@@ -1,0 +1,4 @@
+2026-06-02 21:00:51,737 - INFO - Starting annotation evaluation. h5ad=D:\Desktop\scAnnoRare\local-agent\workspace\datasets\tiny_dataset.h5ad, prediction=D:\Desktop\scAnnoRare\local-agent\workspace\predictions\imported_predictions\tiny_predictions.csv
+2026-06-02 21:00:53,817 - INFO - Cell ID match rate: 1.0000 (200/200)
+2026-06-02 21:00:53,819 - INFO - Valid cells for metrics computation: 200 (out of 200 matched)
+2026-06-02 21:00:57,679 - ERROR - Execution failed: name 'time' is not defined

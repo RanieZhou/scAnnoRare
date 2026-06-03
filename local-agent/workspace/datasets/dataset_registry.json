@@ -1,0 +1,114 @@
+{
+    "tiny_test_data": {
+        "dataset_name": "tiny_test_data",
+        "filepath": "D:\\Desktop\\scAnnoRare\\local-agent\\workspace\\datasets\\tiny_dataset.h5ad",
+        "n_cells": 200,
+        "n_genes": 1000,
+        "label_col": "cell_type",
+        "batch_col": "batch",
+        "total_cells": 200,
+        "valid_label_cells": 200,
+        "invalid_label_cells": 0,
+        "invalid_label_ratio": 0.0,
+        "label_distribution": {
+            "B cell": {
+                "count": 80,
+                "ratio": 0.4
+            },
+            "T cell": {
+                "count": 75,
+                "ratio": 0.375
+            },
+            "Monocyte": {
+                "count": 35,
+                "ratio": 0.175
+            },
+            "pDC": {
+                "count": 6,
+                "ratio": 0.03
+            },
+            "ASDC": {
+                "count": 4,
+                "ratio": 0.02
+            }
+        },
+        "rare_candidates": [
+            {
+                "class_name": "pDC",
+                "count": 6,
+                "ratio": 0.03
+            },
+            {
+                "class_name": "ASDC",
+                "count": 4,
+                "ratio": 0.02
+            }
+        ],
+        "batch_distribution": {
+            "Batch2": {
+                "count": 107,
+                "ratio": 0.535
+            },
+            "Batch1": {
+                "count": 93,
+                "ratio": 0.465
+            }
+        }
+    },
+    "Immune_DC_Evaluation": {
+        "dataset_name": "Immune_DC_Evaluation",
+        "filepath": "d:\\Desktop\\scAnnoRare\\local-agent\\workspace\\datasets\\tiny_dataset.h5ad",
+        "n_cells": 200,
+        "n_genes": 1000,
+        "label_col": "cell_type",
+        "batch_col": "batch",
+        "total_cells": 200,
+        "valid_label_cells": 200,
+        "invalid_label_cells": 0,
+        "invalid_label_ratio": 0.0,
+        "label_distribution": {
+            "B cell": {
+                "count": 80,
+                "ratio": 0.4
+            },
+            "T cell": {
+                "count": 75,
+                "ratio": 0.375
+            },
+            "Monocyte": {
+                "count": 35,
+                "ratio": 0.175
+            },
+            "pDC": {
+                "count": 6,
+                "ratio": 0.03
+            },
+            "ASDC": {
+                "count": 4,
+                "ratio": 0.02
+            }
+        },
+        "rare_candidates": [
+            {
+                "class_name": "pDC",
+                "count": 6,
+                "ratio": 0.03
+            },
+            {
+                "class_name": "ASDC",
+                "count": 4,
+                "ratio": 0.02
+            }
+        ],
+        "batch_distribution": {
+            "Batch2": {
+                "count": 107,
+                "ratio": 0.535
+            },
+            "Batch1": {
+                "count": 93,
+                "ratio": 0.465
+            }
+        }
+    }
+}

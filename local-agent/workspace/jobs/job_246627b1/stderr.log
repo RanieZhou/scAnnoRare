@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "D:\Desktop\scAnnoRare\local-agent\runners\evaluate_annotation.py", line 18, in <module>
+    cell_id_col: Optional[str] = None
+NameError: name 'Optional' is not defined

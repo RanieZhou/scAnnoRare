@@ -1,0 +1,7 @@
+{
+    "filepath": "D:\\Desktop\\scAnnoRare\\local-agent\\workspace\\datasets\\tiny_dataset.h5ad",
+    "pred_csv_path": "D:\\Desktop\\scAnnoRare\\local-agent\\workspace\\predictions\\imported_predictions\\tiny_predictions.csv",
+    "label_col": "cell_type",
+    "match_mode": "relaxed",
+    "cell_id_col": null
+}
