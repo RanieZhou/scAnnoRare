@@ -1,0 +1,2 @@
+2026-06-04 18:59:05,624 - INFO - Starting rare detection evaluation. mode=pooled_rare_vs_nonrare, targets=['activated_stellate']
+2026-06-04 18:59:05,945 - ERROR - Rare execution failed: [Errno 2] No such file or directory: '/data/pre.csv'

@@ -1,0 +1,33 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - heading "scAnnoRare" [level=1] [ref=e7]
+      - paragraph [ref=e8]: 单细胞细胞类型注释与稀有细胞识别多方法评估系统 V1.0
+    - generic [ref=e9]:
+      - tablist [ref=e13]:
+        - tab "登录" [selected] [ref=e15]
+        - tab "注册" [ref=e16]
+      - tabpanel "登录" [ref=e18]:
+        - generic [ref=e19]:
+          - generic [ref=e20]:
+            - generic [ref=e21]: 用户名
+            - generic [ref=e24]:
+              - img [ref=e27]
+              - textbox "用户名" [ref=e29]:
+                - /placeholder: admin
+                - text: admin
+          - generic [ref=e30]:
+            - generic [ref=e31]: 密码
+            - generic [ref=e34]:
+              - img [ref=e37]
+              - textbox "密码" [ref=e40]: admin
+              - img [ref=e51] [cursor=pointer]
+          - button "登录系统" [ref=e41] [cursor=pointer]:
+            - generic [ref=e42]: 登录系统
+    - generic [ref=e43]:
+      - text: 首次使用默认账号：
+      - code [ref=e44] [cursor=pointer]: admin / admin
+  - alert [ref=e53]:
+    - img [ref=e55]
+    - paragraph [ref=e57]: Invalid username or password.

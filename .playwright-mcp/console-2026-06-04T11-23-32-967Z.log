@@ -1,0 +1,2 @@
+[       4ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/reports/rep_caebae64/figures/confusion_matrix.png:0
+[     866ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/favicon.ico:0

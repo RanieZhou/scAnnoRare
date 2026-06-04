@@ -1,0 +1,186 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "数据集注册" [ref=e24] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e26]
+        - generic [ref=e28]: 数据集注册
+      - link "实验配置管理" [ref=e29] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e31]
+        - generic [ref=e33]: 实验配置管理
+      - link "评估与对比" [ref=e34] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e36]
+        - generic [ref=e38]: 评估与对比
+      - link "报告中心" [ref=e39] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e41]
+        - generic [ref=e43]: 报告中心
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - img [ref=e47]
+        - generic [ref=e49]: admin
+      - button "退出" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: 退出
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - navigation "面包屑" [ref=e55]:
+        - generic [ref=e56]:
+          - link "scAnnoRare" [ref=e57]
+          - text: /
+        - link "Datasets" [ref=e59]
+      - generic [ref=e62]:
+        - img [ref=e64] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e67]:
+      - generic [ref=e69]:
+        - generic [ref=e70]:
+          - heading "📂 导入与注册本地数据集" [level=3] [ref=e71]
+          - generic [ref=e72]:
+            - generic [ref=e73]:
+              - generic [ref=e74]: "*本地 H5AD 绝对路径"
+              - textbox "*本地 H5AD 绝对路径" [ref=e78]:
+                - /placeholder: "例如: C:\\data\\immune.h5ad"
+                - text: /Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad
+            - button "检测 H5AD 数据结构" [ref=e79] [cursor=pointer]:
+              - generic [ref=e80]: 检测 H5AD 数据结构
+            - generic [ref=e107]:
+              - separator [ref=e108]:
+                - generic [ref=e109]: 选择标签与批次字段
+              - paragraph [ref=e111]:
+                - text: "🧬 细胞数:"
+                - strong [ref=e112]: "8569"
+                - text: "| 基因数:"
+                - strong [ref=e113]: "20125"
+              - generic [ref=e114]:
+                - generic [ref=e115]: "*数据集重命名 (Alias)"
+                - textbox "*数据集重命名 (Alias)" [ref=e119]:
+                  - /placeholder: "例如: Immune_DC_2026"
+                  - text: Immune_DC_Evaluation
+              - generic [ref=e120]:
+                - generic [ref=e121]: "*真实细胞类型注释列 (label_col)"
+                - generic [ref=e124] [cursor=pointer]:
+                  - generic:
+                    - combobox "*真实细胞类型注释列 (label_col)" [ref=e126]
+                    - generic [ref=e127]: cell_type
+                  - img [ref=e130]
+              - generic [ref=e132]:
+                - generic [ref=e133]: 实验批次来源列 (batch_col) 可选
+                - generic [ref=e136] [cursor=pointer]:
+                  - generic:
+                    - combobox "实验批次来源列 (batch_col) 可选" [ref=e138]
+                    - generic [ref=e139]: 请选择批次字段
+                  - img [ref=e142]
+              - generic [ref=e144]:
+                - generic [ref=e145]: 稀有细胞定义阈值
+                - generic [ref=e146]:
+                  - slider "稀有细胞定义阈值" [ref=e150] [cursor=pointer]
+                  - generic [ref=e152]: 占比低于该阈值的细胞类型将被判定为稀有细胞候选类
+              - button "分析标签分布并注册数据集" [ref=e153] [cursor=pointer]:
+                - generic [ref=e154]: 分析标签分布并注册数据集
+          - generic [ref=e81]:
+            - separator [ref=e82]:
+              - generic [ref=e83]: 快速测试指引
+            - paragraph [ref=e84]:
+              - text: 若本地无可用单细胞数据，可使用此测试路径，系统已在本地准备好 tiny 数据集：
+              - code [ref=e85] [cursor=pointer]: /Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad
+        - generic [ref=e170]:
+          - 'heading "📊 数据集概览: Immune_DC_Evaluation" [level=3] [ref=e171]'
+          - generic [ref=e172]:
+            - generic [ref=e173]: "🧬 细胞数: 8569"
+            - generic [ref=e174]: "🧬 基因数: 20125"
+            - generic [ref=e175]: "🧪 有效标签细胞: 8569"
+            - generic [ref=e176]: "⚠️ 无效/缺失细胞: 0 (0.00%)"
+          - separator [ref=e177]
+          - heading "🏷️ 细胞类型分布前十类统计" [level=4] [ref=e180]
+          - separator [ref=e184]
+          - heading "🦄 自动筛选的稀有细胞类型候选" [level=4] [ref=e185]
+          - paragraph [ref=e186]: 基于您设定的稀有定义阈值 (5%)，检测到以下稀有细胞类：
+          - generic [ref=e188]:
+            - table [ref=e190]:
+              - rowgroup [ref=e195]:
+                - row "细胞类型 细胞数 所占比例" [ref=e196]:
+                  - columnheader "细胞类型" [ref=e197]:
+                    - generic [ref=e198]: 细胞类型
+                  - columnheader "细胞数" [ref=e199]:
+                    - generic [ref=e200]: 细胞数
+                  - columnheader "所占比例" [ref=e201]:
+                    - generic [ref=e202]: 所占比例
+            - table [ref=e207]:
+              - rowgroup [ref=e212]:
+                - row "activated_stellate 284 3.31%" [ref=e213]:
+                  - cell "activated_stellate" [ref=e214]:
+                    - generic [ref=e215]: activated_stellate
+                  - cell "284" [ref=e216]:
+                    - generic [ref=e219]: "284"
+                  - cell "3.31%" [ref=e220]:
+                    - strong [ref=e222]: 3.31%
+                - row "gamma 255 2.98%" [ref=e223]:
+                  - cell "gamma" [ref=e224]:
+                    - generic [ref=e225]: gamma
+                  - cell "255" [ref=e226]:
+                    - generic [ref=e229]: "255"
+                  - cell "2.98%" [ref=e230]:
+                    - strong [ref=e232]: 2.98%
+                - row "endothelial 252 2.94%" [ref=e233]:
+                  - cell "endothelial" [ref=e234]:
+                    - generic [ref=e235]: endothelial
+                  - cell "252" [ref=e236]:
+                    - generic [ref=e239]: "252"
+                  - cell "2.94%" [ref=e240]:
+                    - strong [ref=e242]: 2.94%
+                - row "quiescent_stellate 173 2.02%" [ref=e243]:
+                  - cell "quiescent_stellate" [ref=e244]:
+                    - generic [ref=e245]: quiescent_stellate
+                  - cell "173" [ref=e246]:
+                    - generic [ref=e249]: "173"
+                  - cell "2.02%" [ref=e250]:
+                    - strong [ref=e252]: 2.02%
+                - row "macrophage 55 0.64%" [ref=e253]:
+                  - cell "macrophage" [ref=e254]:
+                    - generic [ref=e255]: macrophage
+                  - cell "55" [ref=e256]:
+                    - generic [ref=e259]: "55"
+                  - cell "0.64%" [ref=e260]:
+                    - strong [ref=e262]: 0.64%
+                - row "mast 25 0.29%" [ref=e263]:
+                  - cell "mast" [ref=e264]:
+                    - generic [ref=e265]: mast
+                  - cell "25" [ref=e266]:
+                    - generic [ref=e269]: "25"
+                  - cell "0.29%" [ref=e270]:
+                    - strong [ref=e272]: 0.29%
+                - row "epsilon 18 0.21%" [ref=e273]:
+                  - cell "epsilon" [ref=e274]:
+                    - generic [ref=e275]: epsilon
+                  - cell "18" [ref=e276]:
+                    - generic [ref=e279]: "18"
+                  - cell "0.21%" [ref=e280]:
+                    - strong [ref=e282]: 0.21%
+                - row "schwann 13 0.15%" [ref=e283]:
+                  - cell "schwann" [ref=e284]:
+                    - generic [ref=e285]: schwann
+                  - cell "13" [ref=e286]:
+                    - generic [ref=e289]: "13"
+                  - cell "0.15%" [ref=e290]:
+                    - strong [ref=e292]: 0.15%
+                - row "t_cell 7 0.08%" [ref=e293]:
+                  - cell "t_cell" [ref=e294]:
+                    - generic [ref=e295]: t_cell
+                  - cell "7" [ref=e296]:
+                    - generic [ref=e299]: "7"
+                  - cell "0.08%" [ref=e300]:
+                    - strong [ref=e302]: 0.08%

@@ -49,7 +49,7 @@
             </el-form-item>
 
             <el-form-item label="稀有细胞定义阈值">
-              <el-slider v-model="form.rareThreshold" :min="1" :max="10" :format-tooltip="val => val + '%'" />
+              <el-slider v-model="form.rareThreshold" :min="1" :max="10" :format-tooltip="(val: number) => val + '%'" />
               <span class="slider-desc">占比低于该阈值的细胞类型将被判定为稀有细胞候选类</span>
             </el-form-item>
             
@@ -142,7 +142,11 @@ const registeredData = ref<any>(null)
 const mockPath = ref('')
 onMounted(() => {
   // Try to locate mock dataset path under local-agent
-  mockPath.value = 'd:\\Desktop\\scAnnoRare\\local-agent\\workspace\\datasets\\tiny_dataset.h5ad'
+  // Use the real pancreas dataset on macOS; tiny dataset as fallback
+  const isWindows = navigator.platform.toLowerCase().includes('win')
+  mockPath.value = isWindows
+    ? 'C:\\Users\\username\\Desktop\\scAnnoRare\\data\\pancreas_baron.h5ad'
+    : '/Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad'
 })
 
 const form = reactive({
@@ -265,9 +269,11 @@ const handleRegisterDataset = async () => {
       
       // 2. Synchronize to central Web Backend database
       const resWeb = await axios.post('http://127.0.0.1:8000/api/v1/datasets', {
-        project_id: 'proj_default', // mock project id
+        project_id: null,
         dataset_name: form.datasetName,
         local_dataset_alias: form.filepath,
+        label_col: form.labelCol || null,
+        batch_col: form.batchCol || null,
         n_cells: summary.n_cells,
         n_genes: summary.n_genes,
         obs_columns: inspectResult.value.obs_columns,

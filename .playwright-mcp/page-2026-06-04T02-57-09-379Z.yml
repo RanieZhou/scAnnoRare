@@ -1,0 +1,64 @@
+- generic [ref=e50]:
+  - complementary [ref=e51]:
+    - generic [ref=e52]:
+      - generic [ref=e53]: 🔮
+      - generic [ref=e54]: scAnnoRare
+      - generic [ref=e55]: V1.0
+    - navigation [ref=e56]:
+      - link "首页控制台" [ref=e57] [cursor=pointer]:
+        - /url: /
+        - img [ref=e59]
+        - generic [ref=e63]: 首页控制台
+      - link "计算节点配对" [active] [ref=e64] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e66]
+        - generic [ref=e69]: 计算节点配对
+      - link "数据集注册" [ref=e71] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e73]
+        - generic [ref=e75]: 数据集注册
+      - link "实验配置管理" [ref=e76] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e78]
+        - generic [ref=e80]: 实验配置管理
+      - link "评估与对比" [ref=e81] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e83]
+        - generic [ref=e85]: 评估与对比
+      - link "报告中心" [ref=e86] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e88]
+        - generic [ref=e90]: 报告中心
+    - generic [ref=e91]:
+      - generic [ref=e92]:
+        - img [ref=e94]
+        - generic [ref=e96]: admin
+      - button "退出" [ref=e97] [cursor=pointer]:
+        - generic [ref=e98]: 退出
+  - generic [ref=e99]:
+    - banner [ref=e100]:
+      - navigation "面包屑" [ref=e102]:
+        - generic [ref=e103]:
+          - link "scAnnoRare" [ref=e104]
+          - text: /
+        - link "AgentPair" [ref=e190]
+      - generic [ref=e109]:
+        - img [ref=e111] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e114]:
+      - generic [ref=e191]:
+        - generic [ref=e194]:
+          - heading "Local Agent 连接诊断" [level=3] [ref=e195]
+          - paragraph [ref=e196]: 系统检测到本地运行中的代理服务，端口：17890，当前状态：已授权配对
+        - generic [ref=e197]:
+          - generic [ref=e198]:
+            - heading "🔑 节点配对授权" [level=3] [ref=e199]
+            - generic [ref=e200]:
+              - generic [ref=e201]:
+                - generic [ref=e202]: 已授权 Session Token
+                - code [ref=e203]: ...
+              - button "解除节点配对授权" [ref=e204] [cursor=pointer]:
+                - generic [ref=e205]: 解除节点配对授权
+          - generic [ref=e207]:
+            - img [ref=e209]
+            - paragraph [ref=e226]: 授权配对本地节点后，将实时调取并渲染硬件指标与单细胞生信依赖分析

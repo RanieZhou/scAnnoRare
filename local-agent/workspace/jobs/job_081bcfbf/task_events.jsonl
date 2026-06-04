@@ -1,0 +1,3 @@
+{"time": "2026-06-04T10:38:40", "event": "job_started", "progress": 10}
+{"time": "2026-06-04T10:38:40", "event": "dataset_loaded", "progress": 30}
+{"time": "2026-06-04T10:38:40", "event": "execution_failed", "progress": 50}

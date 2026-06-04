@@ -1,0 +1,8 @@
+2026-06-04 10:42:56,419 - INFO - Starting annotation evaluation. h5ad=/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/datasets/tiny_dataset.h5ad, prediction=/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/predictions/imported_predictions/tiny_predictions.csv
+2026-06-04 10:42:56,629 - INFO - Cell ID match rate: 1.0000 (200/200)
+2026-06-04 10:42:56,629 - INFO - Valid cells for metrics computation: 200 (out of 200 matched)
+2026-06-04 10:43:31,821 - INFO - Evaluation metrics written to /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/jobs/job_7184324f/result.json
+Traceback (most recent call last):
+  File "/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py", line 9, in <module>
+    from jinja2 import Template
+ModuleNotFoundError: No module named 'jinja2'

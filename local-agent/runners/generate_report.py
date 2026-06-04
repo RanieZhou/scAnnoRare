@@ -2,12 +2,21 @@ import os
 import sys
 import json
 import logging
+import base64
 import matplotlib
 matplotlib.use('Agg')  # Non-interactive backend
 import matplotlib.pyplot as plt
 import seaborn as sns
 from jinja2 import Template
 import time
+
+
+def _png_to_b64(path: str) -> str:
+    """Read a PNG file and return its base64 string (empty string if not found)."""
+    if not os.path.exists(path):
+        return ""
+    with open(path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger("generate-report")
@@ -395,15 +404,21 @@ HTML_TEMPLATE = """
                 <h2>可视化分析图表</h2>
                 <div class="plot-container">
                     {% if task_type == 'annotation_evaluation' %}
-                        <img class="plot-img" src="figures/confusion_matrix.png" alt="混淆矩阵" onerror="this.style.display='none'">
-                        <p class="subtitle">图 1: 混淆矩阵 (Confusion Matrix) 分布</p>
-                    {% else %}
-                        {% if overall_metrics.auroc is not none %}
-                            <img class="plot-img" src="figures/roc_pr_curve.png" alt="ROC & PR 曲线" onerror="this.style.display='none'">
-                            <p class="subtitle">图 1: 稀有细胞分类 ROC 与 PR 曲线分析</p>
+                        {% if img_confusion_matrix %}
+                            <img class="plot-img" src="data:image/png;base64,{{ img_confusion_matrix }}" alt="混淆矩阵">
+                            <p class="subtitle">图 1: 混淆矩阵 (Confusion Matrix) 分布</p>
                         {% else %}
-                            <img class="plot-img" src="figures/confusion_matrix.png" alt="稀有细胞混淆矩阵" onerror="this.style.display='none'">
+                            <p class="subtitle" style="color: var(--text-muted);">混淆矩阵图表生成中...</p>
+                        {% endif %}
+                    {% else %}
+                        {% if img_roc_pr %}
+                            <img class="plot-img" src="data:image/png;base64,{{ img_roc_pr }}" alt="ROC & PR 曲线">
+                            <p class="subtitle">图 1: 稀有细胞分类 ROC 与 PR 曲线分析</p>
+                        {% elif img_confusion_matrix %}
+                            <img class="plot-img" src="data:image/png;base64,{{ img_confusion_matrix }}" alt="稀有细胞混淆矩阵">
                             <p class="subtitle">图 1: 稀有细胞检测混淆矩阵</p>
+                        {% else %}
+                            <p class="subtitle" style="color: var(--text-muted);">图表生成中...</p>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -453,9 +468,9 @@ def generate_report(result_json_path: str, output_dir: str):
                 yticklabels=classes,
                 cbar_kws={'label': '细胞数'}
             )
-            plt.title(f"{method_name} - 细胞类型分类混淆矩阵", fontsize=14, fontweight="bold", pad=15)
-            plt.xlabel("预测类别 (Predicted Labels)", fontsize=11, labelpad=10)
-            plt.ylabel("真实类别 (True Labels)", fontsize=11, labelpad=10)
+            plt.title(f"{method_name} - Confusion Matrix", fontsize=14, fontweight="bold", pad=15)
+            plt.xlabel("Predicted Labels", fontsize=11, labelpad=10)
+            plt.ylabel("True Labels", fontsize=11, labelpad=10)
             plt.xticks(rotation=45, ha='right')
             plt.yticks(rotation=0)
             plt.tight_layout()
@@ -493,7 +508,7 @@ def generate_report(result_json_path: str, output_dir: str):
             ax2.legend(loc="lower left")
             ax2.grid(alpha=0.15)
             
-            plt.suptitle(f"{method_name} - 稀有细胞检测性能曲线", fontsize=14, fontweight="bold", y=0.98)
+            plt.suptitle(f"{method_name} - Rare Cell Detection Performance", fontsize=14, fontweight="bold", y=0.98)
             plt.tight_layout()
             plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
             plt.close()
@@ -508,15 +523,18 @@ def generate_report(result_json_path: str, output_dir: str):
                     annot=True,
                     fmt="d",
                     cmap="Blues",
-                    xticklabels=["预测非稀有", "预测稀有"],
-                    yticklabels=["真实非稀有", "真实稀有"]
+                    xticklabels=["Pred Non-Rare", "Pred Rare"],
+                    yticklabels=["True Non-Rare", "True Rare"]
                 )
-                plt.title(f"{method_name} - 稀有细胞检测混淆矩阵", fontsize=12, fontweight="bold", pad=15)
+                plt.title(f"{method_name} - Rare Cell Detection Confusion Matrix", fontsize=12, fontweight="bold", pad=15)
                 plt.tight_layout()
                 plt.savefig(os.path.join(fig_dir, "confusion_matrix.png"))
                 plt.close()
 
-    # 2. Render Template
+    # 2. Render Template — embed figures as base64 for self-contained HTML
+    img_confusion_matrix = _png_to_b64(os.path.join(fig_dir, "confusion_matrix.png"))
+    img_roc_pr           = _png_to_b64(os.path.join(fig_dir, "roc_pr_curve.png"))
+
     t = Template(HTML_TEMPLATE)
     html_content = t.render(
         method_name=method_name,
@@ -526,6 +544,8 @@ def generate_report(result_json_path: str, output_dir: str):
         overall_metrics=res.get("overall_metrics", {}),
         per_class_metrics=res.get("per_class_metrics", {}),
         false_rescue_rate=res.get("false_rescue_rate"),
+        img_confusion_matrix=img_confusion_matrix,
+        img_roc_pr=img_roc_pr,
     )
     
     report_path = os.path.join(output_dir, "report.html")

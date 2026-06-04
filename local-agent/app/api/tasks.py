@@ -4,7 +4,6 @@ import uuid
 import time
 import sqlite3
 import logging
-import threading
 import subprocess
 from fastapi import APIRouter, HTTPException, BackgroundTasks
 from pydantic import BaseModel
@@ -14,12 +13,14 @@ from fastapi.responses import FileResponse
 logger = logging.getLogger("local-agent.tasks")
 router = APIRouter()
 
-# Get workspace directory
 WORKSPACE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "workspace")
 os.makedirs(WORKSPACE_DIR, exist_ok=True)
 JOBS_DIR = os.path.join(WORKSPACE_DIR, "jobs")
 os.makedirs(JOBS_DIR, exist_ok=True)
 DB_PATH = os.path.join(JOBS_DIR, "jobs.sqlite")
+
+RUNNERS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "runners")
+
 
 # Initialize jobs.sqlite db
 def init_db():
@@ -312,3 +313,173 @@ async def get_task_report(local_job_id: str):
     if not os.path.exists(report_path):
         raise HTTPException(status_code=404, detail="Report HTML file does not exist yet.")
     return FileResponse(report_path, media_type="text/html")
+
+
+# ── inspect-dataset (standalone task endpoint) ────────────────────────────────
+class InspectDatasetRequest(BaseModel):
+    filepath: str
+    dataset_name: str
+    label_col: str
+    batch_col: Optional[str] = None
+    rare_threshold: Optional[float] = 0.05
+
+
+@router.post("/tasks/inspect-dataset")
+async def inspect_dataset_task(payload: InspectDatasetRequest, background_tasks: BackgroundTasks):
+    """Inspect h5ad file and compute label distribution / rare candidates as a tracked job."""
+    job_id = f"job_{uuid.uuid4().hex[:8]}"
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    os.makedirs(job_dir, exist_ok=True)
+
+    config = payload.dict()
+    with open(os.path.join(job_dir, "config.json"), "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=4)
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO jobs (id, task_type, status, progress, config_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (job_id, "inspect_dataset", "pending", 0, json.dumps(config), time.time()),
+    )
+    conn.commit(); conn.close()
+
+    def _run():
+        update_job_status(job_id, "running", 20)
+        log_event(job_dir, "started", 20)
+        try:
+            import anndata
+            import pandas as pd
+
+            adata = anndata.read_h5ad(payload.filepath, backed="r")
+            if payload.label_col not in adata.obs.columns:
+                raise ValueError(f"label_col '{payload.label_col}' not found in obs.")
+
+            obs_df = pd.DataFrame(adata.obs[[payload.label_col]])
+            if payload.batch_col and payload.batch_col in adata.obs.columns:
+                obs_df[payload.batch_col] = adata.obs[payload.batch_col]
+
+            invalid = {"NaN", "None", "", "NA", "Unknown", "unknown", "unassigned", "Unassigned"}
+            obs_df[payload.label_col] = obs_df[payload.label_col].astype(str).str.strip()
+            valid_mask = ~obs_df[payload.label_col].isin(invalid) & obs_df[payload.label_col].notna()
+            valid_df = obs_df[valid_mask]
+
+            total = len(obs_df)
+            valid_count = len(valid_df)
+            label_counts = valid_df[payload.label_col].value_counts()
+
+            label_distribution: dict = {}
+            rare_candidates: list = []
+            for lbl, cnt in label_counts.items():
+                ratio = float(cnt / valid_count) if valid_count else 0.0
+                label_distribution[str(lbl)] = {"count": int(cnt), "ratio": round(ratio, 4)}
+                if ratio < payload.rare_threshold:
+                    rare_candidates.append({"class_name": str(lbl), "count": int(cnt), "ratio": round(ratio, 4)})
+
+            batch_distribution: dict = {}
+            if payload.batch_col and payload.batch_col in obs_df.columns:
+                for b, cnt in obs_df[payload.batch_col].value_counts().items():
+                    batch_distribution[str(b)] = {"count": int(cnt), "ratio": round(float(cnt / total), 4)}
+
+            result = {
+                "success": True,
+                "task_type": "inspect_dataset",
+                "dataset_name": payload.dataset_name,
+                "filepath": payload.filepath,
+                "n_cells": int(adata.shape[0]),
+                "n_genes": int(adata.shape[1]),
+                "obs_columns": list(adata.obs.columns),
+                "var_columns": list(adata.var.columns),
+                "total_cells": total,
+                "valid_label_cells": valid_count,
+                "invalid_label_cells": total - valid_count,
+                "label_distribution": label_distribution,
+                "rare_candidates": rare_candidates,
+                "batch_distribution": batch_distribution,
+            }
+
+            result_path = os.path.join(job_dir, "result.json")
+            with open(result_path, "w", encoding="utf-8") as f:
+                json.dump(result, f, indent=4, ensure_ascii=False)
+
+            # Update local dataset registry
+            registry_path = os.path.join(WORKSPACE_DIR, "datasets", "dataset_registry.json")
+            os.makedirs(os.path.dirname(registry_path), exist_ok=True)
+            registry: dict = {}
+            if os.path.exists(registry_path):
+                try:
+                    with open(registry_path, "r", encoding="utf-8") as f:
+                        registry = json.load(f)
+                except Exception:
+                    pass
+            registry[payload.dataset_name] = result
+            with open(registry_path, "w", encoding="utf-8") as f:
+                json.dump(registry, f, indent=4, ensure_ascii=False)
+
+            update_job_status(job_id, "success", 100, result=result, finished_at=time.time())
+            log_event(job_dir, "completed", 100)
+        except Exception as e:
+            logger.error(f"inspect-dataset job {job_id} failed: {e}")
+            update_job_status(job_id, "failed", 50, result={"error": str(e)}, finished_at=time.time())
+
+    background_tasks.add_task(_run)
+    return {"success": True, "local_job_id": job_id, "status": "pending"}
+
+
+# ── generate-report (standalone task endpoint) ────────────────────────────────
+class GenerateReportRequest(BaseModel):
+    local_job_id: str   # ID of a completed evaluate-annotation / evaluate-rare job
+
+
+@router.post("/tasks/generate-report")
+async def generate_report_task(payload: GenerateReportRequest, background_tasks: BackgroundTasks):
+    """(Re-)generate the HTML report for a completed evaluation job."""
+    source_job_dir = os.path.join(JOBS_DIR, payload.local_job_id)
+    result_json = os.path.join(source_job_dir, "result.json")
+    if not os.path.exists(result_json):
+        raise HTTPException(status_code=404, detail=f"result.json not found for job {payload.local_job_id}.")
+
+    report_job_id = f"job_{uuid.uuid4().hex[:8]}"
+    report_job_dir = os.path.join(JOBS_DIR, report_job_id)
+    os.makedirs(report_job_dir, exist_ok=True)
+
+    config = {"local_job_id": payload.local_job_id}
+    with open(os.path.join(report_job_dir, "config.json"), "w") as f:
+        json.dump(config, f)
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO jobs (id, task_type, status, progress, config_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (report_job_id, "generate_report", "pending", 0, json.dumps(config), time.time()),
+    )
+    conn.commit(); conn.close()
+
+    report_script = os.path.join(RUNNERS_DIR, "generate_report.py")
+
+    def _run():
+        update_job_status(report_job_id, "running", 20)
+        log_event(report_job_dir, "started", 20)
+        stdout_f = open(os.path.join(report_job_dir, "stdout.log"), "w")
+        stderr_f = open(os.path.join(report_job_dir, "stderr.log"), "w")
+        try:
+            proc = subprocess.Popen(
+                ["python", report_script, result_json, source_job_dir],
+                stdout=stdout_f, stderr=stderr_f,
+            )
+            proc.wait()
+            if proc.returncode == 0:
+                result = {"success": True, "report_path": os.path.join(source_job_dir, "report.html")}
+                update_job_status(report_job_id, "success", 100, result=result, finished_at=time.time())
+                log_event(report_job_dir, "completed", 100)
+            else:
+                update_job_status(report_job_id, "failed", 90, result={"error": "Report generation failed."}, finished_at=time.time())
+        except Exception as e:
+            update_job_status(report_job_id, "failed", 50, result={"error": str(e)}, finished_at=time.time())
+        finally:
+            stdout_f.close(); stderr_f.close()
+
+    background_tasks.add_task(_run)
+    return {
+        "success": True,
+        "local_job_id": report_job_id,
+        "source_job_id": payload.local_job_id,
+        "status": "pending",
+    }

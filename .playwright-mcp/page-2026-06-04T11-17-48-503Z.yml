@@ -1,0 +1,72 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [active] [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "数据集注册" [ref=e24] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e26]
+        - generic [ref=e28]: 数据集注册
+      - link "实验配置管理" [ref=e29] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e31]
+        - generic [ref=e33]: 实验配置管理
+      - link "评估与对比" [ref=e34] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e36]
+        - generic [ref=e38]: 评估与对比
+      - link "报告中心" [ref=e39] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e41]
+        - generic [ref=e43]: 报告中心
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - img [ref=e47]
+        - generic [ref=e49]: admin
+      - button "退出" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: 退出
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - navigation "面包屑" [ref=e55]:
+        - generic [ref=e56]:
+          - link "scAnnoRare" [ref=e57]
+          - text: /
+        - link "AgentPair" [ref=e107]
+      - generic [ref=e62]:
+        - img [ref=e79] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e66]:
+      - generic [ref=e108]:
+        - generic [ref=e111]:
+          - heading "Local Agent 连接诊断" [level=3] [ref=e112]
+          - paragraph [ref=e113]: 系统检测到本地运行中的代理服务，端口：17890，当前状态：等待配对验证
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - heading "🔑 节点配对授权" [level=3] [ref=e116]
+            - generic [ref=e117]:
+              - paragraph [ref=e118]: 请输入本地桌面客户端或终端生成的配对码。配对码有效期为 5 分钟，单次验证成功后返回 session_token 进行会话保活。
+              - generic [ref=e119]:
+                - generic [ref=e120]:
+                  - generic [ref=e121]: "*本地配对码 (Pairing Code)"
+                  - textbox "*本地配对码 (Pairing Code)" [ref=e125]:
+                    - /placeholder: 请输入 6-8 位大写字母或数字
+                - button "发起节点配对" [ref=e126] [cursor=pointer]:
+                  - generic [ref=e127]: 发起节点配对
+              - generic [ref=e128]:
+                - separator [ref=e129]:
+                  - generic [ref=e130]: 开发者快速测试
+                - button "一键在本地生成配对码并授权" [ref=e131] [cursor=pointer]:
+                  - generic [ref=e132]: 一键在本地生成配对码并授权
+          - generic [ref=e134]:
+            - img [ref=e136]
+            - paragraph [ref=e153]: 授权配对本地节点后，将实时调取并渲染硬件指标与单细胞生信依赖分析

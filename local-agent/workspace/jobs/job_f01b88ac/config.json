@@ -1,0 +1,7 @@
+{
+    "filepath": "/Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad",
+    "dataset_name": "pancreas_inspect_test",
+    "label_col": "celltype",
+    "batch_col": null,
+    "rare_threshold": 0.05
+}

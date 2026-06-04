@@ -1,0 +1,6 @@
+2026-06-04 10:43:39,894 - INFO - Starting rare detection evaluation. mode=pooled_rare_vs_nonrare, targets=['T cell']
+2026-06-04 10:43:40,606 - INFO - Rare cell metrics written to /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/jobs/job_5fcc58b8/result.json
+Traceback (most recent call last):
+  File "/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py", line 9, in <module>
+    from jinja2 import Template
+ModuleNotFoundError: No module named 'jinja2'

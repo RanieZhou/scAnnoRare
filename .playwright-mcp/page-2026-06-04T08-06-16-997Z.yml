@@ -1,0 +1,97 @@
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🔮
+        - generic [ref=e7]: scAnnoRare
+        - generic [ref=e8]: V1.0
+      - navigation [ref=e9]:
+        - link "首页控制台" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12]
+          - generic [ref=e16]: 首页控制台
+        - link "计算节点配对" [ref=e17] [cursor=pointer]:
+          - /url: /agent
+          - img [ref=e19]
+          - generic [ref=e22]: 计算节点配对
+        - link "数据集注册" [ref=e24] [cursor=pointer]:
+          - /url: /datasets
+          - img [ref=e26]
+          - generic [ref=e28]: 数据集注册
+        - link "实验配置管理" [ref=e29] [cursor=pointer]:
+          - /url: /experiments
+          - img [ref=e31]
+          - generic [ref=e33]: 实验配置管理
+        - link "评估与对比" [ref=e34] [cursor=pointer]:
+          - /url: /evaluation
+          - img [ref=e36]
+          - generic [ref=e38]: 评估与对比
+        - link "报告中心" [ref=e39] [cursor=pointer]:
+          - /url: /reports
+          - img [ref=e41]
+          - generic [ref=e43]: 报告中心
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - img [ref=e47]
+          - generic [ref=e49]: admin
+        - button "退出" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: 退出
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - navigation "面包屑" [ref=e55]:
+          - generic [ref=e56]:
+            - link "scAnnoRare" [ref=e57]
+            - text: /
+          - link "Experiments" [ref=e59]
+        - generic [ref=e62]:
+          - img [ref=e64] [cursor=pointer]
+          - text: "Local Agent: 已连接 (127.0.0.1)"
+      - main [ref=e67]:
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - heading "🧪 建立基准评估实验主题" [level=3] [ref=e71]
+            - generic [ref=e72]:
+              - generic [ref=e73]:
+                - generic [ref=e74]: "*选择基准数据集"
+                - generic [ref=e77] [cursor=pointer]:
+                  - generic:
+                    - combobox "*选择基准数据集" [expanded] [active] [ref=e79]
+                    - generic [ref=e80]: 选择已注册的数据集
+                  - img [ref=e83]
+              - generic [ref=e85]:
+                - generic [ref=e86]: "*基准实验名称 (Experiment Name)"
+                - textbox "*基准实验名称 (Experiment Name)" [ref=e90]:
+                  - /placeholder: "例如: immune_rare_cell_benchmark_v1"
+                  - text: Immune_Rare_Cell_Benchmark_1
+              - generic [ref=e91]:
+                - generic [ref=e92]: "*评估任务主要维度"
+                - radiogroup "*评估任务主要维度" [ref=e94]:
+                  - generic [ref=e95]:
+                    - radio "细胞类型注释评估" [checked] [ref=e96]
+                    - generic [ref=e97] [cursor=pointer]: 细胞类型注释评估
+                  - generic [ref=e98]:
+                    - radio "稀有细胞识别评估" [ref=e99]
+                    - generic [ref=e100] [cursor=pointer]: 稀有细胞识别评估
+              - button "发布实验基准配置" [ref=e101] [cursor=pointer]:
+                - generic [ref=e102]: 发布实验基准配置
+          - generic [ref=e103]:
+            - heading "📋 平台活跃实验主题列表" [level=3] [ref=e104]
+            - generic [ref=e106]:
+              - table [ref=e108]:
+                - rowgroup [ref=e114]:
+                  - row "实验名称 评估类型 绑定标签列 具体配置" [ref=e115]:
+                    - columnheader "实验名称" [ref=e116]:
+                      - generic [ref=e117]: 实验名称
+                    - columnheader "评估类型" [ref=e118]:
+                      - generic [ref=e119]: 评估类型
+                    - columnheader "绑定标签列" [ref=e120]:
+                      - generic [ref=e121]: 绑定标签列
+                    - columnheader "具体配置" [ref=e122]:
+                      - generic [ref=e123]: 具体配置
+              - generic [ref=e127]:
+                - table:
+                  - rowgroup
+                - generic [ref=e129]: 暂无数据
+  - tooltip [ref=e130]:
+    - listbox [ref=e134]:
+      - option "Immune_DC_Evaluation" [ref=e135] [cursor=pointer]

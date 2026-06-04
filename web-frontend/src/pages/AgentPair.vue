@@ -163,6 +163,13 @@ import axios from 'axios'
 const agentStore = useAgentStore()
 const pairingLoading = ref(false)
 
+// On mount: if already paired but envInfo missing, reload it
+onMounted(async () => {
+  if (agentStore.isOnline && agentStore.paired && !agentStore.envInfo) {
+    await agentStore.fetchAgentEnv()
+  }
+})
+
 const form = reactive({
   pairingCode: ''
 })

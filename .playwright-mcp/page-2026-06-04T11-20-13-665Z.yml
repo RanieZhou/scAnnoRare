@@ -1,0 +1,126 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🔮
+        - generic [ref=e7]: scAnnoRare
+        - generic [ref=e8]: V1.0
+      - navigation [ref=e9]:
+        - link "首页控制台" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12]
+          - generic [ref=e16]: 首页控制台
+        - link "计算节点配对" [ref=e17] [cursor=pointer]:
+          - /url: /agent
+          - img [ref=e19]
+          - generic [ref=e22]: 计算节点配对
+        - link "数据集注册" [ref=e24] [cursor=pointer]:
+          - /url: /datasets
+          - img [ref=e26]
+          - generic [ref=e28]: 数据集注册
+        - link "实验配置管理" [ref=e29] [cursor=pointer]:
+          - /url: /experiments
+          - img [ref=e31]
+          - generic [ref=e33]: 实验配置管理
+        - link "评估与对比" [ref=e34] [cursor=pointer]:
+          - /url: /evaluation
+          - img [ref=e36]
+          - generic [ref=e38]: 评估与对比
+        - link "报告中心" [ref=e39] [cursor=pointer]:
+          - /url: /reports
+          - img [ref=e41]
+          - generic [ref=e43]: 报告中心
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - img [ref=e47]
+          - generic [ref=e49]: admin
+        - button "退出" [ref=e50] [cursor=pointer]:
+          - generic [ref=e51]: 退出
+    - generic [ref=e52]:
+      - banner [ref=e53]:
+        - navigation "面包屑" [ref=e55]:
+          - generic [ref=e56]:
+            - link "scAnnoRare" [ref=e57]
+            - text: /
+          - link "AgentPair" [ref=e107]
+        - generic [ref=e62]:
+          - img [ref=e79] [cursor=pointer]
+          - text: "Local Agent: 已连接 (127.0.0.1)"
+      - main [ref=e66]:
+        - generic [ref=e108]:
+          - generic [ref=e111]:
+            - heading "Local Agent 连接诊断" [level=3] [ref=e112]
+            - paragraph [ref=e113]: 系统检测到本地运行中的代理服务，端口：17890，当前状态：已授权配对
+          - generic [ref=e114]:
+            - generic [ref=e115]:
+              - heading "🔑 节点配对授权" [level=3] [ref=e116]
+              - generic [ref=e154]:
+                - generic [ref=e155]:
+                  - generic [ref=e156]: 已授权 Session Token
+                  - code [ref=e157]: 70378c59e4d64693...
+                - button "解除节点配对授权" [ref=e158] [cursor=pointer]:
+                  - generic [ref=e159]: 解除节点配对授权
+            - generic [ref=e160]:
+              - heading "🖥️ 本地算力与依赖环境诊断" [level=3] [ref=e161]
+              - generic [ref=e162]:
+                - generic [ref=e163]:
+                  - generic [ref=e164]: 操作系统
+                  - generic [ref=e165]: Darwin 25.5.0
+                - generic [ref=e166]:
+                  - generic [ref=e167]: Python 引擎
+                  - generic [ref=e168]: v3.14.0
+              - separator [ref=e169]
+              - heading "📊 硬件算力消耗" [level=4] [ref=e170]
+              - generic [ref=e171]:
+                - generic [ref=e173]:
+                  - generic [ref=e174]: CPU 逻辑核心数
+                  - generic [ref=e175]: 10 核
+                - generic [ref=e176]:
+                  - generic [ref=e177]:
+                    - generic [ref=e178]: 物理内存
+                    - generic [ref=e179]: 11.2GB 可用 / 16GB 总量
+                  - progressbar [ref=e180]:
+                    - generic [ref=e184]: 30%
+                - generic [ref=e186]:
+                  - generic [ref=e187]: GPU 加速
+                  - generic [ref=e188]: 未检测到 NVIDIA GPU 设备，将降级使用 CPU 计算
+              - separator [ref=e189]
+              - heading "🧪 关键单细胞生信包依赖" [level=4] [ref=e190]
+              - generic [ref=e192]:
+                - table [ref=e194]:
+                  - rowgroup [ref=e198]:
+                    - row "依赖库 检测版本" [ref=e199]:
+                      - columnheader "依赖库" [ref=e200]:
+                        - generic [ref=e201]: 依赖库
+                      - columnheader "检测版本" [ref=e202]:
+                        - generic [ref=e203]: 检测版本
+                - table [ref=e208]:
+                  - rowgroup [ref=e212]:
+                    - row "scanpy v1.12.1" [ref=e213]:
+                      - cell "scanpy" [ref=e214]:
+                        - generic [ref=e215]: scanpy
+                      - cell "v1.12.1" [ref=e216]:
+                        - generic [ref=e219]: v1.12.1
+                    - row "anndata v0.12.16" [ref=e220]:
+                      - cell "anndata" [ref=e221]:
+                        - generic [ref=e222]: anndata
+                      - cell "v0.12.16" [ref=e223]:
+                        - generic [ref=e226]: v0.12.16
+                    - row "celltypist 未安装" [ref=e227]:
+                      - cell "celltypist" [ref=e228]:
+                        - generic [ref=e229]: celltypist
+                      - cell "未安装" [ref=e230]:
+                        - generic [ref=e233]: 未安装
+                    - row "scvi-tools 未安装" [ref=e234]:
+                      - cell "scvi-tools" [ref=e235]:
+                        - generic [ref=e236]: scvi-tools
+                      - cell "未安装" [ref=e237]:
+                        - generic [ref=e240]: 未安装
+                    - row "torch 未安装" [ref=e241]:
+                      - cell "torch" [ref=e242]:
+                        - generic [ref=e243]: torch
+                      - cell "未安装" [ref=e244]:
+                        - generic [ref=e247]: 未安装
+  - alert [ref=e248]:
+    - img [ref=e250]
+    - paragraph [ref=e252]: 本地节点成功连接并授权！

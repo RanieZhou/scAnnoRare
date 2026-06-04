@@ -1,0 +1,2 @@
+2026-06-04 19:06:00,295 - INFO - Starting rare detection evaluation. mode=pooled_rare_vs_nonrare, targets=['activated_stellate']
+2026-06-04 19:06:00,626 - ERROR - Rare execution failed: No columns to parse from file

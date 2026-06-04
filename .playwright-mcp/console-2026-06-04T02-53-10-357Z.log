@@ -1,0 +1,7 @@
+[     150ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://127.0.0.1:17890/api/v1/local/env:0
+[     150ms] [ERROR] Failed to fetch Agent environment specs: AxiosError: Request failed with status code 401
+    at settle (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:1740:14)
+    at XMLHttpRequest.onloadend (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2093:4)
+    at Axios$1.request (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2796:37)
+    at async Proxy.fetchAgentEnv (http://localhost:5173/src/stores/agent.ts:43:17)
+    at async http://localhost:5173/src/App.vue:22:5 @ http://localhost:5173/@vite/client:524

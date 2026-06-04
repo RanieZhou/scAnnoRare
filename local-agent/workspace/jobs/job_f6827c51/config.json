@@ -1,0 +1,11 @@
+{
+    "filepath": "/Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad",
+    "pred_csv_path": "/Users/wangxiansheng/Desktop/pre.csv",
+    "label_col": "cell_type",
+    "rare_mode": "pooled_rare_vs_nonrare",
+    "target_rare_classes": [
+        "activated_stellate"
+    ],
+    "match_mode": "relaxed",
+    "cell_id_col": null
+}

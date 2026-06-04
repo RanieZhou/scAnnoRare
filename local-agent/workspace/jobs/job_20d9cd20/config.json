@@ -1,0 +1,7 @@
+{
+    "filepath": "/nonexistent_large.h5ad",
+    "dataset_name": "will_fail",
+    "label_col": "x",
+    "batch_col": null,
+    "rare_threshold": 0.05
+}

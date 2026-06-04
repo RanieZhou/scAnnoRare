@@ -180,7 +180,7 @@ const handleCreateExperiment = async () => {
   createLoading.value = true
   try {
     const res = await axios.post('http://127.0.0.1:8000/api/v1/experiments', {
-      project_id: 'proj_default',
+      project_id: null,
       dataset_id: form.datasetId,
       experiment_name: form.experimentName,
       task_type: form.taskType,

@@ -1,0 +1,64 @@
+2026-06-04 10:45:21,055 - INFO - Starting rare detection evaluation. mode=pooled_rare_vs_nonrare, targets=['T cell']
+2026-06-04 10:45:21,761 - INFO - Rare cell metrics written to /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/jobs/job_1e3c4b4a/result.json
+2026-06-04 10:45:22,598 - INFO - Generating offline report from /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/jobs/job_1e3c4b4a/result.json
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 21484 (\N{CJK UNIFIED IDEOGRAPH-53EC}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 22238 (\N{CJK UNIFIED IDEOGRAPH-56DE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 29575 (\N{CJK UNIFIED IDEOGRAPH-7387}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 31934 (\N{CJK UNIFIED IDEOGRAPH-7CBE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 30830 (\N{CJK UNIFIED IDEOGRAPH-786E}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 31232 (\N{CJK UNIFIED IDEOGRAPH-7A00}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 26377 (\N{CJK UNIFIED IDEOGRAPH-6709}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 32454 (\N{CJK UNIFIED IDEOGRAPH-7EC6}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 32990 (\N{CJK UNIFIED IDEOGRAPH-80DE}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 26816 (\N{CJK UNIFIED IDEOGRAPH-68C0}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 27979 (\N{CJK UNIFIED IDEOGRAPH-6D4B}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 24615 (\N{CJK UNIFIED IDEOGRAPH-6027}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 33021 (\N{CJK UNIFIED IDEOGRAPH-80FD}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 26354 (\N{CJK UNIFIED IDEOGRAPH-66F2}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:497: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.tight_layout()
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 21484 (\N{CJK UNIFIED IDEOGRAPH-53EC}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 22238 (\N{CJK UNIFIED IDEOGRAPH-56DE}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 29575 (\N{CJK UNIFIED IDEOGRAPH-7387}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 31934 (\N{CJK UNIFIED IDEOGRAPH-7CBE}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 30830 (\N{CJK UNIFIED IDEOGRAPH-786E}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 31232 (\N{CJK UNIFIED IDEOGRAPH-7A00}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 26377 (\N{CJK UNIFIED IDEOGRAPH-6709}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 32454 (\N{CJK UNIFIED IDEOGRAPH-7EC6}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 32990 (\N{CJK UNIFIED IDEOGRAPH-80DE}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 26816 (\N{CJK UNIFIED IDEOGRAPH-68C0}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 27979 (\N{CJK UNIFIED IDEOGRAPH-6D4B}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 24615 (\N{CJK UNIFIED IDEOGRAPH-6027}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 33021 (\N{CJK UNIFIED IDEOGRAPH-80FD}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 26354 (\N{CJK UNIFIED IDEOGRAPH-66F2}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/runners/generate_report.py:498: UserWarning: Glyph 32447 (\N{CJK UNIFIED IDEOGRAPH-7EBF}) missing from font(s) DejaVu Sans.
+  plt.savefig(os.path.join(fig_dir, "roc_pr_curve.png"))
+2026-06-04 10:45:22,694 - INFO - Successfully generated HTML offline report at /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/jobs/job_1e3c4b4a/report.html

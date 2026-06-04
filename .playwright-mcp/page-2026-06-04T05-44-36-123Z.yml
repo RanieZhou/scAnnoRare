@@ -1,0 +1,102 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "数据集注册" [ref=e24] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e26]
+        - generic [ref=e28]: 数据集注册
+      - link "实验配置管理" [ref=e29] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e31]
+        - generic [ref=e33]: 实验配置管理
+      - link "评估与对比" [ref=e34] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e36]
+        - generic [ref=e38]: 评估与对比
+      - link "报告中心" [ref=e39] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e41]
+        - generic [ref=e43]: 报告中心
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - img [ref=e47]
+        - generic [ref=e49]: admin
+      - button "退出" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: 退出
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - navigation "面包屑" [ref=e55]:
+        - generic [ref=e56]:
+          - link "scAnnoRare" [ref=e57]
+          - text: /
+        - link "Datasets" [ref=e213]
+      - generic [ref=e62]:
+        - img [ref=e64] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e67]:
+      - generic [ref=e448]:
+        - generic [ref=e449]:
+          - heading "📂 导入与注册本地数据集" [level=3] [ref=e450]
+          - generic [ref=e451]:
+            - generic [ref=e452]:
+              - generic [ref=e453]: "*本地 H5AD 绝对路径"
+              - textbox "*本地 H5AD 绝对路径" [ref=e457]:
+                - /placeholder: "例如: C:\\data\\immune.h5ad"
+                - text: /Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad
+            - button "检测 H5AD 数据结构" [ref=e458] [cursor=pointer]:
+              - generic [ref=e459]: 检测 H5AD 数据结构
+            - generic [ref=e486]:
+              - separator [ref=e487]:
+                - generic [ref=e488]: 选择标签与批次字段
+              - paragraph [ref=e490]:
+                - text: "🧬 细胞数:"
+                - strong [ref=e491]: "8569"
+                - text: "| 基因数:"
+                - strong [ref=e492]: "20125"
+              - generic [ref=e493]:
+                - generic [ref=e494]: "*数据集重命名 (Alias)"
+                - textbox "*数据集重命名 (Alias)" [ref=e498]:
+                  - /placeholder: "例如: Immune_DC_2026"
+                  - text: Immune_DC_Evaluation
+              - generic [ref=e499]:
+                - generic [ref=e500]: "*真实细胞类型注释列 (label_col)"
+                - generic [ref=e503] [cursor=pointer]:
+                  - generic:
+                    - combobox "*真实细胞类型注释列 (label_col)" [ref=e505]
+                    - generic [ref=e506]: 请选择主标签字段
+                  - img [ref=e509]
+              - generic [ref=e511]:
+                - generic [ref=e512]: 实验批次来源列 (batch_col) 可选
+                - generic [ref=e515] [cursor=pointer]:
+                  - generic:
+                    - combobox "实验批次来源列 (batch_col) 可选" [ref=e517]
+                    - generic [ref=e518]: 请选择批次字段
+                  - img [ref=e521]
+              - generic [ref=e523]:
+                - generic [ref=e524]: 稀有细胞定义阈值
+                - generic [ref=e525]:
+                  - slider "稀有细胞定义阈值" [ref=e529] [cursor=pointer]
+                  - generic [ref=e531]: 占比低于该阈值的细胞类型将被判定为稀有细胞候选类
+              - button "分析标签分布并注册数据集" [ref=e532] [cursor=pointer]:
+                - generic [ref=e533]: 分析标签分布并注册数据集
+          - generic [ref=e460]:
+            - separator [ref=e461]:
+              - generic [ref=e462]: 快速测试指引
+            - paragraph [ref=e463]:
+              - text: 若本地无可用单细胞数据，可使用此测试路径，系统已在本地准备好 tiny 数据集：
+              - code [ref=e464] [cursor=pointer]: /Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad
+        - generic [ref=e466]:
+          - img [ref=e468]
+          - paragraph [ref=e485]: 请输入 H5AD 绝对路径，进行细胞层面的元数据探查与标签分布可视化分析

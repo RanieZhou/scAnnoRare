@@ -1,0 +1,11 @@
+{
+    "filepath": "/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/datasets/tiny_dataset.h5ad",
+    "pred_csv_path": "/Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/predictions/imported_predictions/tiny_predictions.csv",
+    "label_col": "cell_type",
+    "rare_mode": "pooled_rare_vs_nonrare",
+    "target_rare_classes": [
+        "T cell"
+    ],
+    "match_mode": "relaxed",
+    "cell_id_col": null
+}
