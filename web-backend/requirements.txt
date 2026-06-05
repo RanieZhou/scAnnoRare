@@ -1,0 +1,8 @@
+# scAnnoRare Web 后端依赖
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+cryptography
+pydantic
+requests

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>scAnnoRare Agent 兼容性验证</title>
+  <style>
+    body { font-family: -apple-system, "Segoe UI", sans-serif; background:#0d1117; color:#e6edf3;
+           max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    h1 { font-size: 1.4rem; }
+    .meta { color:#8b949e; font-size:0.85rem; margin-bottom:20px; line-height:1.6; }
+    table { width:100%; border-collapse:collapse; margin-top:16px; }
+    th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #21262d; font-size:0.9rem; }
+    th { color:#8b949e; }
+    .pass { color:#3fb950; font-weight:600; }
+    .fail { color:#f85149; font-weight:600; }
+    code { background:#161b22; padding:2px 6px; border-radius:4px; font-size:0.8rem; }
+  </style>
+</head>
+<body>
+  <h1>🔬 scAnnoRare Local Agent 浏览器兼容性验证</h1>
+  <div class="meta">
+    页面来源（Origin）：<code id="origin"></code><br>
+    目标 Agent：<code>http://127.0.0.1:17890</code><br>
+    场景：HTTPS 页面 → HTTP loopback Agent（复现 Mixed Content / CORS / Private Network Access）
+  </div>
+
+  <table id="results">
+    <thead>
+      <tr><th>#</th><th>测试项</th><th>结果</th><th>详情</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const AGENT = 'http://127.0.0.1:17890';
+    document.getElementById('origin').textContent = location.origin;
+
+    const tests = [
+      {
+        name: 'GET /health（简单请求，无凭证）',
+        run: () => fetch(AGENT + '/api/v1/local/health')
+      },
+      {
+        name: 'GET /env（带 Authorization 头 → 触发 CORS 预检 + PNA）',
+        run: () => fetch(AGENT + '/api/v1/local/env', {
+          headers: { 'Authorization': 'Bearer dummy', 'X-scAnnoRare-Origin': location.origin }
+        })
+      },
+      {
+        name: 'POST /pair（带 JSON body → 触发预检）',
+        run: () => fetch(AGENT + '/api/v1/local/pair', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pairing_code: 'TEST00', origin: location.origin })
+        })
+      },
+    ];
+
+    const results = [];
+    const tbody = document.querySelector('#results tbody');
+
+    async function runAll() {
+      for (let i = 0; i < tests.length; i++) {
+        const t = tests[i];
+        const row = { idx: i + 1, name: t.name };
+        try {
+          const resp = await t.run();
+          // 能拿到 response 即说明浏览器未拦截（即使 HTTP 状态是 4xx 也算"连通"）
+          row.ok = true;
+          row.detail = `HTTP ${resp.status}（浏览器未拦截，请求成功到达 Agent）`;
+        } catch (err) {
+          row.ok = false;
+          row.detail = (err && err.message) ? err.message : String(err);
+        }
+        results.push(row);
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${row.idx}</td><td>${row.name}</td>` +
+          `<td class="${row.ok ? 'pass' : 'fail'}">${row.ok ? '✅ 通过' : '❌ 被拦截'}</td>` +
+          `<td><code>${row.detail}</code></td>`;
+        tbody.appendChild(tr);
+      }
+      window.__RESULTS__ = results;
+      window.__DONE__ = true;
+    }
+    runAll();
+  </script>
+</body>
+</html>

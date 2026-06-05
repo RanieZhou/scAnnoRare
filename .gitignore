@@ -1,1 +1,30 @@
+# 数据集（大文件，本地化）
 data/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local Agent 工作区与打包产物
+local-agent/workspace/jobs/
+local-agent/packaging/dist/
+local-agent/packaging/build/
+local-agent/packaging/*.spec.bak
+
+# 前端
+web-frontend/node_modules/
+web-frontend/dist/
+desktop-agent/node_modules/
+desktop-agent/dist/
+
+# Tauri / Rust 构建产物
+desktop-agent/src-tauri/target/
+desktop-agent/src-tauri/gen/
+
+# 桌面打包临时
+desktop-agent/window-shot.png
+
+# 系统
+.DS_Store

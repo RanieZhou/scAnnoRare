@@ -1,5 +1,18 @@
 import os
 import sys
+
+# ── Frozen-runner entry handler ───────────────────────────────────────────────
+# When packaged with PyInstaller, the Agent shells out to itself to run the
+# evaluation / report runner scripts (there is no external `python`).
+# This must run BEFORE FastAPI / heavy imports so the bundled interpreter behaves
+# like a plain `python <script> <args...>`.
+if len(sys.argv) > 2 and sys.argv[1] == "--run-script":
+    import runpy
+    _script = sys.argv[2]
+    sys.argv = [_script] + sys.argv[3:]
+    runpy.run_path(_script, run_name="__main__")
+    sys.exit(0)
+
 import uuid
 import time
 import logging
@@ -153,4 +166,8 @@ async def generate_pairing_code():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="127.0.0.1", port=17890, reload=True)
+    if getattr(sys, "frozen", False):
+        # Packaged: pass the app object directly; reload/string-import don't work frozen.
+        uvicorn.run(app, host="127.0.0.1", port=17890)
+    else:
+        uvicorn.run("main:app", host="127.0.0.1", port=17890, reload=True)

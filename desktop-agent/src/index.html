@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="styles.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>scAnnoRare Local Agent</title>
+    <script type="module" src="/main.js" defer></script>
+  </head>
+  <body>
+    <main class="app">
+      <header class="brand">
+        <div class="logo">🔮</div>
+        <div>
+          <div class="title">scAnnoRare Local Agent</div>
+          <div class="subtitle">本地计算节点 · 端口 17890</div>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="status-row">
+          <span class="dot" id="status-dot"></span>
+          <span class="status-text" id="status-text">正在检测本地服务…</span>
+        </div>
+        <div class="meta-line">配对状态：<strong id="pair-state">—</strong></div>
+      </section>
+
+      <section class="card">
+        <div class="card-title">节点配对</div>
+        <p class="hint">在 Web 平台「计算节点配对」页输入下方配对码完成授权。</p>
+        <div class="code-box" id="code-box">
+          <span class="code-placeholder">点击下方按钮生成配对码</span>
+        </div>
+        <button class="btn primary" id="gen-btn" disabled>生成配对码</button>
+        <div class="countdown" id="countdown"></div>
+      </section>
+
+      <footer class="foot">关闭窗口将最小化到系统托盘，Agent 持续在后台运行。</footer>
+    </main>
+  </body>
+</html>

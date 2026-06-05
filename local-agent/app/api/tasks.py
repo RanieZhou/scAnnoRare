@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import uuid
 import time
@@ -13,13 +14,49 @@ from fastapi.responses import FileResponse
 logger = logging.getLogger("local-agent.tasks")
 router = APIRouter()
 
-WORKSPACE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "workspace")
+
+def runner_cmd(script_path, *args):
+    """Build the command to run a runner script.
+
+    In a normal Python environment we invoke the runner with the current
+    interpreter (sys.executable). When packaged with PyInstaller (sys.frozen),
+    there is no external ``python``; the frozen executable re-invokes itself
+    via the ``--run-script`` entry handler defined in main.py.
+    """
+    if getattr(sys, "frozen", False):
+        return [sys.executable, "--run-script", script_path, *map(str, args)]
+    return [sys.executable, script_path, *map(str, args)]
+
+
+# Windows：spawn 子进程时抑制黑色控制台窗口闪现（CREATE_NO_WINDOW）。
+_POPEN_KW = {"creationflags": 0x08000000} if sys.platform.startswith("win") else {}
+
+def _user_data_dir() -> str:
+    """跨平台用户可写数据目录（打包后 app bundle 内只读，workspace 必须落在此处）。"""
+    home = os.path.expanduser("~")
+    if sys.platform == "darwin":
+        base = os.path.join(home, "Library", "Application Support", "scAnnoRare")
+    elif sys.platform.startswith("win"):
+        base = os.path.join(os.environ.get("APPDATA", home), "scAnnoRare")
+    else:
+        base = os.path.join(os.environ.get("XDG_DATA_HOME", os.path.join(home, ".local", "share")), "scAnnoRare")
+    return base
+
+if getattr(sys, "frozen", False):
+    # Packaged: runner scripts are extracted into the bundle (_MEIPASS);
+    # the workspace must live in a user-writable location, never inside the app bundle.
+    _BUNDLE = getattr(sys, "_MEIPASS", os.path.dirname(sys.executable))
+    WORKSPACE_DIR = os.path.join(_user_data_dir(), "workspace")
+    RUNNERS_DIR = os.path.join(_BUNDLE, "runners")
+else:
+    _AGENT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+    WORKSPACE_DIR = os.path.join(_AGENT_ROOT, "workspace")
+    RUNNERS_DIR = os.path.join(_AGENT_ROOT, "runners")
+
 os.makedirs(WORKSPACE_DIR, exist_ok=True)
 JOBS_DIR = os.path.join(WORKSPACE_DIR, "jobs")
 os.makedirs(JOBS_DIR, exist_ok=True)
 DB_PATH = os.path.join(JOBS_DIR, "jobs.sqlite")
-
-RUNNERS_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "runners")
 
 
 # Initialize jobs.sqlite db
@@ -98,7 +135,7 @@ def run_job_thread(job_id: str, task_type: str, args: List[str], job_dir: str):
         update_job_status(job_id, "running", 30)
         
         # Start runner process
-        proc = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file)
+        proc = subprocess.Popen(args, stdout=stdout_file, stderr=stderr_file, **_POPEN_KW)
         active_processes[job_id] = proc
         
         # Wait for finish
@@ -111,14 +148,11 @@ def run_job_thread(job_id: str, task_type: str, args: List[str], job_dir: str):
             # Now trigger report generator (runners/generate_report.py)
             result_json = os.path.join(job_dir, "result.json")
             
-            report_script = os.path.join(
-                os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
-                "runners", "generate_report.py"
-            )
-            
+            report_script = os.path.join(RUNNERS_DIR, "generate_report.py")
+
             # Run report generator
-            rep_args = ["python", report_script, result_json, job_dir]
-            rep_proc = subprocess.Popen(rep_args, stdout=stdout_file, stderr=stderr_file)
+            rep_args = runner_cmd(report_script, result_json, job_dir)
+            rep_proc = subprocess.Popen(rep_args, stdout=stdout_file, stderr=stderr_file, **_POPEN_KW)
             rep_proc.wait()
             
             if rep_proc.returncode == 0:
@@ -159,11 +193,8 @@ async def create_annotation_task(payload: AnnotationTaskRequest, background_task
         json.dump(config, f, indent=4, ensure_ascii=False)
         
     # Prepare runner path
-    runner_script = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
-        "runners", "evaluate_annotation.py"
-    )
-    
+    runner_script = os.path.join(RUNNERS_DIR, "evaluate_annotation.py")
+
     # Save job in sqlite
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -174,12 +205,12 @@ async def create_annotation_task(payload: AnnotationTaskRequest, background_task
     conn.commit()
     conn.close()
     
-    args = [
-        "python", runner_script, 
-        payload.filepath, payload.pred_csv_path, 
-        payload.label_col, job_dir, payload.match_mode
-    ]
-    
+    args = runner_cmd(
+        runner_script,
+        payload.filepath, payload.pred_csv_path,
+        payload.label_col, job_dir, payload.match_mode,
+    )
+
     # Dispatch background execution
     background_tasks.add_task(run_job_thread, job_id, "annotation_evaluation", args, job_dir)
     
@@ -202,10 +233,7 @@ async def create_rare_task(payload: RareTaskRequest, background_tasks: Backgroun
         json.dump(config, f, indent=4, ensure_ascii=False)
         
     # Prepare runner path
-    runner_script = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))), 
-        "runners", "evaluate_rare.py"
-    )
+    runner_script = os.path.join(RUNNERS_DIR, "evaluate_rare.py")
     
     # Save job in sqlite
     conn = sqlite3.connect(DB_PATH)
@@ -217,12 +245,12 @@ async def create_rare_task(payload: RareTaskRequest, background_tasks: Backgroun
     conn.commit()
     conn.close()
     
-    args = [
-        "python", runner_script, 
-        payload.filepath, payload.pred_csv_path, 
+    args = runner_cmd(
+        runner_script,
+        payload.filepath, payload.pred_csv_path,
         payload.label_col, job_dir, payload.rare_mode,
-        json.dumps(payload.target_rare_classes), payload.match_mode
-    ]
+        json.dumps(payload.target_rare_classes), payload.match_mode,
+    )
     
     background_tasks.add_task(run_job_thread, job_id, "rare_detection_evaluation", args, job_dir)
     
@@ -461,8 +489,8 @@ async def generate_report_task(payload: GenerateReportRequest, background_tasks:
         stderr_f = open(os.path.join(report_job_dir, "stderr.log"), "w")
         try:
             proc = subprocess.Popen(
-                ["python", report_script, result_json, source_job_dir],
-                stdout=stdout_f, stderr=stderr_f,
+                runner_cmd(report_script, result_json, source_job_dir),
+                stdout=stdout_f, stderr=stderr_f, **_POPEN_KW,
             )
             proc.wait()
             if proc.returncode == 0:

@@ -1,0 +1,18 @@
+# scAnnoRare Local Agent 依赖
+fastapi
+uvicorn
+pydantic
+psutil
+# 计算引擎
+scanpy
+anndata
+pandas
+numpy
+scipy
+scikit-learn
+matplotlib
+seaborn
+jinja2
+# 可选：GPU 检测
+# torch
+# pynvml
