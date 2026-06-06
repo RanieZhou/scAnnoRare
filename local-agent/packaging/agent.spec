@@ -1,29 +1,18 @@
 # -*- mode: python ; coding: utf-8 -*-
 """PyInstaller 打包配置：把 scAnnoRare Local Agent 打成独立可执行（onedir）。"""
 import os
-from PyInstaller.utils.hooks import collect_all, collect_submodules
+from PyInstaller.utils.hooks import collect_submodules
 
 AGENT_ROOT = os.path.abspath(os.path.join(SPECPATH, ".."))
 RUNNERS = os.path.join(AGENT_ROOT, "runners")
 
 datas, binaries, hiddenimports = [], [], []
 
-# 收全运行时真正需要的科学计算库（子模块 + 数据文件）
-# scanpy/celltypist/umap 为 V1.1 内置方法与 UMAP 可视化所需
-for pkg in ["sklearn", "scipy", "matplotlib", "anndata", "seaborn",
-            "pandas", "numpy", "h5py", "jinja2",
-            "scanpy", "celltypist", "umap", "numba", "llvmlite", "pynndescent"]:
-    try:
-        d, b, h = collect_all(pkg)
-        datas += d; binaries += b; hiddenimports += h
-    except Exception:
-        pass
-
 # uvicorn / fastapi 动态加载的子模块
 for pkg in ["uvicorn", "anyio", "starlette"]:
     hiddenimports += collect_submodules(pkg)
 
-# 随包携带 runner 脚本（frozen 时由 --run-script 调用）
+# 随包携带 runner 脚本；运行时由用户选择的本地 Python 环境调用。
 datas += [(os.path.join(RUNNERS, f), "runners")
           for f in os.listdir(RUNNERS) if f.endswith(".py")]
 
@@ -32,10 +21,12 @@ a = Analysis(
     pathex=[AGENT_ROOT],
     binaries=binaries,
     datas=datas,
-    hiddenimports=hiddenimports + ["app.api.env", "app.api.files", "app.api.tasks"],
+    hiddenimports=hiddenimports + ["app.api.env", "app.api.files", "app.api.tasks", "app.api.envs"],
     excludes=[
-        # 运行时不需要的重依赖（注意：V1.1 起 scanpy/numba/llvmlite 已改为包含）
-        "scvi", "scvi-tools", "torch",
+        # Local Agent 只做桥接与调度；科学计算依赖必须来自用户选择的本地 Python 环境。
+        "anndata", "celltypist", "h5py", "jinja2", "matplotlib", "numba", "numpy",
+        "pandas", "pynndescent", "scanpy", "scipy", "scvi", "scvi-tools",
+        "seaborn", "sklearn", "torch", "umap",
         "tkinter", "PyQt5", "PyQt6", "PySide2", "PySide6",
         "IPython", "notebook", "jupyter", "pytest",
     ],

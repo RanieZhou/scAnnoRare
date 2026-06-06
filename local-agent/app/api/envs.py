@@ -10,6 +10,7 @@ import glob
 import json
 import uuid
 import time
+import shutil
 import logging
 import subprocess
 from fastapi import APIRouter, HTTPException, BackgroundTasks
@@ -54,7 +55,7 @@ def _save_store(store: Dict):
 _PROBE_SCRIPT = (
     "import json,sys;"
     "caps={};"
-    "pkgs=['scvi','celltypist','scanpy','anndata','torch','sklearn','actinn'];"
+    "pkgs=['anndata','celltypist','jinja2','matplotlib','numpy','pandas','scanpy','scipy','scvi','seaborn','sklearn','torch','umap'];"
     "[caps.update({p: getattr(__import__(p),'__version__','installed')})"
     " if (lambda: __import__(p) or True)() else None"
     " for p in pkgs];"
@@ -65,7 +66,7 @@ _PROBE_SCRIPT = (
 _PROBE_CODE = """
 import json, sys
 caps = {}
-for p in ['scvi', 'celltypist', 'scanpy', 'anndata', 'torch', 'sklearn']:
+for p in ['anndata', 'celltypist', 'jinja2', 'matplotlib', 'numpy', 'pandas', 'scanpy', 'scipy', 'scvi', 'seaborn', 'sklearn', 'torch', 'umap']:
     try:
         m = __import__(p)
         caps[p] = getattr(m, '__version__', 'installed')
@@ -167,6 +168,11 @@ def _scan_system() -> List[tuple]:
         candidates = ["/usr/bin/python3", "/usr/local/bin/python3", "/opt/homebrew/bin/python3"]
         candidates += glob.glob("/opt/homebrew/bin/python3.*")
         candidates += glob.glob("/usr/local/bin/python3.*")
+
+    for exe_name in ["python", "python3"]:
+        found = shutil.which(exe_name)
+        if found:
+            candidates.append(found)
 
     seen = set()
     for exe in candidates:

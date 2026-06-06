@@ -1,6 +1,6 @@
 """内置方法运行：CellTypist 注释 → 复用现有 annotation 评估流水线。
 
-用法（命令行 / frozen --run-script）：
+用法（由用户选择的本地 Python 环境执行）：
   python run_celltypist.py <adata_path> <label_col> <output_dir> <model> <match_mode>
 """
 import os

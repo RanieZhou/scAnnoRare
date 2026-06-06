@@ -1,6 +1,9 @@
 import os
+import sys
 import json
 import logging
+import subprocess
+import uuid
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Dict, Any, List, Optional
@@ -10,6 +13,20 @@ router = APIRouter()
 
 # 文件浏览：允许浏览的扩展名（数据集 / 预测结果）
 BROWSE_EXTS = (".h5ad", ".csv")
+
+
+def _workspace_dir() -> str:
+    home = os.path.expanduser("~")
+    if sys.platform == "darwin":
+        base = os.path.join(home, "Library", "Application Support", "scAnnoRare")
+    elif sys.platform.startswith("win"):
+        base = os.path.join(os.environ.get("APPDATA", home), "scAnnoRare")
+    else:
+        base = os.path.join(
+            os.environ.get("XDG_DATA_HOME", os.path.join(home, ".local", "share")),
+            "scAnnoRare",
+        )
+    return os.path.join(base, "workspace")
 
 
 @router.get("/files/browse")
@@ -65,7 +82,7 @@ class DatasetRegisterRequest(BaseModel):
     batch_col: Optional[str] = None
     rare_threshold: Optional[float] = 0.05  # default 5%
 
-# Helper to check if file is anndata
+# Helper to check whether the path points to an h5ad dataset candidate.
 def is_h5ad_file(path: str) -> bool:
     if not os.path.exists(path):
         return False
@@ -73,11 +90,46 @@ def is_h5ad_file(path: str) -> bool:
         return False
     return True
 
+
+def _run_dataset_inspector(mode: str, *args) -> Dict[str, Any]:
+    from app.api.tasks import RUNNERS_DIR, _POPEN_KW, _get_external_python
+
+    tmp_dir = os.path.join(_workspace_dir(), "tmp")
+    os.makedirs(tmp_dir, exist_ok=True)
+    output_json = os.path.join(tmp_dir, f"inspect_{uuid.uuid4().hex[:8]}.json")
+    runner = os.path.join(RUNNERS_DIR, "inspect_dataset.py")
+    cmd = [_get_external_python(), runner, mode, output_json, *map(str, args)]
+
+    try:
+        proc = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=120,
+            **_POPEN_KW,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"无法调用本地 Python 环境：{e}")
+
+    result: Dict[str, Any] = {}
+    if os.path.exists(output_json):
+        try:
+            with open(output_json, "r", encoding="utf-8") as f:
+                result = json.load(f)
+        except Exception:
+            result = {}
+
+    if proc.returncode != 0 or not result.get("success"):
+        detail = result.get("error") or proc.stderr.strip() or "本地 Python 环境解析数据集失败。"
+        raise HTTPException(status_code=500, detail=detail)
+    return result
+
 @router.post("/files/select")
 async def select_file(payload: FileSelectRequest):
     """
-    Simulate file selection or validate a given file path.
-    For local agent, we directly test if the file is readable by anndata.
+    Validate the file path and inspect h5ad metadata via the selected local Python.
     """
     path = payload.filepath
     if not os.path.exists(path):
@@ -85,26 +137,7 @@ async def select_file(payload: FileSelectRequest):
     if not is_h5ad_file(path):
         raise HTTPException(status_code=400, detail="File is not a valid .h5ad file.")
     
-    try:
-        import anndata
-        # read_h5ad with backed='r' is extremely fast and light
-        adata = anndata.read_h5ad(path, backed='r')
-        n_cells, n_genes = adata.shape
-        obs_cols = list(adata.obs.columns)
-        var_cols = list(adata.var.columns)
-        
-        # Close connection if supported in backed mode (done automatically in modern anndata)
-        return {
-            "success": True,
-            "filepath": path,
-            "n_cells": n_cells,
-            "n_genes": n_genes,
-            "obs_columns": obs_cols,
-            "var_columns": var_cols
-        }
-    except Exception as e:
-        logger.error(f"Error parsing h5ad file: {e}")
-        raise HTTPException(status_code=500, detail=f"Failed to parse .h5ad file: {str(e)}")
+    return _run_dataset_inspector("select", path)
 
 @router.post("/files/register-dataset")
 async def register_dataset(payload: DatasetRegisterRequest):
@@ -116,68 +149,16 @@ async def register_dataset(payload: DatasetRegisterRequest):
         raise HTTPException(status_code=400, detail="Invalid .h5ad file path.")
     
     try:
-        import anndata
-        import pandas as pd
-        
-        adata = anndata.read_h5ad(path, backed='r')
-        
-        # 24.2 Parameter validation: label_col must be in obs
-        if payload.label_col not in adata.obs.columns:
-            raise HTTPException(status_code=400, detail=f"label_col '{payload.label_col}' not found in dataset obs columns.")
-            
-        if payload.batch_col and payload.batch_col not in adata.obs.columns:
-            raise HTTPException(status_code=400, detail=f"batch_col '{payload.batch_col}' not found in dataset obs columns.")
-
-        # Read specific columns from obs to avoid loading entire object
-        obs_df = pd.DataFrame(adata.obs[[payload.label_col]])
-        if payload.batch_col:
-            obs_df[payload.batch_col] = adata.obs[payload.batch_col]
-            
-        # Label distribution
-        # Handle NaN/missing labels (14.1 Missing or invalid labels)
-        invalid_labels = ["NaN", "None", "", "NA", "Unknown", "unknown", "unassigned", "Unassigned"]
-        
-        # Convert to string and strip
-        obs_df[payload.label_col] = obs_df[payload.label_col].astype(str).str.strip()
-        
-        total_cells = len(obs_df)
-        valid_mask = ~obs_df[payload.label_col].isin(invalid_labels) & obs_df[payload.label_col].notna()
-        valid_df = obs_df[valid_mask]
-        
-        valid_label_cells = len(valid_df)
-        invalid_label_cells = total_cells - valid_label_cells
-        invalid_label_ratio = round(invalid_label_cells / total_cells if total_cells > 0 else 0, 4)
-        
-        label_counts = valid_df[payload.label_col].value_counts()
-        label_distribution = {}
-        rare_candidates = []
-        
-        for lbl, cnt in label_counts.items():
-            ratio = float(cnt / valid_label_cells) if valid_label_cells > 0 else 0.0
-            label_distribution[lbl] = {
-                "count": int(cnt),
-                "ratio": round(ratio, 4)
-            }
-            # If ratio is below threshold, it's a rare cell type candidate
-            if ratio < payload.rare_threshold:
-                rare_candidates.append({
-                    "class_name": lbl,
-                    "count": int(cnt),
-                    "ratio": round(ratio, 4)
-                })
-
-        # Batch distribution if provided
-        batch_distribution = {}
-        if payload.batch_col:
-            batch_counts = obs_df[payload.batch_col].value_counts()
-            for b_lbl, b_cnt in batch_counts.items():
-                batch_distribution[b_lbl] = {
-                    "count": int(b_cnt),
-                    "ratio": round(float(b_cnt / total_cells), 4)
-                }
-
+        summary = _run_dataset_inspector(
+            "register",
+            path,
+            payload.dataset_name,
+            payload.label_col,
+            payload.batch_col or "None",
+            payload.rare_threshold,
+        )
         # Save registration info locally in a JSON file registry (19.4 Local workspace)
-        workspace_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "workspace")
+        workspace_dir = _workspace_dir()
         os.makedirs(workspace_dir, exist_ok=True)
         datasets_dir = os.path.join(workspace_dir, "datasets")
         os.makedirs(datasets_dir, exist_ok=True)
@@ -191,21 +172,7 @@ async def register_dataset(payload: DatasetRegisterRequest):
             except Exception:
                 pass
                 
-        registry[payload.dataset_name] = {
-            "dataset_name": payload.dataset_name,
-            "filepath": path,
-            "n_cells": int(adata.shape[0]),
-            "n_genes": int(adata.shape[1]),
-            "label_col": payload.label_col,
-            "batch_col": payload.batch_col,
-            "total_cells": total_cells,
-            "valid_label_cells": valid_label_cells,
-            "invalid_label_cells": invalid_label_cells,
-            "invalid_label_ratio": invalid_label_ratio,
-            "label_distribution": label_distribution,
-            "rare_candidates": rare_candidates,
-            "batch_distribution": batch_distribution
-        }
+        registry[payload.dataset_name] = summary
         
         with open(registry_path, "w", encoding="utf-8") as f:
             json.dump(registry, f, indent=4, ensure_ascii=False)

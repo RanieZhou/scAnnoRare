@@ -1,7 +1,7 @@
 # scAnnoRare 桌面 Agent（Tauri）
 
-将 Local Agent 打包为**自带计算引擎、无需 Python** 的桌面应用。
-用户双击即用：自动启动本地 Agent、显示配对码、常驻系统托盘。
+将 Local Agent 打包为**本机桥接服务**桌面应用。
+用户双击即用：自动启动本地 Agent、显示配对码、常驻系统托盘；实际计算使用用户本机已选择的 Python 环境。
 
 ```
 ┌─────────────────────────────────────┐
@@ -23,13 +23,16 @@
 
 - **桌面壳**：`desktop-agent/`，Tauri v2（Rust + 前端状态面板）。
 - **Agent**：`local-agent/`，用 PyInstaller 打成独立可执行（onedir）。
-  - 打包后 runner 通过 `scannorare-agent --run-script <脚本>` **自调用**执行（无外部 python）。
+  - 打包后仅负责配对、文件浏览、环境扫描和任务调度。
+  - runner 脚本由用户在设置中选择的本机 Python 环境执行。
   - workspace 落在**用户数据目录**（非 app bundle 内）：
     - macOS：`~/Library/Application Support/scAnnoRare/workspace`
     - Windows：`%APPDATA%\scAnnoRare\workspace`
 - **Agent 嵌入方式**：经 `tauri.conf.json` 的 `bundle.resources` 把 `dist/scannorare-agent`
   整个目录打入安装包的 `Resources/agent/`；Rust 端按
   `<resource>/agent/scannorare-agent[.exe]` 解析并启动。
+- **计算环境**：不随安装包内置 `scanpy/anndata/celltypist/scvi/torch` 等依赖；
+  用户需在 Web 设置页扫描并选择本机 Python 环境。
 
 ---
 
@@ -87,6 +90,6 @@ Agent 路径解析优先级：`SCANNORARE_AGENT_PATH` 环境变量 → 安装包
 - **macOS 签名/公证**：对外分发 .app/.dmg 需 Apple 开发者证书签名 + 公证，
   否则用户首次打开会被 Gatekeeper 拦截（提示「无法验证开发者」）。
 - **Windows 签名**：未签名安装包会触发 SmartScreen 警告，建议申请代码签名证书。
-- **包体积**：约 320–350 MB（主要来自 scipy/sklearn/matplotlib/pandas）。
+- **包体积**：显著小于旧版自带计算环境包；主要包含 Tauri 外壳与 FastAPI 桥接服务。
 - **架构**：macOS 包区分 Apple Silicon (aarch64) 与 Intel (x86_64)；
   Windows 包为 x64。需各自在对应架构上构建。

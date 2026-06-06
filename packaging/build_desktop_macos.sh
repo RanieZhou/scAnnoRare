@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # scAnnoRare 桌面应用一键打包脚本（macOS）
-# 产出：自带 Agent、无需 Python 的 .app / .dmg
+# 产出：自带桥接 Agent 的 .app / .dmg
+# 注意：计算依赖不打进安装包，用户需在本机选择已有 Python 环境。
 #
 # 前置（需预装）：
 #   - Python 3.10/3.11
@@ -24,6 +25,7 @@ python3 -m pip install --upgrade pip
 python3 -m pip install -r requirements.txt
 python3 -m pip install pyinstaller
 cd "$ROOT/local-agent/packaging"
+rm -rf ./dist/scannorare-agent ./build
 pyinstaller agent.spec --distpath ./dist --workpath ./build --noconfirm
 test -f "./dist/scannorare-agent/scannorare-agent" \
   || { echo "Agent 打包失败"; exit 1; }

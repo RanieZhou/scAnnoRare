@@ -29,15 +29,8 @@ def _get_external_python() -> str:
 
 
 def runner_cmd(script_path, *args):
-    """Build the command to run a runner script using the configured external Python.
-
-    Falls back to sys.executable only if no external env has been configured yet
-    (e.g. during first-run setup); in normal use _get_external_python() should be
-    called first to give the user a clear error before reaching here.
-    """
-    from app.api.envs import _load_store
-    store = _load_store()
-    python_path = store.get("default_python_path") or sys.executable
+    """Build the command to run a runner script in the user-selected Python."""
+    python_path = _get_external_python()
     return [python_path, script_path, *map(str, args)]
 
 
@@ -311,10 +304,21 @@ async def list_celltypist_models():
     ]
     downloaded = set()
     try:
-        from celltypist import models as ct_models
-        local_dir = ct_models.models_path
-        if os.path.isdir(local_dir):
-            downloaded = {f for f in os.listdir(local_dir) if f.endswith(".pkl")}
+        code = (
+            "import json, os\n"
+            "from celltypist import models as ct_models\n"
+            "p = ct_models.models_path\n"
+            "print(json.dumps([f for f in os.listdir(p) if f.endswith('.pkl')] if os.path.isdir(p) else []))\n"
+        )
+        proc = subprocess.run(
+            [_get_external_python(), "-c", code],
+            capture_output=True,
+            text=True,
+            timeout=10,
+            **_POPEN_KW,
+        )
+        if proc.returncode == 0 and proc.stdout.strip():
+            downloaded = set(json.loads(proc.stdout.strip()))
     except Exception:
         pass
     return {
@@ -656,6 +660,7 @@ class InspectDatasetRequest(BaseModel):
 @router.post("/tasks/inspect-dataset")
 async def inspect_dataset_task(payload: InspectDatasetRequest, background_tasks: BackgroundTasks):
     """Inspect h5ad file and compute label distribution / rare candidates as a tracked job."""
+    _get_external_python()
     job_id = f"job_{uuid.uuid4().hex[:8]}"
     job_dir = os.path.join(JOBS_DIR, job_id)
     os.makedirs(job_dir, exist_ok=True)
@@ -671,63 +676,34 @@ async def inspect_dataset_task(payload: InspectDatasetRequest, background_tasks:
     )
     conn.commit(); conn.close()
 
+    result_path = os.path.join(job_dir, "result.json")
+    runner_script = os.path.join(RUNNERS_DIR, "inspect_dataset.py")
+    args = runner_cmd(
+        runner_script,
+        "register",
+        result_path,
+        payload.filepath,
+        payload.dataset_name,
+        payload.label_col,
+        payload.batch_col or "None",
+        payload.rare_threshold,
+    )
+
     def _run():
         update_job_status(job_id, "running", 20)
         log_event(job_dir, "started", 20)
+        stdout_f = open(os.path.join(job_dir, "stdout.log"), "w", encoding="utf-8")
+        stderr_f = open(os.path.join(job_dir, "stderr.log"), "w", encoding="utf-8")
         try:
-            import anndata
-            import pandas as pd
-
-            adata = anndata.read_h5ad(payload.filepath, backed="r")
-            if payload.label_col not in adata.obs.columns:
-                raise ValueError(f"label_col '{payload.label_col}' not found in obs.")
-
-            obs_df = pd.DataFrame(adata.obs[[payload.label_col]])
-            if payload.batch_col and payload.batch_col in adata.obs.columns:
-                obs_df[payload.batch_col] = adata.obs[payload.batch_col]
-
-            invalid = {"NaN", "None", "", "NA", "Unknown", "unknown", "unassigned", "Unassigned"}
-            obs_df[payload.label_col] = obs_df[payload.label_col].astype(str).str.strip()
-            valid_mask = ~obs_df[payload.label_col].isin(invalid) & obs_df[payload.label_col].notna()
-            valid_df = obs_df[valid_mask]
-
-            total = len(obs_df)
-            valid_count = len(valid_df)
-            label_counts = valid_df[payload.label_col].value_counts()
-
-            label_distribution: dict = {}
-            rare_candidates: list = []
-            for lbl, cnt in label_counts.items():
-                ratio = float(cnt / valid_count) if valid_count else 0.0
-                label_distribution[str(lbl)] = {"count": int(cnt), "ratio": round(ratio, 4)}
-                if ratio < payload.rare_threshold:
-                    rare_candidates.append({"class_name": str(lbl), "count": int(cnt), "ratio": round(ratio, 4)})
-
-            batch_distribution: dict = {}
-            if payload.batch_col and payload.batch_col in obs_df.columns:
-                for b, cnt in obs_df[payload.batch_col].value_counts().items():
-                    batch_distribution[str(b)] = {"count": int(cnt), "ratio": round(float(cnt / total), 4)}
-
-            result = {
-                "success": True,
-                "task_type": "inspect_dataset",
-                "dataset_name": payload.dataset_name,
-                "filepath": payload.filepath,
-                "n_cells": int(adata.shape[0]),
-                "n_genes": int(adata.shape[1]),
-                "obs_columns": list(adata.obs.columns),
-                "var_columns": list(adata.var.columns),
-                "total_cells": total,
-                "valid_label_cells": valid_count,
-                "invalid_label_cells": total - valid_count,
-                "label_distribution": label_distribution,
-                "rare_candidates": rare_candidates,
-                "batch_distribution": batch_distribution,
-            }
-
-            result_path = os.path.join(job_dir, "result.json")
-            with open(result_path, "w", encoding="utf-8") as f:
-                json.dump(result, f, indent=4, ensure_ascii=False)
+            proc = subprocess.Popen(args, stdout=stdout_f, stderr=stderr_f, **_POPEN_KW)
+            active_processes[job_id] = proc
+            proc.wait()
+            if proc.returncode != 0 or not os.path.exists(result_path):
+                raise RuntimeError("数据集解析失败，请查看 stderr 日志。")
+            with open(result_path, "r", encoding="utf-8") as f:
+                result = json.load(f)
+            if not result.get("success"):
+                raise RuntimeError(result.get("error", "数据集解析失败。"))
 
             # Update local dataset registry
             registry_path = os.path.join(WORKSPACE_DIR, "datasets", "dataset_registry.json")
@@ -748,6 +724,9 @@ async def inspect_dataset_task(payload: InspectDatasetRequest, background_tasks:
         except Exception as e:
             logger.error(f"inspect-dataset job {job_id} failed: {e}")
             update_job_status(job_id, "failed", 50, result={"error": str(e)}, finished_at=time.time())
+        finally:
+            stdout_f.close(); stderr_f.close()
+            active_processes.pop(job_id, None)
 
     background_tasks.add_task(_run)
     return {"success": True, "local_job_id": job_id, "status": "pending"}
@@ -761,6 +740,7 @@ class GenerateReportRequest(BaseModel):
 @router.post("/tasks/generate-report")
 async def generate_report_task(payload: GenerateReportRequest, background_tasks: BackgroundTasks):
     """(Re-)generate the HTML report for a completed evaluation job."""
+    _get_external_python()
     source_job_dir = os.path.join(JOBS_DIR, payload.local_job_id)
     result_json = os.path.join(source_job_dir, "result.json")
     if not os.path.exists(result_json):

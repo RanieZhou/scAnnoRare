@@ -1,5 +1,6 @@
 # scAnnoRare 桌面应用一键打包脚本（Windows）
-# 产出：自带 Agent、无需 Python 的 .msi / .exe 安装包
+# 产出：自带桥接 Agent 的 .msi / .exe 安装包
+# 注意：计算依赖不打进安装包，用户需在本机选择已有 Python 环境。
 #
 # 前置（需在 Windows 机器上预装）：
 #   - Python 3.10/3.11      https://www.python.org/
@@ -22,6 +23,8 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 python -m pip install pyinstaller
 Set-Location "$Root\local-agent\packaging"
+Remove-Item -Recurse -Force .\dist\scannorare-agent -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force .\build -ErrorAction SilentlyContinue
 pyinstaller agent.spec --distpath .\dist --workpath .\build --noconfirm
 if (-not (Test-Path ".\dist\scannorare-agent\scannorare-agent.exe")) {
     throw "Agent 打包失败：未找到 dist\scannorare-agent\scannorare-agent.exe"

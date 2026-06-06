@@ -3,19 +3,6 @@ fastapi
 uvicorn
 pydantic
 psutil
-# 计算引擎
-scanpy
-anndata
-pandas
-numpy
-scipy
-scikit-learn
-matplotlib
-seaborn
-jinja2
-# 内置方法 + 可视化（V1.1）
-celltypist
-umap-learn
-# 可选：GPU 检测
-# torch
-# pynvml
+
+# 注意：Local Agent 只负责本机桥接、配对、环境扫描与任务调度。
+# h5ad 解析、评估、CellTypist、UMAP、scANVI 等计算依赖应安装在用户选择的本地 Python 环境中。
