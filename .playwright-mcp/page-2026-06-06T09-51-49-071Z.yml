@@ -1,0 +1,101 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "项目管理" [ref=e24] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e26]
+        - generic [ref=e28]: 项目管理
+      - link "数据集注册" [ref=e29] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e31]
+        - generic [ref=e33]: 数据集注册
+      - link "实验配置管理" [ref=e34] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e36]
+        - generic [ref=e38]: 实验配置管理
+      - link "评估与对比" [ref=e39] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e41]
+        - generic [ref=e43]: 评估与对比
+      - link "报告中心" [ref=e44] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e46]
+        - generic [ref=e48]: 报告中心
+      - link "系统设置" [active] [ref=e49] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e51]
+        - generic [ref=e53]: 系统设置
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - generic [ref=e59]: admin
+      - button "退出" [ref=e60] [cursor=pointer]:
+        - generic [ref=e61]: 退出
+  - generic [ref=e62]:
+    - banner [ref=e63]:
+      - navigation "面包屑" [ref=e65]:
+        - generic [ref=e66]:
+          - link "scAnnoRare" [ref=e67]
+          - text: /
+        - link "Settings" [ref=e148]
+      - generic [ref=e72]:
+        - img [ref=e74] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e77]:
+      - generic [ref=e149]:
+        - generic [ref=e150]:
+          - heading "👤 账号信息" [level=3] [ref=e151]
+          - generic [ref=e152]:
+            - generic [ref=e153]:
+              - generic [ref=e154]: 用户名
+              - generic [ref=e155]: admin
+            - generic [ref=e156]:
+              - generic [ref=e157]: 用户 ID
+              - generic [ref=e158]: admin_001
+            - generic [ref=e159]:
+              - generic [ref=e160]: 登录令牌
+              - generic [ref=e161]: eyJhbGciOiJIUzI1NiIsInR5…
+        - generic [ref=e162]:
+          - heading "🔒 修改密码" [level=3] [ref=e163]
+          - generic [ref=e164]:
+            - generic [ref=e165]:
+              - generic [ref=e166]: 原密码
+              - generic [ref=e169]:
+                - textbox "原密码" [ref=e170]: admin
+                - img [ref=e173] [cursor=pointer]
+            - generic [ref=e176]:
+              - generic [ref=e177]: 新密码（至少 4 位）
+              - textbox "新密码（至少 4 位）" [ref=e181]
+            - button "确认修改" [ref=e182] [cursor=pointer]:
+              - generic [ref=e183]: 确认修改
+        - generic [ref=e184]:
+          - heading "🖥️ 本地计算节点" [level=3] [ref=e185]
+          - generic [ref=e186]:
+            - generic [ref=e188]: 已连接（127.0.0.1:17890）
+            - button "前往配对页" [ref=e189] [cursor=pointer]:
+              - generic [ref=e190]: 前往配对页
+        - generic [ref=e191]:
+          - heading "🐍 Python 环境管理" [level=3] [ref=e192]
+          - paragraph [ref=e193]: 检测本地 conda / pyenv / system Python 环境，选定后可在评估页直接运行 scANVI 等重型方法（无需打包进 Agent）。
+          - generic [ref=e194]:
+            - button "🔍 重新扫描环境" [disabled] [ref=e195]:
+              - generic [ref=e196]: 🔍 重新扫描环境
+            - button "➕ 手动添加路径" [disabled] [ref=e197]:
+              - generic [ref=e198]: ➕ 手动添加路径
+          - generic [ref=e199]: 请先连接并配对本地 Agent
+        - generic [ref=e200]:
+          - heading "ℹ️ 关于" [level=3] [ref=e201]
+          - paragraph [ref=e202]: 单细胞细胞类型注释与稀有细胞识别多方法评估系统
+          - paragraph [ref=e203]: scAnnoRare · 版本 V1.1

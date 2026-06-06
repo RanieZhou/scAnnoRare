@@ -15,17 +15,30 @@ logger = logging.getLogger("local-agent.tasks")
 router = APIRouter()
 
 
-def runner_cmd(script_path, *args):
-    """Build the command to run a runner script.
+def _get_external_python() -> str:
+    """Return the configured default external Python path, or raise 400 if not set."""
+    from app.api.envs import _load_store
+    store = _load_store()
+    python_path = store.get("default_python_path")
+    if not python_path or not os.path.isfile(python_path):
+        raise HTTPException(
+            status_code=400,
+            detail="未配置外部 Python 环境。请前往系统设置 → Python 环境，扫描并选定一个包含所需依赖的本地 Python 环境。",
+        )
+    return python_path
 
-    In a normal Python environment we invoke the runner with the current
-    interpreter (sys.executable). When packaged with PyInstaller (sys.frozen),
-    there is no external ``python``; the frozen executable re-invokes itself
-    via the ``--run-script`` entry handler defined in main.py.
+
+def runner_cmd(script_path, *args):
+    """Build the command to run a runner script using the configured external Python.
+
+    Falls back to sys.executable only if no external env has been configured yet
+    (e.g. during first-run setup); in normal use _get_external_python() should be
+    called first to give the user a clear error before reaching here.
     """
-    if getattr(sys, "frozen", False):
-        return [sys.executable, "--run-script", script_path, *map(str, args)]
-    return [sys.executable, script_path, *map(str, args)]
+    from app.api.envs import _load_store
+    store = _load_store()
+    python_path = store.get("default_python_path") or sys.executable
+    return [python_path, script_path, *map(str, args)]
 
 
 # Windows：spawn 子进程时抑制黑色控制台窗口闪现（CREATE_NO_WINDOW）。
@@ -183,6 +196,7 @@ def run_job_thread(job_id: str, task_type: str, args: List[str], job_dir: str):
 
 @router.post("/tasks/evaluate-annotation")
 async def create_annotation_task(payload: AnnotationTaskRequest, background_tasks: BackgroundTasks):
+    _get_external_python()
     job_id = f"job_{uuid.uuid4().hex[:8]}"
     job_dir = os.path.join(JOBS_DIR, job_id)
     os.makedirs(job_dir, exist_ok=True)
@@ -221,8 +235,295 @@ async def create_annotation_task(payload: AnnotationTaskRequest, background_task
         "message": "Annotation evaluation task queued successfully."
     }
 
+
+# ── UMAP 嵌入计算 ──────────────────────────────────────────────────────────────
+class EmbeddingTaskRequest(BaseModel):
+    filepath: str
+    label_col: str
+    max_cells: Optional[int] = 4000
+    pred_csv: Optional[str] = None
+
+
+@router.post("/tasks/compute-embedding")
+async def create_embedding_task(payload: EmbeddingTaskRequest, background_tasks: BackgroundTasks):
+    _get_external_python()
+    job_id = f"job_{uuid.uuid4().hex[:8]}"
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    os.makedirs(job_dir, exist_ok=True)
+    config = payload.dict()
+    with open(os.path.join(job_dir, "config.json"), "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=4, ensure_ascii=False)
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO jobs (id, task_type, status, progress, config_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (job_id, "compute_embedding", "pending", 0, json.dumps(config), time.time()),
+    )
+    conn.commit(); conn.close()
+
+    runner_script = os.path.join(RUNNERS_DIR, "compute_embedding.py")
+    args = runner_cmd(runner_script, payload.filepath, payload.label_col, job_dir,
+                      str(payload.max_cells), payload.pred_csv or "None")
+
+    def _run():
+        update_job_status(job_id, "running", 20)
+        log_event(job_dir, "started", 20)
+        stdout_f = open(os.path.join(job_dir, "stdout.log"), "w")
+        stderr_f = open(os.path.join(job_dir, "stderr.log"), "w")
+        try:
+            proc = subprocess.Popen(args, stdout=stdout_f, stderr=stderr_f, **_POPEN_KW)
+            active_processes[job_id] = proc
+            proc.wait()
+            result_path = os.path.join(job_dir, "result.json")
+            if proc.returncode == 0 and os.path.exists(result_path):
+                with open(result_path, "r", encoding="utf-8") as f:
+                    res = json.load(f)
+                update_job_status(job_id, "success", 100, result=res, finished_at=time.time())
+                log_event(job_dir, "completed", 100)
+            else:
+                update_job_status(job_id, "failed", 90, result={"error": "嵌入计算失败"}, finished_at=time.time())
+        except Exception as e:
+            update_job_status(job_id, "failed", 50, result={"error": str(e)}, finished_at=time.time())
+        finally:
+            stdout_f.close(); stderr_f.close()
+            active_processes.pop(job_id, None)
+
+    background_tasks.add_task(_run)
+    return {"success": True, "local_job_id": job_id, "status": "pending"}
+
+
+# ── 内置方法：CellTypist ───────────────────────────────────────────────────────
+class CelltypistTaskRequest(BaseModel):
+    filepath: str
+    label_col: str
+    model: Optional[str] = "Immune_All_Low.pkl"
+    match_mode: Optional[str] = "relaxed"
+
+
+@router.get("/builtin/celltypist-models")
+async def list_celltypist_models():
+    """返回 CellTypist 可用预训练模型列表（已下载的标记 downloaded）。"""
+    common = [
+        "Immune_All_Low.pkl", "Immune_All_High.pkl",
+        "Adult_Mouse_Gut.pkl", "Cells_Intestinal_Tract.pkl",
+        "Human_Lung_Atlas.pkl", "Healthy_COVID19_PBMC.pkl",
+        "Developing_Human_Brain.pkl", "Human_PF_Lung.pkl",
+    ]
+    downloaded = set()
+    try:
+        from celltypist import models as ct_models
+        local_dir = ct_models.models_path
+        if os.path.isdir(local_dir):
+            downloaded = {f for f in os.listdir(local_dir) if f.endswith(".pkl")}
+    except Exception:
+        pass
+    return {
+        "models": [{"name": m, "downloaded": m in downloaded} for m in common],
+        "default": "Immune_All_Low.pkl",
+    }
+
+
+@router.post("/tasks/run-celltypist")
+async def create_celltypist_task(payload: CelltypistTaskRequest, background_tasks: BackgroundTasks):
+    _get_external_python()
+    job_id = f"job_{uuid.uuid4().hex[:8]}"
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    os.makedirs(job_dir, exist_ok=True)
+
+    config = payload.dict()
+    with open(os.path.join(job_dir, "config.json"), "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=4, ensure_ascii=False)
+
+    runner_script = os.path.join(RUNNERS_DIR, "run_celltypist.py")
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO jobs (id, task_type, status, progress, config_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (job_id, "builtin_celltypist", "pending", 0, json.dumps(config), time.time()),
+    )
+    conn.commit(); conn.close()
+
+    args = runner_cmd(
+        runner_script,
+        payload.filepath, payload.label_col, job_dir,
+        payload.model, payload.match_mode,
+    )
+    # run_job_thread 会先跑 runner（CellTypist 预测+评估），再生成报告
+    background_tasks.add_task(run_job_thread, job_id, "builtin_celltypist", args, job_dir)
+
+    return {
+        "success": True,
+        "local_job_id": job_id,
+        "status": "pending",
+        "message": "CellTypist builtin run queued successfully.",
+    }
+
+
+# ── 外部环境方法（scANVI 等） ─────────────────────────────────────────────────
+# 支持的外部方法 → 对应的 runner 脚本名
+_EXTERNAL_METHOD_RUNNERS = {
+    "scanvi": "run_scanvi.py",
+}
+
+class ExternalMethodTaskRequest(BaseModel):
+    method_type: str           # e.g. "scanvi"
+    filepath: str              # h5ad 路径
+    label_col: str
+    match_mode: Optional[str] = "relaxed"
+    params: Optional[Dict[str, Any]] = {}   # method-specific extras
+
+
+@router.post("/tasks/run-external")
+async def create_external_method_task(
+    payload: ExternalMethodTaskRequest,
+    background_tasks: BackgroundTasks,
+):
+    """使用默认外部 Python 环境运行方法，全程（预测 + 评估 + 报告）均在用户本地环境中执行。"""
+    method_type = payload.method_type.lower()
+    if method_type not in _EXTERNAL_METHOD_RUNNERS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"不支持的外部方法：{method_type}。支持：{list(_EXTERNAL_METHOD_RUNNERS)}",
+        )
+    _get_external_python()  # 提前校验，未配置时给用户明确提示
+
+    job_id = f"job_{uuid.uuid4().hex[:8]}"
+    job_dir = os.path.join(JOBS_DIR, job_id)
+    os.makedirs(job_dir, exist_ok=True)
+
+    config = payload.dict()
+    with open(os.path.join(job_dir, "config.json"), "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=4, ensure_ascii=False)
+
+    runner_script = os.path.join(RUNNERS_DIR, _EXTERNAL_METHOD_RUNNERS[method_type])
+
+    conn = sqlite3.connect(DB_PATH)
+    conn.execute(
+        "INSERT INTO jobs (id, task_type, status, progress, config_json, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+        (job_id, f"external_{method_type}", "pending", 0, json.dumps(config), time.time()),
+    )
+    conn.commit(); conn.close()
+
+    p = payload.params or {}
+    train_frac  = str(p.get("train_frac", 0.8))
+    max_epochs  = str(p.get("max_epochs", 100))
+    batch_col   = str(p.get("batch_col", "None"))
+
+    def _run():
+        log_event(job_dir, "started", 5)
+        update_job_status(job_id, "running", 5)
+        stdout_f = open(os.path.join(job_dir, "stdout.log"), "w", encoding="utf-8")
+        stderr_f = open(os.path.join(job_dir, "stderr.log"), "w", encoding="utf-8")
+        try:
+            # Phase 1: 外部环境跑方法预测（可能耗时数分钟）
+            log_event(job_dir, "phase1_prediction", 10)
+            update_job_status(job_id, "running", 10)
+            phase1_args = runner_cmd(
+                runner_script,
+                payload.filepath, payload.label_col, job_dir,
+                train_frac, max_epochs, payload.match_mode, batch_col,
+            )
+            proc1 = subprocess.Popen(phase1_args, stdout=stdout_f, stderr=stderr_f, **_POPEN_KW)
+            active_processes[job_id] = proc1
+            proc1.wait()
+
+            if proc1.returncode != 0:
+                update_job_status(job_id, "failed", 30, result={"error": "外部方法预测失败，请查看 stderr 日志"}, finished_at=time.time())
+                return
+
+            # 读取预测 CSV 路径（从 summary JSON）
+            summary_path = os.path.join(job_dir, f"{method_type}_summary.json")
+            if not os.path.exists(summary_path):
+                update_job_status(job_id, "failed", 35, result={"error": "找不到预测摘要文件"}, finished_at=time.time())
+                return
+            with open(summary_path) as f:
+                summary = json.load(f)
+            if not summary.get("success"):
+                update_job_status(job_id, "failed", 35, result={"error": summary.get("error", "预测失败")}, finished_at=time.time())
+                return
+
+            pred_csv = summary["pred_csv"]
+            method_name = summary.get("method_name", method_type.upper())
+
+            # Phase 2: 外部 Python 跑评估
+            log_event(job_dir, "phase2_evaluation", 50)
+            update_job_status(job_id, "running", 50)
+            eval_script = os.path.join(RUNNERS_DIR, "evaluate_annotation.py")
+            phase2_args = runner_cmd(eval_script, payload.filepath, pred_csv, payload.label_col, job_dir, payload.match_mode)
+            proc2 = subprocess.Popen(phase2_args, stdout=stdout_f, stderr=stderr_f, **_POPEN_KW)
+            active_processes[job_id] = proc2
+            proc2.wait()
+
+            if proc2.returncode != 0:
+                update_job_status(job_id, "failed", 60, result={"error": "评估阶段失败，请查看日志"}, finished_at=time.time())
+                return
+
+            # 注入方法名
+            result_path = os.path.join(job_dir, "result.json")
+            if os.path.exists(result_path):
+                with open(result_path, "r", encoding="utf-8") as f:
+                    res_data = json.load(f)
+                res_data["method_name"] = method_name
+                with open(result_path, "w", encoding="utf-8") as f:
+                    json.dump(res_data, f, indent=4, ensure_ascii=False)
+
+            # Phase 3: 生成报告
+            log_event(job_dir, "phase3_report", 75)
+            update_job_status(job_id, "running", 75)
+            rep_script = os.path.join(RUNNERS_DIR, "generate_report.py")
+            proc3 = subprocess.Popen(
+                runner_cmd(rep_script, result_path, job_dir),
+                stdout=stdout_f, stderr=stderr_f, **_POPEN_KW,
+            )
+            proc3.wait()
+
+            if os.path.exists(result_path):
+                with open(result_path, "r", encoding="utf-8") as f:
+                    final_result = json.load(f)
+                update_job_status(job_id, "success", 100, result=final_result, finished_at=time.time())
+                log_event(job_dir, "completed", 100)
+            else:
+                update_job_status(job_id, "failed", 90, result={"error": "result.json 未生成"}, finished_at=time.time())
+
+        except Exception as e:
+            logger.error(f"External job {job_id} error: {e}")
+            update_job_status(job_id, "failed", 50, result={"error": str(e)}, finished_at=time.time())
+        finally:
+            stdout_f.close(); stderr_f.close()
+            active_processes.pop(job_id, None)
+
+    background_tasks.add_task(_run)
+    return {
+        "success": True,
+        "local_job_id": job_id,
+        "status": "pending",
+        "message": f"外部方法 {method_type.upper()} 已在后台启动（分三阶段执行）",
+    }
+
+
+@router.get("/tasks/external-methods")
+async def list_external_methods():
+    """返回支持的外部方法列表及所需库。"""
+    return {
+        "methods": [
+            {
+                "id": "scanvi",
+                "name": "scANVI",
+                "description": "semi-supervised VAE 细胞类型注释（scvi-tools）",
+                "required_packages": ["scvi", "torch", "anndata", "scanpy"],
+                "params": [
+                    {"key": "train_frac", "label": "训练集比例", "type": "float", "default": 0.8},
+                    {"key": "max_epochs", "label": "最大训练轮次", "type": "int", "default": 100},
+                    {"key": "batch_col", "label": "批次列（可选）", "type": "str", "default": ""},
+                ],
+            },
+        ]
+    }
+
+
 @router.post("/tasks/evaluate-rare")
 async def create_rare_task(payload: RareTaskRequest, background_tasks: BackgroundTasks):
+    _get_external_python()
     job_id = f"job_{uuid.uuid4().hex[:8]}"
     job_dir = os.path.join(JOBS_DIR, job_id)
     os.makedirs(job_dir, exist_ok=True)

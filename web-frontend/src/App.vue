@@ -25,6 +25,11 @@
             <span class="badge" :class="agentStore.isOnline ? 'dot-online' : 'dot-offline'"></span>
           </router-link>
 
+          <router-link to="/projects" class="nav-item">
+            <el-icon><Briefcase /></el-icon>
+            <span>项目管理</span>
+          </router-link>
+
           <router-link to="/datasets" class="nav-item">
             <el-icon><FolderOpened /></el-icon>
             <span>数据集注册</span>
@@ -43,6 +48,11 @@
           <router-link to="/reports" class="nav-item">
             <el-icon><Document /></el-icon>
             <span>报告中心</span>
+          </router-link>
+
+          <router-link to="/settings" class="nav-item">
+            <el-icon><Setting /></el-icon>
+            <span>系统设置</span>
           </router-link>
         </nav>
 
@@ -88,7 +98,7 @@
         <main class="content-view">
           <router-view v-slot="{ Component }">
             <transition name="fade" mode="out-in">
-              <component :is="Component" />
+              <component :is="Component" :key="$route.path" />
             </transition>
           </router-view>
         </main>
@@ -107,6 +117,7 @@ import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 import {
   Odometer, Cpu, FolderOpened, ScaleToOriginal,
   DataAnalysis, Document, User, CircleCheck, Warning,
+  Briefcase, Setting,
 } from '@element-plus/icons-vue'
 
 const route      = useRoute()

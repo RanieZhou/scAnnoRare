@@ -27,6 +27,7 @@ class Project(Base):
 class Dataset(Base):
     __tablename__ = "datasets"
     id                    = Column(String(50),  primary_key=True, index=True)
+    user_id               = Column(String(50),  ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
     project_id            = Column(String(50),  ForeignKey("projects.id", ondelete="CASCADE"), nullable=True)
     dataset_name          = Column(String(100), index=True)
     local_dataset_alias   = Column(String(500))
@@ -61,6 +62,7 @@ class Agent(Base):
 class Experiment(Base):
     __tablename__ = "experiments"
     id                      = Column(String(50),  primary_key=True, index=True)
+    user_id                 = Column(String(50),  ForeignKey("users.id", ondelete="CASCADE"), nullable=True, index=True)
     project_id              = Column(String(50),  ForeignKey("projects.id", ondelete="CASCADE"), nullable=True)
     dataset_id              = Column(String(50),  ForeignKey("datasets.id", ondelete="CASCADE"))
     experiment_name         = Column(String(100), index=True)

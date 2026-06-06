@@ -6,23 +6,35 @@
         <h3 class="section-title">📂 导入与注册本地数据集</h3>
         
         <el-form :model="form" label-position="top">
-          <el-form-item label="本地 H5AD 绝对路径" required>
-            <el-input 
-              v-model="form.filepath" 
-              placeholder="例如: C:\data\immune.h5ad" 
-              class="neon-input"
-            />
+          <el-form-item label="本地 H5AD 文件" required>
+            <div class="path-input-row">
+              <el-input
+                v-model="form.filepath"
+                placeholder="点击「浏览」选择，或手动输入绝对路径"
+                class="neon-input"
+              />
+              <el-button :disabled="!agentStore.paired" @click="pickerVisible = true">
+                📂 浏览
+              </el-button>
+            </div>
           </el-form-item>
-          
-          <el-button 
-            type="primary" 
-            class="gradient-btn w-100" 
-            :disabled="!agentStore.paired" 
+
+          <el-button
+            type="primary"
+            class="gradient-btn w-100"
+            :disabled="!agentStore.paired"
             :loading="inspectLoading"
             @click="handleInspectFile"
           >
             检测 H5AD 数据结构
           </el-button>
+
+          <FilePicker
+            v-model="pickerVisible"
+            title="选择 H5AD 数据文件"
+            exts=".h5ad"
+            @select="(p: string) => (form.filepath = p)"
+          />
           
           <!-- Column bindings (appears after inspection success) -->
           <div v-if="inspectResult" class="col-bindings">
@@ -114,6 +126,12 @@
             </template>
           </el-table-column>
         </el-table>
+
+        <el-divider />
+
+        <!-- UMAP 嵌入可视化 -->
+        <h4 class="sub-title">🗺️ UMAP 二维嵌入（按细胞类型着色）</h4>
+        <UmapViewer :filepath="form.filepath" :label-col="form.labelCol" />
       </div>
       
       <!-- Empty panel -->
@@ -130,6 +148,11 @@ import { useAgentStore } from '../stores/agent'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import * as echarts from 'echarts'
+import FilePicker from '../components/FilePicker.vue'
+import UmapViewer from '../components/UmapViewer.vue'
+
+const pickerVisible = ref(false)
+// .path-input-row 样式见 <style>，用于路径输入框 + 浏览按钮并排
 
 const agentStore = useAgentStore()
 const inspectLoading = ref(false)
@@ -337,6 +360,15 @@ const handleRegisterDataset = async () => {
   font-size: 1.15rem;
   font-weight: 700;
   color: #cbd5e1;
+}
+
+.path-input-row {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+.path-input-row .neon-input {
+  flex: 1;
 }
 
 .neon-input :deep(.el-input__wrapper) {

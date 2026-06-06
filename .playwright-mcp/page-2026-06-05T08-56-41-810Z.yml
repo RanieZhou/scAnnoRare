@@ -1,0 +1,103 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "数据集注册" [ref=e24] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e26]
+        - generic [ref=e28]: 数据集注册
+      - link "实验配置管理" [ref=e29] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e31]
+        - generic [ref=e33]: 实验配置管理
+      - link "评估与对比" [ref=e34] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e36]
+        - generic [ref=e38]: 评估与对比
+      - link "报告中心" [ref=e39] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e41]
+        - generic [ref=e43]: 报告中心
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - img [ref=e47]
+        - generic [ref=e49]: admin
+      - button "退出" [ref=e50] [cursor=pointer]:
+        - generic [ref=e51]: 退出
+  - generic [ref=e52]:
+    - banner [ref=e53]:
+      - navigation "面包屑" [ref=e55]:
+        - generic [ref=e56]:
+          - link "scAnnoRare" [ref=e57]
+          - text: /
+        - link "Dashboard" [ref=e59]
+      - generic [ref=e62]:
+        - img [ref=e64] [cursor=pointer]
+        - text: "Local Agent: 未连接"
+    - main [ref=e66]:
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - heading "欢迎使用 scAnnoRare 评估系统" [level=2] [ref=e70]
+            - paragraph [ref=e71]: 基于 Web-Agent 协同架构的单细胞细胞类型注释与稀有细胞识别多方法基准评估平台。计算任务在本地安全运行，元数据与可视化结果由云端统一聚合管理。
+          - button "配对本地计算节点" [ref=e73] [cursor=pointer]:
+            - generic [ref=e74]: 配对本地计算节点
+        - generic [ref=e75]:
+          - generic [ref=e76]:
+            - img [ref=e79]
+            - generic [ref=e81]:
+              - generic [ref=e82]: 注册数据集
+              - generic [ref=e83]: "0"
+          - generic [ref=e84]:
+            - img [ref=e87]
+            - generic [ref=e90]:
+              - generic [ref=e91]: 配置实验主题
+              - generic [ref=e92]: "0"
+          - generic [ref=e93]:
+            - img [ref=e96]
+            - generic [ref=e98]:
+              - generic [ref=e99]: 已完成评估结果
+              - generic [ref=e100]: "0"
+          - generic [ref=e101]:
+            - img [ref=e104]
+            - generic [ref=e106]:
+              - generic [ref=e107]: 生成报告数
+              - generic [ref=e108]: "0"
+        - generic [ref=e110]:
+          - heading "🔮 scAnnoRare 评估流程说明" [level=3] [ref=e111]
+          - generic [ref=e112]:
+            - generic [ref=e113]:
+              - generic [ref=e114]: "1"
+              - heading "启动 Local Agent" [level=4] [ref=e115]
+              - paragraph [ref=e116]: 在本地终端启动 Agent，监听 17890 端口并生成配对码
+            - generic [ref=e117]: ➔
+            - generic [ref=e118]:
+              - generic [ref=e119]: "2"
+              - heading "注册 H5AD 数据" [level=4] [ref=e120]
+              - paragraph [ref=e121]: 选择本地 .h5ad 路径，轻量级提取观测列、真实标签分布与稀有细胞候选
+            - generic [ref=e122]: ➔
+            - generic [ref=e123]:
+              - generic [ref=e124]: "3"
+              - heading "配置评估实验" [level=4] [ref=e125]
+              - paragraph [ref=e126]: 选定标签、设置稀有阈值（1%、3%、5%），选定目标稀有细胞类型
+            - generic [ref=e127]: ➔
+            - generic [ref=e128]:
+              - generic [ref=e129]: "4"
+              - heading "导入并运行计算" [level=4] [ref=e130]
+              - paragraph [ref=e131]: 上传算法预测所得 CSV，本地 Agent 运行精准对齐并计算高维指标
+            - generic [ref=e132]: ➔
+            - generic [ref=e133]:
+              - generic [ref=e134]: "5"
+              - heading "查看报告与对比" [level=4] [ref=e135]
+              - paragraph [ref=e136]: 多方法排行榜横向对比，导出 HTML 报告，下载 CSV 结果表

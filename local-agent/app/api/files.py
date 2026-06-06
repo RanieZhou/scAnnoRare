@@ -8,6 +8,52 @@ from typing import Dict, Any, List, Optional
 logger = logging.getLogger("local-agent.files")
 router = APIRouter()
 
+# 文件浏览：允许浏览的扩展名（数据集 / 预测结果）
+BROWSE_EXTS = (".h5ad", ".csv")
+
+
+@router.get("/files/browse")
+async def browse_dir(path: Optional[str] = None, exts: Optional[str] = None):
+    """列出目录内容（仅返回子目录 + 指定扩展名文件），供前端文件选择弹窗使用。
+
+    path: 目标目录绝对路径，缺省为用户主目录。
+    exts: 逗号分隔的扩展名过滤（如 ".h5ad" 或 ".csv"），缺省为 .h5ad,.csv。
+    """
+    base = path or os.path.expanduser("~")
+    base = os.path.abspath(os.path.expanduser(base))
+    if not os.path.isdir(base):
+        raise HTTPException(status_code=400, detail=f"目录不存在：{base}")
+
+    allow = tuple(e.strip().lower() for e in exts.split(",")) if exts else BROWSE_EXTS
+
+    dirs: List[Dict[str, Any]] = []
+    files: List[Dict[str, Any]] = []
+    try:
+        for name in sorted(os.listdir(base), key=str.lower):
+            if name.startswith("."):
+                continue  # 跳过隐藏项
+            full = os.path.join(base, name)
+            try:
+                if os.path.isdir(full):
+                    dirs.append({"name": name, "path": full})
+                elif name.lower().endswith(allow):
+                    files.append({"name": name, "path": full,
+                                  "size": os.path.getsize(full)})
+            except OSError:
+                continue
+    except PermissionError:
+        raise HTTPException(status_code=403, detail=f"无权限读取目录：{base}")
+
+    parent = os.path.dirname(base.rstrip(os.sep)) or base
+    return {
+        "current": base,
+        "parent": parent if parent != base else None,
+        "home": os.path.expanduser("~"),
+        "dirs": dirs,
+        "files": files,
+    }
+
+
 # Schema definitions
 class FileSelectRequest(BaseModel):
     filepath: str

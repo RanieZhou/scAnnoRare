@@ -11,6 +11,7 @@ from pydantic import BaseModel, EmailStr
 
 from app.db import get_db, engine, Base
 import app.models as models
+from app.auth import hash_password, verify_password, create_token, decode_token
 
 Base.metadata.create_all(bind=engine)
 
@@ -29,15 +30,14 @@ app.add_middleware(
 
 
 def _ensure_admin(db: Session) -> models.User:
-    """Always ensure the default admin user exists, regardless of other users."""
+    """确保默认管理员存在（密码 bcrypt 哈希存储），便于零配置首次登录。"""
     admin = db.query(models.User).filter(models.User.username == "admin").first()
     if not admin:
         admin = models.User(
             id="admin_001",
             email="admin@scannorare.com",
             username="admin",
-            password_hash="admin",
-            token=str(uuid.uuid4()).replace("-", ""),
+            password_hash=hash_password("admin"),
         )
         db.add(admin)
         db.commit()
@@ -45,19 +45,22 @@ def _ensure_admin(db: Session) -> models.User:
     return admin
 
 
-# ── simple token auth ─────────────────────────────────────────────────────────
+# ── JWT 鉴权 ──────────────────────────────────────────────────────────────────
 def get_current_user(
     authorization: Optional[str] = Header(None),
     db: Session = Depends(get_db),
-):
-    """Accept Bearer <token>; fall back to default admin for zero-config mode."""
-    if authorization and authorization.startswith("Bearer "):
-        token = authorization.split(" ", 1)[1]
-        user = db.query(models.User).filter(models.User.token == token).first()
-        if user:
-            return user
-
-    return _ensure_admin(db)
+) -> models.User:
+    """要求有效的 Bearer JWT，否则 401。"""
+    if not authorization or not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="未登录或缺少访问令牌。")
+    token = authorization.split(" ", 1)[1]
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=401, detail="令牌无效或已过期，请重新登录。")
+    user = db.query(models.User).filter(models.User.id == payload.get("sub")).first()
+    if not user:
+        raise HTTPException(status_code=401, detail="用户不存在。")
+    return user
 
 
 @app.on_event("startup")
@@ -133,6 +136,7 @@ class MethodRunCreate(BaseModel):
     input_type: str
     prediction_file_alias: str
     baseline_file_alias: Optional[str] = None
+    config: Optional[Dict[str, Any]] = None
 
 class TriggerJobRequest(BaseModel):
     method_run_id: str
@@ -144,27 +148,33 @@ class TriggerJobRequest(BaseModel):
 @app.post("/api/v1/auth/register")
 async def register(payload: UserRegister, db: Session = Depends(get_db)):
     if db.query(models.User).filter(models.User.username == payload.username).first():
-        raise HTTPException(status_code=400, detail="Username already registered.")
+        raise HTTPException(status_code=400, detail="用户名已被注册。")
     user = models.User(
         id=f"user_{uuid.uuid4().hex[:8]}",
         email=payload.email,
         username=payload.username,
-        password_hash=payload.password,
-        token=str(uuid.uuid4()).replace("-", ""),
+        password_hash=hash_password(payload.password),
     )
     db.add(user)
     db.commit()
-    return {"success": True, "message": "Registered successfully."}
+    return {"success": True, "message": "注册成功。"}
 
 
 @app.post("/api/v1/auth/login")
 async def login(payload: UserLogin, db: Session = Depends(get_db)):
     user = db.query(models.User).filter(models.User.username == payload.username).first()
-    if not user or user.password_hash != payload.password:
-        raise HTTPException(status_code=401, detail="Invalid username or password.")
+    if not user or not verify_password(payload.password, user.password_hash):
+        raise HTTPException(status_code=401, detail="用户名或密码错误。")
+
+    # 兼容迁移：旧明文密码登录成功后顺手升级为 bcrypt 哈希。
+    if not (user.password_hash or "").startswith("$2"):
+        user.password_hash = hash_password(payload.password)
+        db.commit()
+
+    token = create_token(user.id, user.username)
     return {
         "success": True,
-        "token": user.token,
+        "token": token,
         "user": {"id": user.id, "username": user.username, "email": user.email},
     }
 
@@ -174,10 +184,26 @@ async def get_me(user: models.User = Depends(get_current_user)):
     return {"id": user.id, "username": user.username, "email": user.email}
 
 
+class ChangePassword(BaseModel):
+    old_password: str
+    new_password: str
+
+
+@app.post("/api/v1/auth/change-password")
+async def change_password(payload: ChangePassword, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    if not verify_password(payload.old_password, user.password_hash):
+        raise HTTPException(status_code=400, detail="原密码错误。")
+    if len(payload.new_password) < 4:
+        raise HTTPException(status_code=400, detail="新密码至少 4 位。")
+    user.password_hash = hash_password(payload.new_password)
+    db.commit()
+    return {"success": True, "message": "密码已修改，请用新密码重新登录。"}
+
+
 # ── Projects ──────────────────────────────────────────────────────────────────
 @app.get("/api/v1/projects")
-async def list_projects(page: int = 1, page_size: int = 20, db: Session = Depends(get_db)):
-    q = db.query(models.Project)
+async def list_projects(page: int = 1, page_size: int = 20, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    q = db.query(models.Project).filter(models.Project.user_id == user.id)
     total = q.count()
     items = q.offset((page - 1) * page_size).limit(page_size).all()
     return {"items": [_proj(p) for p in items], "total": total, "page": page, "page_size": page_size}
@@ -195,19 +221,23 @@ async def create_project(payload: ProjectCreate, db: Session = Depends(get_db), 
     return {"success": True, "project": _proj(p)}
 
 
-@app.get("/api/v1/projects/{project_id}")
-async def get_project(project_id: str, db: Session = Depends(get_db)):
+def _owned_project(project_id: str, db: Session, user: models.User) -> models.Project:
     p = db.query(models.Project).filter(models.Project.id == project_id).first()
     if not p:
-        raise HTTPException(status_code=404, detail="Project not found.")
-    return _proj(p)
+        raise HTTPException(status_code=404, detail="项目不存在。")
+    if p.user_id and p.user_id != user.id:
+        raise HTTPException(status_code=403, detail="无权访问该项目。")
+    return p
+
+
+@app.get("/api/v1/projects/{project_id}")
+async def get_project(project_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    return _proj(_owned_project(project_id, db, user))
 
 
 @app.put("/api/v1/projects/{project_id}")
-async def update_project(project_id: str, payload: ProjectUpdate, db: Session = Depends(get_db)):
-    p = db.query(models.Project).filter(models.Project.id == project_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Project not found.")
+async def update_project(project_id: str, payload: ProjectUpdate, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    p = _owned_project(project_id, db, user)
     if payload.project_name is not None:
         p.project_name = payload.project_name
     if payload.description is not None:
@@ -218,10 +248,8 @@ async def update_project(project_id: str, payload: ProjectUpdate, db: Session = 
 
 
 @app.delete("/api/v1/projects/{project_id}")
-async def delete_project(project_id: str, db: Session = Depends(get_db)):
-    p = db.query(models.Project).filter(models.Project.id == project_id).first()
-    if not p:
-        raise HTTPException(status_code=404, detail="Project not found.")
+async def delete_project(project_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    p = _owned_project(project_id, db, user)
     db.delete(p); db.commit()
     return {"success": True}
 
@@ -247,14 +275,16 @@ def _ds(d):
 
 
 @app.get("/api/v1/datasets")
-async def list_datasets(db: Session = Depends(get_db)):
-    return [_ds(d) for d in db.query(models.Dataset).all()]
+async def list_datasets(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    rows = db.query(models.Dataset).filter(models.Dataset.user_id == user.id).all()
+    return [_ds(d) for d in rows]
 
 
 @app.post("/api/v1/datasets")
-async def create_dataset(payload: DatasetCreate, db: Session = Depends(get_db)):
+async def create_dataset(payload: DatasetCreate, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
     d = models.Dataset(
         id=f"data_{uuid.uuid4().hex[:8]}",
+        user_id=user.id,
         project_id=payload.project_id,
         dataset_name=payload.dataset_name,
         local_dataset_alias=payload.local_dataset_alias,
@@ -271,19 +301,23 @@ async def create_dataset(payload: DatasetCreate, db: Session = Depends(get_db)):
     return {"success": True, "dataset_id": d.id, "dataset": _ds(d)}
 
 
-@app.get("/api/v1/datasets/{dataset_id}")
-async def get_dataset(dataset_id: str, db: Session = Depends(get_db)):
+def _owned_dataset(dataset_id: str, db: Session, user: models.User) -> models.Dataset:
     d = db.query(models.Dataset).filter(models.Dataset.id == dataset_id).first()
     if not d:
-        raise HTTPException(status_code=404, detail="Dataset not found.")
-    return _ds(d)
+        raise HTTPException(status_code=404, detail="数据集不存在。")
+    if d.user_id and d.user_id != user.id:
+        raise HTTPException(status_code=403, detail="无权访问该数据集。")
+    return d
+
+
+@app.get("/api/v1/datasets/{dataset_id}")
+async def get_dataset(dataset_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    return _ds(_owned_dataset(dataset_id, db, user))
 
 
 @app.delete("/api/v1/datasets/{dataset_id}")
-async def delete_dataset(dataset_id: str, db: Session = Depends(get_db)):
-    d = db.query(models.Dataset).filter(models.Dataset.id == dataset_id).first()
-    if not d:
-        raise HTTPException(status_code=404, detail="Dataset not found.")
+async def delete_dataset(dataset_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    d = _owned_dataset(dataset_id, db, user)
     db.delete(d); db.commit()
     return {"success": True}
 
@@ -355,14 +389,15 @@ def _exp(e):
 
 
 @app.get("/api/v1/experiments")
-async def list_experiments(db: Session = Depends(get_db)):
-    return [_exp(e) for e in db.query(models.Experiment).all()]
+async def list_experiments(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    return [_exp(e) for e in db.query(models.Experiment).filter(models.Experiment.user_id == user.id).all()]
 
 
 @app.post("/api/v1/experiments")
-async def create_experiment(payload: ExperimentCreate, db: Session = Depends(get_db)):
+async def create_experiment(payload: ExperimentCreate, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
     e = models.Experiment(
         id=f"exp_{uuid.uuid4().hex[:8]}",
+        user_id=user.id,
         project_id=payload.project_id,
         dataset_id=payload.dataset_id,
         experiment_name=payload.experiment_name,
@@ -377,19 +412,23 @@ async def create_experiment(payload: ExperimentCreate, db: Session = Depends(get
     return {"success": True, "experiment": _exp(e)}
 
 
-@app.get("/api/v1/experiments/{experiment_id}")
-async def get_experiment(experiment_id: str, db: Session = Depends(get_db)):
+def _owned_experiment(experiment_id: str, db: Session, user: models.User) -> models.Experiment:
     e = db.query(models.Experiment).filter(models.Experiment.id == experiment_id).first()
     if not e:
-        raise HTTPException(status_code=404, detail="Experiment not found.")
-    return _exp(e)
+        raise HTTPException(status_code=404, detail="实验不存在。")
+    if e.user_id and e.user_id != user.id:
+        raise HTTPException(status_code=403, detail="无权访问该实验。")
+    return e
+
+
+@app.get("/api/v1/experiments/{experiment_id}")
+async def get_experiment(experiment_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    return _exp(_owned_experiment(experiment_id, db, user))
 
 
 @app.put("/api/v1/experiments/{experiment_id}")
-async def update_experiment(experiment_id: str, payload: ExperimentUpdate, db: Session = Depends(get_db)):
-    e = db.query(models.Experiment).filter(models.Experiment.id == experiment_id).first()
-    if not e:
-        raise HTTPException(status_code=404, detail="Experiment not found.")
+async def update_experiment(experiment_id: str, payload: ExperimentUpdate, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    e = _owned_experiment(experiment_id, db, user)
     if payload.experiment_name is not None:
         e.experiment_name = payload.experiment_name
     if payload.rare_mode is not None:
@@ -404,10 +443,8 @@ async def update_experiment(experiment_id: str, payload: ExperimentUpdate, db: S
 
 
 @app.delete("/api/v1/experiments/{experiment_id}")
-async def delete_experiment(experiment_id: str, db: Session = Depends(get_db)):
-    e = db.query(models.Experiment).filter(models.Experiment.id == experiment_id).first()
-    if not e:
-        raise HTTPException(status_code=404, detail="Experiment not found.")
+async def delete_experiment(experiment_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    e = _owned_experiment(experiment_id, db, user)
     db.delete(e); db.commit()
     return {"success": True}
 
@@ -424,12 +461,14 @@ def _run(r):
 
 
 @app.get("/api/v1/experiments/{experiment_id}/method-runs")
-async def list_method_runs(experiment_id: str, db: Session = Depends(get_db)):
+async def list_method_runs(experiment_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    _owned_experiment(experiment_id, db, user)
     return [_run(r) for r in db.query(models.MethodRun).filter(models.MethodRun.experiment_id == experiment_id).all()]
 
 
 @app.post("/api/v1/experiments/{experiment_id}/method-runs")
-async def create_method_run(experiment_id: str, payload: MethodRunCreate, db: Session = Depends(get_db)):
+async def create_method_run(experiment_id: str, payload: MethodRunCreate, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    _owned_experiment(experiment_id, db, user)
     r = models.MethodRun(
         id=f"run_{uuid.uuid4().hex[:8]}",
         experiment_id=experiment_id,
@@ -438,6 +477,7 @@ async def create_method_run(experiment_id: str, payload: MethodRunCreate, db: Se
         input_type=payload.input_type,
         prediction_file_alias=payload.prediction_file_alias,
         baseline_file_alias=payload.baseline_file_alias,
+        config_json=json.dumps(payload.config) if payload.config else None,
         status="pending",
     )
     db.add(r); db.commit(); db.refresh(r)
@@ -489,7 +529,17 @@ async def trigger_eval_job(payload: TriggerJobRequest, db: Session = Depends(get
         "X-scAnnoRare-Origin": "http://localhost:5173",
     }
 
-    if exp.task_type == "annotation_evaluation":
+    if run.method_type == "builtin_celltypist":
+        # 内置方法运行：无需预测 CSV，Agent 直接对 h5ad 跑 CellTypist 再评估
+        cfg = json.loads(run.config_json) if run.config_json else {}
+        endpoint = "/api/v1/local/tasks/run-celltypist"
+        agent_payload = {
+            "filepath": dataset.local_dataset_alias,
+            "label_col": exp.label_col,
+            "model": cfg.get("model", "Immune_All_Low.pkl"),
+            "match_mode": "relaxed",
+        }
+    elif exp.task_type == "annotation_evaluation":
         endpoint = "/api/v1/local/tasks/evaluate-annotation"
         agent_payload = {
             "filepath": dataset.local_dataset_alias,
@@ -662,8 +712,63 @@ async def get_method_run_result(method_run_id: str, db: Session = Depends(get_db
     }
 
 
+@app.post("/api/v1/method-runs/{method_run_id}/result")
+async def write_method_run_result(
+    method_run_id: str,
+    result_data: dict,
+    db: Session = Depends(get_db),
+    user: models.User = Depends(get_current_user),
+):
+    """外部方法（scANVI 等）完成后，由前端将 Agent 的 result JSON 写回数据库。"""
+    run = db.query(models.MethodRun).filter(models.MethodRun.id == method_run_id).first()
+    if not run:
+        raise HTTPException(status_code=404, detail="MethodRun not found.")
+
+    # 前端可附带 _local_job_id 以便 report 代理到 Agent 文件
+    local_job_id = result_data.pop("_local_job_id", None)
+
+    existing = db.query(models.MethodResult).filter(models.MethodResult.method_run_id == method_run_id).first()
+    if existing:
+        existing.metrics_json = json.dumps(result_data.get("overall_metrics", {}))
+        existing.per_class_metrics_json = json.dumps(result_data.get("per_class_metrics", {}))
+        existing.confusion_matrix_json = json.dumps(result_data.get("confusion_matrix", {}))
+    else:
+        mr = models.MethodResult(
+            id=f"res_{uuid.uuid4().hex[:8]}",
+            method_run_id=method_run_id,
+            job_id=None,
+            metrics_json=json.dumps(result_data.get("overall_metrics", {})),
+            per_class_metrics_json=json.dumps(result_data.get("per_class_metrics", {})),
+            confusion_matrix_json=json.dumps(result_data.get("confusion_matrix", {})),
+        )
+        db.add(mr)
+
+    run.status = "success"
+
+    report_path = f"local_agent::{local_job_id}" if local_job_id else "external_method"
+    rep_exists = db.query(models.Report).filter(models.Report.method_run_id == method_run_id).first()
+    if not rep_exists:
+        report = models.Report(
+            id=f"rep_{uuid.uuid4().hex[:8]}",
+            experiment_id=run.experiment_id,
+            method_run_id=method_run_id,
+            job_id=None,
+            report_type="external",
+            report_path=report_path,
+            metrics_json=json.dumps(result_data.get("overall_metrics", {})),
+            figures_json=json.dumps({}),
+        )
+        db.add(report)
+    elif local_job_id and rep_exists.report_path == "external_method":
+        rep_exists.report_path = report_path
+
+    db.commit()
+    return {"success": True}
+
+
 @app.get("/api/v1/experiments/{experiment_id}/comparison")
-async def get_comparison(experiment_id: str, db: Session = Depends(get_db)):
+async def get_comparison(experiment_id: str, db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    _owned_experiment(experiment_id, db, user)
     runs = db.query(models.MethodRun).filter(
         models.MethodRun.experiment_id == experiment_id,
         models.MethodRun.status == "success",
@@ -750,15 +855,36 @@ async def download_report(report_id: str, session_token: str, agent_url: str = "
     raise HTTPException(status_code=404, detail="Report file not accessible.")
 
 
+@app.get("/api/v1/agent-report")
+async def proxy_agent_report(local_job_id: str, session_token: str, agent_url: str = "http://127.0.0.1:17890"):
+    """直接从 Agent 代理指定 local_job_id 的 HTML 报告，无需 DB report 记录。"""
+    try:
+        from fastapi.responses import Response
+        resp = _requests.get(
+            f"{agent_url}/api/v1/local/tasks/{local_job_id}/report",
+            headers={"Authorization": f"Bearer {session_token}"},
+            timeout=15,
+        )
+        if resp.status_code != 200:
+            raise HTTPException(status_code=404, detail="Agent 报告未找到")
+        return Response(content=resp.content, media_type="text/html")
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"无法从 Agent 获取报告: {e}")
+
+
 # ── Summary stats (for Dashboard) ────────────────────────────────────────────
 @app.get("/api/v1/stats/summary")
-async def get_summary(db: Session = Depends(get_db)):
+async def get_summary(db: Session = Depends(get_db), user: models.User = Depends(get_current_user)):
+    my_exp_ids = [e.id for e in db.query(models.Experiment.id).filter(models.Experiment.user_id == user.id).all()]
+    runs_q = db.query(models.MethodRun).filter(models.MethodRun.experiment_id.in_(my_exp_ids)) if my_exp_ids else None
     return {
-        "total_datasets": db.query(models.Dataset).count(),
-        "total_experiments": db.query(models.Experiment).count(),
-        "total_method_runs": db.query(models.MethodRun).count(),
-        "successful_runs": db.query(models.MethodRun).filter(models.MethodRun.status == "success").count(),
-        "total_reports": db.query(models.Report).count(),
+        "total_datasets": db.query(models.Dataset).filter(models.Dataset.user_id == user.id).count(),
+        "total_experiments": len(my_exp_ids),
+        "total_method_runs": runs_q.count() if runs_q else 0,
+        "successful_runs": runs_q.filter(models.MethodRun.status == "success").count() if runs_q else 0,
+        "total_reports": db.query(models.Report).filter(models.Report.experiment_id.in_(my_exp_ids)).count() if my_exp_ids else 0,
     }
 
 

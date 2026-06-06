@@ -9,10 +9,15 @@ RUNNERS = os.path.join(AGENT_ROOT, "runners")
 datas, binaries, hiddenimports = [], [], []
 
 # 收全运行时真正需要的科学计算库（子模块 + 数据文件）
+# scanpy/celltypist/umap 为 V1.1 内置方法与 UMAP 可视化所需
 for pkg in ["sklearn", "scipy", "matplotlib", "anndata", "seaborn",
-            "pandas", "numpy", "h5py", "jinja2"]:
-    d, b, h = collect_all(pkg)
-    datas += d; binaries += b; hiddenimports += h
+            "pandas", "numpy", "h5py", "jinja2",
+            "scanpy", "celltypist", "umap", "numba", "llvmlite", "pynndescent"]:
+    try:
+        d, b, h = collect_all(pkg)
+        datas += d; binaries += b; hiddenimports += h
+    except Exception:
+        pass
 
 # uvicorn / fastapi 动态加载的子模块
 for pkg in ["uvicorn", "anyio", "starlette"]:
@@ -29,8 +34,8 @@ a = Analysis(
     datas=datas,
     hiddenimports=hiddenimports + ["app.api.env", "app.api.files", "app.api.tasks"],
     excludes=[
-        # 运行时不需要、且会显著增大体积 / 引入麻烦的依赖
-        "scanpy", "scvi", "scvi-tools", "torch", "numba", "llvmlite",
+        # 运行时不需要的重依赖（注意：V1.1 起 scanpy/numba/llvmlite 已改为包含）
+        "scvi", "scvi-tools", "torch",
         "tkinter", "PyQt5", "PyQt6", "PySide2", "PySide6",
         "IPython", "notebook", "jupyter", "pytest",
     ],

@@ -1,0 +1,180 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - complementary [ref=e4]:
+      - generic [ref=e5]:
+        - generic [ref=e6]: 🔮
+        - generic [ref=e7]: scAnnoRare
+        - generic [ref=e8]: V1.0
+      - navigation [ref=e9]:
+        - link "首页控制台" [ref=e10] [cursor=pointer]:
+          - /url: /
+          - img [ref=e12]
+          - generic [ref=e16]: 首页控制台
+        - link "计算节点配对" [ref=e17] [cursor=pointer]:
+          - /url: /agent
+          - img [ref=e19]
+          - generic [ref=e22]: 计算节点配对
+        - link "项目管理" [ref=e24] [cursor=pointer]:
+          - /url: /projects
+          - img [ref=e26]
+          - generic [ref=e28]: 项目管理
+        - link "数据集注册" [ref=e29] [cursor=pointer]:
+          - /url: /datasets
+          - img [ref=e31]
+          - generic [ref=e33]: 数据集注册
+        - link "实验配置管理" [ref=e34] [cursor=pointer]:
+          - /url: /experiments
+          - img [ref=e36]
+          - generic [ref=e38]: 实验配置管理
+        - link "评估与对比" [ref=e39] [cursor=pointer]:
+          - /url: /evaluation
+          - img [ref=e41]
+          - generic [ref=e43]: 评估与对比
+        - link "报告中心" [ref=e44] [cursor=pointer]:
+          - /url: /reports
+          - img [ref=e46]
+          - generic [ref=e48]: 报告中心
+        - link "系统设置" [ref=e49] [cursor=pointer]:
+          - /url: /settings
+          - img [ref=e51]
+          - generic [ref=e53]: 系统设置
+      - generic [ref=e54]:
+        - generic [ref=e55]:
+          - img [ref=e57]
+          - generic [ref=e59]: admin
+        - button "退出" [ref=e60] [cursor=pointer]:
+          - generic [ref=e61]: 退出
+    - generic [ref=e62]:
+      - banner [ref=e63]:
+        - navigation "面包屑" [ref=e65]:
+          - generic [ref=e66]:
+            - link "scAnnoRare" [ref=e67]
+            - text: /
+          - link "AgentPair" [ref=e69]
+        - generic [ref=e72]:
+          - img [ref=e118] [cursor=pointer]
+          - text: "Local Agent: 已连接 (127.0.0.1)"
+      - main [ref=e76]:
+        - generic [ref=e77]:
+          - generic [ref=e80]:
+            - heading "Local Agent 连接诊断" [level=3] [ref=e81]
+            - paragraph [ref=e121]: 系统检测到本地运行中的代理服务，端口：17890，当前状态：已授权配对
+          - generic [ref=e83]:
+            - generic [ref=e84]:
+              - heading "🔑 节点配对授权" [level=3] [ref=e85]
+              - generic [ref=e127]:
+                - generic [ref=e128]:
+                  - generic [ref=e129]: 已授权 Session Token
+                  - code [ref=e130]: 40653b9cc7f04284...
+                - button "解除节点配对授权" [ref=e131] [cursor=pointer]:
+                  - generic [ref=e132]: 解除节点配对授权
+            - generic [ref=e133]:
+              - heading "🖥️ 本地算力与依赖环境诊断" [level=3] [ref=e134]
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e137]: 操作系统
+                  - generic [ref=e138]: Darwin 25.5.0
+                - generic [ref=e139]:
+                  - generic [ref=e140]: Python 引擎
+                  - generic [ref=e141]: v3.14.0
+              - separator [ref=e142]
+              - heading "📊 硬件算力消耗" [level=4] [ref=e143]
+              - generic [ref=e144]:
+                - generic [ref=e146]:
+                  - generic [ref=e147]: CPU 逻辑核心数
+                  - generic [ref=e148]: 10 核
+                - generic [ref=e149]:
+                  - generic [ref=e150]:
+                    - generic [ref=e151]: 物理内存
+                    - generic [ref=e152]: 11.2GB 可用 / 16GB 总量
+                  - progressbar [ref=e153]:
+                    - generic [ref=e157]: 30%
+                - generic [ref=e159]:
+                  - generic [ref=e160]: GPU 加速
+                  - generic [ref=e161]: 未检测到 NVIDIA GPU 设备，将降级使用 CPU 计算
+              - separator [ref=e162]
+              - heading "🧪 Agent 内置环境依赖" [level=4] [ref=e163]
+              - paragraph [ref=e164]: 以下为 Agent 自身 Python (v3.14.0) 中安装的库，用于内置方法（CellTypist、UMAP 等）。
+              - generic [ref=e166]:
+                - table [ref=e168]:
+                  - rowgroup [ref=e172]:
+                    - row "依赖库 检测版本" [ref=e173]:
+                      - columnheader "依赖库" [ref=e174]:
+                        - generic [ref=e175]: 依赖库
+                      - columnheader "检测版本" [ref=e176]:
+                        - generic [ref=e177]: 检测版本
+                - table [ref=e182]:
+                  - rowgroup [ref=e186]:
+                    - row "scanpy v1.12.1" [ref=e187]:
+                      - cell "scanpy" [ref=e188]:
+                        - generic [ref=e189]: scanpy
+                      - cell "v1.12.1" [ref=e190]:
+                        - generic [ref=e193]: v1.12.1
+                    - row "anndata v0.12.16" [ref=e194]:
+                      - cell "anndata" [ref=e195]:
+                        - generic [ref=e196]: anndata
+                      - cell "v0.12.16" [ref=e197]:
+                        - generic [ref=e200]: v0.12.16
+                    - row "celltypist v1.7.1" [ref=e201]:
+                      - cell "celltypist" [ref=e202]:
+                        - generic [ref=e203]: celltypist
+                      - cell "v1.7.1" [ref=e204]:
+                        - generic [ref=e207]: v1.7.1
+                    - row "scvi-tools 未安装" [ref=e208]:
+                      - cell "scvi-tools" [ref=e209]:
+                        - generic [ref=e210]: scvi-tools
+                      - cell "未安装" [ref=e211]:
+                        - generic [ref=e214]: 未安装
+                    - row "torch 未安装" [ref=e215]:
+                      - cell "torch" [ref=e216]:
+                        - generic [ref=e217]: torch
+                      - cell "未安装" [ref=e218]:
+                        - generic [ref=e221]: 未安装
+              - separator [ref=e222]
+              - heading "🔬 默认外部环境依赖" [level=4] [ref=e223]
+              - paragraph [ref=e224]:
+                - generic [ref=e226]: scANVI (conda)
+                - text: /opt/miniconda3/envs/scANVI/bin/python3 · Python 3.11.15 （用于 scANVI 等重型方法）
+              - generic [ref=e228]:
+                - table [ref=e230]:
+                  - rowgroup [ref=e234]:
+                    - row "依赖库 检测版本" [ref=e235]:
+                      - columnheader "依赖库" [ref=e236]:
+                        - generic [ref=e237]: 依赖库
+                      - columnheader "检测版本" [ref=e238]:
+                        - generic [ref=e239]: 检测版本
+                - table [ref=e244]:
+                  - rowgroup [ref=e248]:
+                    - row "scvi v1.4.2" [ref=e249]:
+                      - cell "scvi" [ref=e250]:
+                        - generic [ref=e251]: scvi
+                      - cell "v1.4.2" [ref=e252]:
+                        - generic [ref=e255]: v1.4.2
+                    - row "celltypist 未安装" [ref=e256]:
+                      - cell "celltypist" [ref=e257]:
+                        - generic [ref=e258]: celltypist
+                      - cell "未安装" [ref=e259]:
+                        - generic [ref=e262]: 未安装
+                    - row "scanpy v1.11.5" [ref=e263]:
+                      - cell "scanpy" [ref=e264]:
+                        - generic [ref=e265]: scanpy
+                      - cell "v1.11.5" [ref=e266]:
+                        - generic [ref=e269]: v1.11.5
+                    - row "anndata v0.12.10" [ref=e270]:
+                      - cell "anndata" [ref=e271]:
+                        - generic [ref=e272]: anndata
+                      - cell "v0.12.10" [ref=e273]:
+                        - generic [ref=e276]: v0.12.10
+                    - row "torch v2.11.0" [ref=e277]:
+                      - cell "torch" [ref=e278]:
+                        - generic [ref=e279]: torch
+                      - cell "v2.11.0" [ref=e280]:
+                        - generic [ref=e283]: v2.11.0
+                    - row "sklearn v1.8.0" [ref=e284]:
+                      - cell "sklearn" [ref=e285]:
+                        - generic [ref=e286]: sklearn
+                      - cell "v1.8.0" [ref=e287]:
+                        - generic [ref=e290]: v1.8.0
+  - alert [ref=e291]:
+    - img [ref=e293]
+    - paragraph [ref=e295]: 本地节点成功连接并授权！

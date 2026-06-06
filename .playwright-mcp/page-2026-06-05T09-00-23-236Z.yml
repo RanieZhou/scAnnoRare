@@ -1,0 +1,107 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e50]:
+    - complementary [ref=e51]:
+      - generic [ref=e52]:
+        - generic [ref=e53]: 🔮
+        - generic [ref=e54]: scAnnoRare
+        - generic [ref=e55]: V1.0
+      - navigation [ref=e56]:
+        - link "首页控制台" [ref=e57] [cursor=pointer]:
+          - /url: /
+          - img [ref=e59]
+          - generic [ref=e63]: 首页控制台
+        - link "计算节点配对" [ref=e64] [cursor=pointer]:
+          - /url: /agent
+          - img [ref=e66]
+          - generic [ref=e69]: 计算节点配对
+        - link "数据集注册" [ref=e71] [cursor=pointer]:
+          - /url: /datasets
+          - img [ref=e73]
+          - generic [ref=e75]: 数据集注册
+        - link "实验配置管理" [ref=e76] [cursor=pointer]:
+          - /url: /experiments
+          - img [ref=e78]
+          - generic [ref=e80]: 实验配置管理
+        - link "评估与对比" [ref=e81] [cursor=pointer]:
+          - /url: /evaluation
+          - img [ref=e83]
+          - generic [ref=e85]: 评估与对比
+        - link "报告中心" [ref=e86] [cursor=pointer]:
+          - /url: /reports
+          - img [ref=e88]
+          - generic [ref=e90]: 报告中心
+      - generic [ref=e91]:
+        - generic [ref=e92]:
+          - img [ref=e94]
+          - generic [ref=e96]: admin
+        - button "退出" [ref=e97] [cursor=pointer]:
+          - generic [ref=e98]: 退出
+    - generic [ref=e99]:
+      - banner [ref=e100]:
+        - navigation "面包屑" [ref=e102]:
+          - generic [ref=e103]:
+            - link "scAnnoRare" [ref=e104]
+            - text: /
+          - link "Dashboard" [ref=e106]
+        - generic [ref=e109]:
+          - img [ref=e111] [cursor=pointer]
+          - text: "Local Agent: 未连接"
+      - main [ref=e113]:
+        - generic [ref=e114]:
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - heading "欢迎使用 scAnnoRare 评估系统" [level=2] [ref=e117]
+              - paragraph [ref=e118]: 基于 Web-Agent 协同架构的单细胞细胞类型注释与稀有细胞识别多方法基准评估平台。计算任务在本地安全运行，元数据与可视化结果由云端统一聚合管理。
+            - button "配对本地计算节点" [ref=e120] [cursor=pointer]:
+              - generic [ref=e121]: 配对本地计算节点
+          - generic [ref=e122]:
+            - generic [ref=e123]:
+              - img [ref=e126]
+              - generic [ref=e128]:
+                - generic [ref=e129]: 注册数据集
+                - generic [ref=e130]: "0"
+            - generic [ref=e131]:
+              - img [ref=e134]
+              - generic [ref=e137]:
+                - generic [ref=e138]: 配置实验主题
+                - generic [ref=e139]: "0"
+            - generic [ref=e140]:
+              - img [ref=e143]
+              - generic [ref=e145]:
+                - generic [ref=e146]: 已完成评估结果
+                - generic [ref=e147]: "0"
+            - generic [ref=e148]:
+              - img [ref=e151]
+              - generic [ref=e153]:
+                - generic [ref=e154]: 生成报告数
+                - generic [ref=e155]: "0"
+          - generic [ref=e157]:
+            - heading "🔮 scAnnoRare 评估流程说明" [level=3] [ref=e158]
+            - generic [ref=e159]:
+              - generic [ref=e160]:
+                - generic [ref=e161]: "1"
+                - heading "启动 Local Agent" [level=4] [ref=e162]
+                - paragraph [ref=e163]: 在本地终端启动 Agent，监听 17890 端口并生成配对码
+              - generic [ref=e164]: ➔
+              - generic [ref=e165]:
+                - generic [ref=e166]: "2"
+                - heading "注册 H5AD 数据" [level=4] [ref=e167]
+                - paragraph [ref=e168]: 选择本地 .h5ad 路径，轻量级提取观测列、真实标签分布与稀有细胞候选
+              - generic [ref=e169]: ➔
+              - generic [ref=e170]:
+                - generic [ref=e171]: "3"
+                - heading "配置评估实验" [level=4] [ref=e172]
+                - paragraph [ref=e173]: 选定标签、设置稀有阈值（1%、3%、5%），选定目标稀有细胞类型
+              - generic [ref=e174]: ➔
+              - generic [ref=e175]:
+                - generic [ref=e176]: "4"
+                - heading "导入并运行计算" [level=4] [ref=e177]
+                - paragraph [ref=e178]: 上传算法预测所得 CSV，本地 Agent 运行精准对齐并计算高维指标
+              - generic [ref=e179]: ➔
+              - generic [ref=e180]:
+                - generic [ref=e181]: "5"
+                - heading "查看报告与对比" [level=4] [ref=e182]
+                - paragraph [ref=e183]: 多方法排行榜横向对比，导出 HTML 报告，下载 CSV 结果表
+  - alert [ref=e184]:
+    - img [ref=e186]
+    - paragraph [ref=e188]: 欢迎回来，admin！

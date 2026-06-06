@@ -36,12 +36,24 @@
             <el-form-item label="评估方法名称 (Method Name)" required>
               <el-input v-model="methodForm.methodName" placeholder="例如: CellTypist" class="neon-input" />
             </el-form-item>
-            <el-form-item label="方法预测 CSV 文件绝对路径" required>
-              <el-input v-model="methodForm.predictionCsv" placeholder="/data/predictions.csv" class="neon-input" />
+            <el-form-item label="方法预测 CSV 文件" required>
+              <div class="path-input-row">
+                <el-input v-model="methodForm.predictionCsv" placeholder="点击「浏览」选择，或手动输入路径" class="neon-input" />
+                <el-button :disabled="!agentStore.paired" @click="openPicker('pred')">📂 浏览</el-button>
+              </div>
             </el-form-item>
             <el-form-item v-if="activeExp?.task_type === 'rare_detection_evaluation'" label="修正前基线 CSV 路径（可选，用于 FRR 指标）">
-              <el-input v-model="methodForm.baselineCsv" placeholder="baseline_unrescued.csv" class="neon-input" />
+              <div class="path-input-row">
+                <el-input v-model="methodForm.baselineCsv" placeholder="可选" class="neon-input" />
+                <el-button :disabled="!agentStore.paired" @click="openPicker('baseline')">📂 浏览</el-button>
+              </div>
             </el-form-item>
+            <FilePicker
+              v-model="pickerVisible"
+              title="选择预测结果 CSV"
+              exts=".csv"
+              @select="onPickCsv"
+            />
             <el-button
               type="primary"
               class="gradient-btn w-100"
@@ -61,6 +73,56 @@
           </div>
         </div>
 
+        <!-- 直接运行方法 -->
+        <div class="glass-card method-adder" v-if="activeExpId">
+          <h3 class="panel-title">🧬 直接运行方法（无需自备预测）</h3>
+          <el-form label-position="top">
+            <el-form-item label="选择方法">
+              <el-select v-model="runForm.method" class="w-100 neon-select">
+                <el-option value="celltypist" label="CellTypist" />
+                <el-option value="scanvi" label="scANVI（scvi-tools 半监督 VAE）" />
+              </el-select>
+            </el-form-item>
+
+            <!-- CellTypist 参数 -->
+            <template v-if="runForm.method === 'celltypist'">
+              <el-form-item label="预训练模型">
+                <el-select v-model="runForm.model" class="w-100 neon-select" filterable>
+                  <el-option v-for="m in ctModels" :key="m.name"
+                    :value="m.name"
+                    :label="m.name.replace('.pkl','') + (m.downloaded ? ' ✓' : '')" />
+                </el-select>
+              </el-form-item>
+            </template>
+
+            <!-- scANVI 参数 -->
+            <template v-if="runForm.method === 'scanvi'">
+              <el-row :gutter="12">
+                <el-col :span="12">
+                  <el-form-item label="训练集比例">
+                    <el-input-number v-model="runForm.trainFrac" :min="0.5" :max="0.95" :step="0.05" :precision="2" style="width:100%" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                  <el-form-item label="最大训练轮次">
+                    <el-input-number v-model="runForm.maxEpochs" :min="10" :max="500" :step="10" style="width:100%" />
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-form-item label="批次列（batch_col，可留空）">
+                <el-input v-model="runForm.batchCol" placeholder="例如 batch" class="neon-input" />
+              </el-form-item>
+              <p class="helper-text" style="color:#94a3b8;margin-bottom:12px;">
+                💡 首次运行约需 5–15 分钟（scANVI 需训练神经网络）
+              </p>
+            </template>
+
+            <el-button type="success" class="w-100" :loading="runLoading" @click="runMethod">
+              运行 {{ runForm.method === 'celltypist' ? 'CellTypist' : 'scANVI' }} 并评估
+            </el-button>
+          </el-form>
+        </div>
+
         <!-- Running jobs list -->
         <div class="glass-card task-monitor" v-if="activeJobs.length > 0">
           <h3 class="panel-title">⏳ 任务队列与同步</h3>
@@ -72,14 +134,17 @@
               </div>
               <el-progress :percentage="job.progress" :stroke-width="8" class="mt-2" />
               <div class="job-actions mt-2">
-                <el-button size="small" type="primary" plain @click="syncJob(job.jobId)">同步进度</el-button>
-                <el-button size="small" type="info" plain @click="viewJobLogs(job.jobId)">查看运行日志</el-button>
+                <el-button size="small" type="primary" plain
+                  @click="job.isExternal ? syncExternalJob(job) : syncJob(job.jobId)"
+                  :disabled="job.isHistory && !job.isExternal"
+                >同步进度</el-button>
+                <el-button size="small" type="info" plain
+                  @click="job.isExternal ? viewExternalJobLogs(job.localJobId) : viewJobLogs(job.jobId)"
+                >查看运行日志</el-button>
                 <el-button
                   v-if="job.status === 'success'"
-                  size="small"
-                  type="success"
-                  plain
-                  @click="openLocalReport(job.jobId)"
+                  size="small" type="success" plain
+                  @click="job.isExternal || job.isHistory ? openReportByRunId(job.methodRunId!) : openLocalReport(job.jobId)"
                 >查看报告</el-button>
               </div>
             </div>
@@ -171,7 +236,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, nextTick } from 'vue'
+import { ref, reactive, onMounted, nextTick, watch } from 'vue'
+import FilePicker from '../components/FilePicker.vue'
 import { useAgentStore } from '../stores/agent'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
@@ -191,14 +257,196 @@ const mockCsv = ref('')
 
 const methodForm = reactive({ methodName: 'CellTypist', predictionCsv: '', baselineCsv: '' })
 
+// 统一方法运行表单
+const runForm = reactive({
+  method: 'celltypist',          // 'celltypist' | 'scanvi'
+  model: 'Immune_All_Low.pkl',   // CellTypist 模型
+  trainFrac: 0.8,                // scANVI 训练集比例
+  maxEpochs: 100,                // scANVI 最大轮次
+  batchCol: '',                  // scANVI 批次列
+})
+const runLoading = ref(false)
+const ctModels = ref<any[]>([{ name: 'Immune_All_Low.pkl', downloaded: true }])
+
+async function runScANVI() {
+  const dataset = await axios.get(`${WEB}/api/v1/datasets/${activeExp.value.dataset_id}`)
+  const filepath = dataset.data.file_path || dataset.data.filepath || dataset.data.local_dataset_alias
+  if (!filepath) { ElMessage.error('数据集没有关联文件路径，无法运行 scANVI'); return }
+
+  const methodLabel = `scANVI (train=${runForm.trainFrac})`
+
+  const runRes = await axios.post(`${WEB}/api/v1/experiments/${activeExpId.value}/method-runs`, {
+    experiment_id: activeExpId.value,
+    method_name: methodLabel,
+    method_type: 'external_scanvi',
+    input_type: 'method_adapter',
+    prediction_file_alias: '',
+    config: {
+      method_type: 'scanvi',
+      train_frac: runForm.trainFrac,
+      max_epochs: runForm.maxEpochs,
+      batch_col: runForm.batchCol || null,
+    },
+  })
+  const methodRun = runRes.data.method_run
+
+  const H = { Authorization: `Bearer ${agentStore.sessionToken}` }
+  const agentRes = await axios.post(`${agentStore.agentUrl}/api/v1/local/tasks/run-external`, {
+    method_type: 'scanvi',
+    filepath,
+    label_col: activeExp.value.label_col,
+    match_mode: 'relaxed',
+    params: {
+      train_frac: runForm.trainFrac,
+      max_epochs: runForm.maxEpochs,
+      batch_col: runForm.batchCol || 'None',
+    },
+  }, { headers: H })
+
+  const localJobId = agentRes.data.local_job_id
+  ElMessage.success('scANVI 已启动，训练可能需要数分钟')
+
+  activeJobs.value.push({
+    jobId: `ext_${localJobId}`,
+    localJobId,
+    methodName: methodLabel,
+    status: 'running',
+    progress: 10,
+    isExternal: true,
+    methodRunId: methodRun.id,
+  })
+  startExternalPolling(localJobId, methodRun.id, methodLabel)
+}
+
+function startExternalPolling(localJobId: string, methodRunId: string, methodName: string) {
+  const H = () => ({ Authorization: `Bearer ${agentStore.sessionToken}` })
+  const t = setInterval(async () => {
+    const entry = activeJobs.value.find(j => j.localJobId === localJobId)
+    if (!entry) { clearInterval(t); return }
+    try {
+      const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/tasks/${localJobId}`, { headers: H() })
+      entry.status = res.data.status
+      entry.progress = res.data.progress || 0
+      if (res.data.status === 'success') {
+        clearInterval(t)
+        const result = res.data.result
+        if (result) {
+          await axios.post(`${WEB}/api/v1/method-runs/${methodRunId}/result`, {
+            ...result,
+            _local_job_id: localJobId,
+          }).catch(() => {})
+        }
+        ElMessage.success(`${methodName} 评估完成！`)
+        await fetchComparisonData()
+      } else if (['failed', 'cancelled'].includes(res.data.status)) {
+        clearInterval(t)
+        ElMessage.error(`${methodName} 执行失败，请查看日志`)
+      }
+    } catch (_) { clearInterval(t) }
+  }, 4000)
+}
+
+async function loadCtModels() {
+  if (!agentStore.paired) return
+  try {
+    const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/builtin/celltypist-models`, {
+      headers: { Authorization: `Bearer ${agentStore.sessionToken}` },
+    })
+    ctModels.value = res.data.models
+    runForm.model = res.data.default
+  } catch (_) {}
+}
+
+async function runCellTypist() {
+  const modelShort = runForm.model.replace('.pkl', '')
+  const runRes = await axios.post(
+    `${WEB}/api/v1/experiments/${activeExpId.value}/method-runs`,
+    {
+      experiment_id: activeExpId.value,
+      method_name: `CellTypist:${modelShort}`,
+      method_type: 'builtin_celltypist',
+      input_type: 'method_adapter',
+      prediction_file_alias: '',
+      baseline_file_alias: null,
+      config: { model: runForm.model },
+    },
+  )
+  const methodRun = runRes.data.method_run
+
+  const jobRes = await axios.post(`${WEB}/api/v1/jobs`, {
+    method_run_id: methodRun.id,
+    agent_url: agentStore.agentUrl,
+    session_token: agentStore.sessionToken,
+  })
+  if (jobRes.data.success) {
+    ElMessage.success('CellTypist 已在本地节点开始运行')
+    activeJobs.value.push({
+      jobId: jobRes.data.job_id,
+      localJobId: jobRes.data.local_job_id,
+      methodName: `CellTypist:${modelShort}`,
+      status: 'running',
+      progress: 10,
+    })
+    startPolling(jobRes.data.job_id)
+  }
+}
+
+async function runMethod() {
+  if (!agentStore.paired) { ElMessage.warning('请先配对本地 Agent'); return }
+  if (!activeExpId.value || !activeExp.value) { ElMessage.warning('请先选择实验'); return }
+  runLoading.value = true
+  try {
+    if (runForm.method === 'celltypist') {
+      await runCellTypist()
+    } else if (runForm.method === 'scanvi') {
+      await runScANVI()
+    }
+  } catch (err: any) {
+    console.error('[runMethod] error:', err, err?.response?.data)
+    const msg = err?.response?.data?.detail
+      || err?.response?.data?.message
+      || err?.message
+      || '方法运行失败'
+    ElMessage({ type: 'error', message: msg, duration: 8000, showClose: true })
+  } finally {
+    runLoading.value = false
+  }
+}
+
+// 文件选择弹窗
+const pickerVisible = ref(false)
+const pickTarget = ref<'pred' | 'baseline'>('pred')
+function openPicker(target: 'pred' | 'baseline') {
+  pickTarget.value = target
+  pickerVisible.value = true
+}
+function onPickCsv(path: string) {
+  if (pickTarget.value === 'pred') methodForm.predictionCsv = path
+  else methodForm.baselineCsv = path
+}
+
 interface JobEntry {
-  jobId: string        // web-backend job id
-  localJobId: string   // agent-side job id
+  jobId: string
+  localJobId: string
   methodName: string
   status: string
   progress: number
+  isExternal?: boolean
+  methodRunId?: string
+  isHistory?: boolean
 }
 const activeJobs = ref<JobEntry[]>([])
+
+function _jobsKey(expId: string) { return `scannorare_jobs_${expId}` }
+function _saveJobs(expId: string, jobs: JobEntry[]) {
+  try { localStorage.setItem(_jobsKey(expId), JSON.stringify(jobs)) } catch (_) {}
+}
+function _loadJobs(expId: string): JobEntry[] {
+  try { return JSON.parse(localStorage.getItem(_jobsKey(expId)) || '[]') } catch (_) { return [] }
+}
+watch(activeJobs, (jobs) => {
+  if (activeExpId.value) _saveJobs(activeExpId.value, jobs)
+}, { deep: true })
 
 const selectedRunId     = ref('')
 const selectedMethodName = ref('')
@@ -210,6 +458,7 @@ const jobLogs     = ref<any>({ stdout: '', stderr: '' })
 // ── init ──────────────────────────────────────────────────────────────────────
 onMounted(async () => {
   await fetchExperiments()
+  loadCtModels()
   const isWindows = navigator.platform.toLowerCase().includes('win')
   mockCsv.value = isWindows
     ? 'C:\\Users\\username\\Desktop\\scAnnoRare\\local-agent\\workspace\\predictions\\imported_predictions\\tiny_predictions.csv'
@@ -226,14 +475,46 @@ async function fetchExperiments() {
 
 async function handleExperimentChange(val: string) {
   activeExp.value = experiments.value.find(e => e.id === val) ?? null
-  if (activeExp.value) {
-    try {
-      const r = await axios.get(`${WEB}/api/v1/datasets/${activeExp.value.dataset_id}`)
-      activeExp.value.dataset_name = r.data.dataset_name
-    } catch (_) {}
-    selectedRunId.value = ''
-    await fetchComparisonData()
+  activeJobs.value = []
+  if (!activeExp.value) return
+  try {
+    const r = await axios.get(`${WEB}/api/v1/datasets/${activeExp.value.dataset_id}`)
+    activeExp.value.dataset_name = r.data.dataset_name
+  } catch (_) {}
+  selectedRunId.value = ''
+
+  // 1. 从 localStorage 恢复本机缓存的任务（含刷新前正在跑的）
+  const saved = _loadJobs(val)
+  if (saved.length) {
+    activeJobs.value = saved
+    for (const job of saved) {
+      if (job.isExternal && job.localJobId && job.methodRunId && job.status === 'running') {
+        startExternalPolling(job.localJobId, job.methodRunId, job.methodName)
+      }
+    }
   }
+
+  // 2. 从 web-backend 加载历史 method-runs（补充 localStorage 没有的已完成任务）
+  try {
+    const res = await axios.get(`${WEB}/api/v1/experiments/${val}/method-runs`)
+    const runs: any[] = res.data
+    for (const run of runs) {
+      const already = activeJobs.value.some(j => j.methodRunId === run.id)
+      if (already) continue
+      activeJobs.value.push({
+        jobId: `hist_${run.id}`,
+        localJobId: '',
+        methodName: run.method_name,
+        status: run.status || 'unknown',
+        progress: run.status === 'success' ? 100 : 30,
+        isExternal: run.method_type?.includes('external') ?? false,
+        methodRunId: run.id,
+        isHistory: true,
+      })
+    }
+  } catch (_) {}
+
+  await fetchComparisonData()
 }
 
 // ── comparison ────────────────────────────────────────────────────────────────
@@ -347,12 +628,44 @@ async function syncJob(jobId: string) {
   } catch (_) { ElMessage.error('同步失败') }
 }
 
+async function syncExternalJob(job: JobEntry) {
+  if (!job.localJobId || !job.methodRunId) { ElMessage.warning('无法同步：缺少任务信息'); return }
+  const H = { Authorization: `Bearer ${agentStore.sessionToken}` }
+  try {
+    const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/tasks/${job.localJobId}`, { headers: H })
+    job.status = res.data.status
+    job.progress = res.data.progress || 0
+    if (res.data.status === 'success' && res.data.result) {
+      await axios.post(`${WEB}/api/v1/method-runs/${job.methodRunId}/result`, {
+        ...res.data.result,
+        _local_job_id: job.localJobId,
+      }).catch(() => {})
+      await fetchComparisonData()
+      ElMessage.success('已同步完成结果')
+    } else {
+      ElMessage.info(`当前状态：${res.data.status}（${res.data.progress || 0}%）`)
+    }
+  } catch (_) { ElMessage.error('同步失败，请确认 Agent 在线') }
+}
+
 // ── logs ──────────────────────────────────────────────────────────────────────
 async function viewJobLogs(jobId: string) {
   try {
     const res = await axios.get(`${WEB}/api/v1/jobs/${jobId}/logs`, {
       params: { session_token: agentStore.sessionToken, agent_url: agentStore.agentUrl },
     })
+    jobLogs.value = res.data
+  } catch (_) {
+    jobLogs.value = { stdout: '无法获取日志，请确认 Agent 在线', stderr: '' }
+  }
+  logsVisible.value = true
+}
+
+async function viewExternalJobLogs(localJobId: string) {
+  if (!localJobId) { ElMessage.warning('历史任务暂无日志记录'); return }
+  const H = { Authorization: `Bearer ${agentStore.sessionToken}` }
+  try {
+    const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/tasks/${localJobId}/logs`, { headers: H })
     jobLogs.value = res.data
   } catch (_) {
     jobLogs.value = { stdout: '无法获取日志，请确认 Agent 在线', stderr: '' }
@@ -472,6 +785,9 @@ function getJobTagType(status: string) {
   padding: 24px;
   box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
+
+.path-input-row { display: flex; gap: 8px; width: 100%; }
+.path-input-row .neon-input { flex: 1; }
 
 .top-selector-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
 .selector-content { display: flex; align-items: center; }

@@ -1,0 +1,191 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "项目管理" [ref=e24] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e26]
+        - generic [ref=e28]: 项目管理
+      - link "数据集注册" [ref=e29] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e31]
+        - generic [ref=e33]: 数据集注册
+      - link "实验配置管理" [ref=e34] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e36]
+        - generic [ref=e38]: 实验配置管理
+      - link "评估与对比" [ref=e39] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e41]
+        - generic [ref=e43]: 评估与对比
+      - link "报告中心" [ref=e44] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e46]
+        - generic [ref=e48]: 报告中心
+      - link "系统设置" [ref=e49] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e51]
+        - generic [ref=e53]: 系统设置
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - generic [ref=e59]: admin
+      - button "退出" [ref=e60] [cursor=pointer]:
+        - generic [ref=e61]: 退出
+  - generic [ref=e62]:
+    - banner [ref=e63]:
+      - navigation "面包屑" [ref=e65]:
+        - generic [ref=e66]:
+          - link "scAnnoRare" [ref=e67]
+          - text: /
+        - link "Evaluation" [ref=e69]
+      - generic [ref=e72]:
+        - img [ref=e74] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - generic [ref=e81]: 🧬 选择实验主题：
+            - generic [ref=e83] [cursor=pointer]:
+              - generic:
+                - combobox [active] [ref=e85]
+                - generic [ref=e86]: Immune_Rare_Cell_Benchmark_1
+              - img [ref=e89]
+          - generic [ref=e120]:
+            - generic [ref=e122]: 类型注释任务
+            - generic [ref=e123]: 数据集：
+            - strong [ref=e124]: pancreas_baron
+            - generic [ref=e125]: 关联标签：
+            - strong [ref=e126]: cell_type
+        - generic [ref=e127]:
+          - generic [ref=e128]:
+            - generic [ref=e129]:
+              - heading "➕ 导入/添加方法预测结果" [level=3] [ref=e130]
+              - generic [ref=e131]:
+                - generic [ref=e132]:
+                  - generic [ref=e133]: "*评估方法名称 (Method Name)"
+                  - textbox "*评估方法名称 (Method Name)" [ref=e137]:
+                    - /placeholder: "例如: CellTypist"
+                    - text: CellTypist
+                - generic [ref=e138]:
+                  - generic [ref=e139]: "*方法预测 CSV 文件"
+                  - generic [ref=e141]:
+                    - textbox "*方法预测 CSV 文件" [ref=e144]:
+                      - /placeholder: 点击「浏览」选择，或手动输入路径
+                    - button "📂 浏览" [ref=e145] [cursor=pointer]:
+                      - generic [ref=e146]: 📂 浏览
+                - button "提交并在本地节点运行评估" [ref=e147] [cursor=pointer]:
+                  - generic [ref=e148]: 提交并在本地节点运行评估
+              - generic [ref=e149]:
+                - separator [ref=e150]:
+                  - generic [ref=e151]: 快速测试 CSV 路径
+                - paragraph [ref=e152]:
+                  - text: 点击填入测试 CSV：
+                  - code [ref=e153] [cursor=pointer]: /Users/wangxiansheng/Desktop/scAnnoRare/local-agent/workspace/predictions/imported_predictions/tiny_predictions.csv
+            - generic [ref=e154]:
+              - heading "🧬 运行内置方法（无需自备预测）" [level=3] [ref=e155]
+              - paragraph [ref=e156]: 直接对数据集运行 CellTypist 注释并自动评估。请选择与数据组织匹配的预训练模型。
+              - generic [ref=e157]:
+                - generic [ref=e158]:
+                  - generic [ref=e159]: 内置方法
+                  - generic [ref=e162] [cursor=pointer]:
+                    - generic:
+                      - combobox "内置方法" [ref=e164]
+                      - generic [ref=e165]: CellTypist
+                    - img [ref=e168]
+                - generic [ref=e170]:
+                  - generic [ref=e171]: 预训练模型
+                  - generic [ref=e174]:
+                    - generic:
+                      - combobox "预训练模型" [ref=e176]
+                      - generic [ref=e177]: Immune_All_Low ✓
+                    - img [ref=e180] [cursor=pointer]
+                - button "运行 CellTypist 并评估" [ref=e182] [cursor=pointer]:
+                  - generic [ref=e183]: 运行 CellTypist 并评估
+            - generic [ref=e184]:
+              - heading "🔬 外部环境方法（用本地 Python 环境运行）" [level=3] [ref=e185]
+              - paragraph [ref=e186]: 从「系统设置 → Python 环境」选定含所需库的本地环境后，可在此直接运行 scANVI 等重型模型，无需手动导出 CSV。
+              - generic [ref=e187]:
+                - generic [ref=e188]:
+                  - generic [ref=e189]: 执行环境
+                  - generic [ref=e192]:
+                    - generic:
+                      - combobox "执行环境" [ref=e194]
+                      - generic [ref=e195]: 请先在设置页探测并选择
+                    - img [ref=e198] [cursor=pointer]
+                - generic [ref=e200]:
+                  - generic [ref=e201]: 方法
+                  - generic [ref=e204] [cursor=pointer]:
+                    - generic:
+                      - combobox "方法" [ref=e206]
+                      - generic [ref=e207]: scANVI（scvi-tools 半监督 VAE）
+                    - img [ref=e210]
+                - generic [ref=e212]:
+                  - generic [ref=e214]:
+                    - generic [ref=e215]: 训练集比例
+                    - generic [ref=e217]:
+                      - button "减少数值" [ref=e218] [cursor=pointer]:
+                        - img [ref=e220]
+                      - button "增加数值" [ref=e222] [cursor=pointer]:
+                        - img [ref=e224]
+                      - spinbutton "训练集比例" [ref=e228]: "0.80"
+                  - generic [ref=e230]:
+                    - generic [ref=e231]: 最大训练轮次
+                    - generic [ref=e233]:
+                      - button "减少数值" [ref=e234] [cursor=pointer]:
+                        - img [ref=e236]
+                      - button "增加数值" [ref=e238] [cursor=pointer]:
+                        - img [ref=e240]
+                      - spinbutton "最大训练轮次" [ref=e244]: "100"
+                - generic [ref=e245]:
+                  - generic [ref=e246]: 批次列（batch_col，可留空）
+                  - textbox "批次列（batch_col，可留空）" [ref=e250]:
+                    - /placeholder: 例如 batch
+                - button "在外部环境中运行 SCANVI 并评估" [disabled] [ref=e251]:
+                  - generic [ref=e252]: 在外部环境中运行 SCANVI 并评估
+              - paragraph [ref=e253]: 💡 首次运行约需 5–15 分钟（scANVI 需训练神经网络）；任务进度在下方队列中跟踪。
+          - generic [ref=e255]:
+            - heading "🏆 多方法指标横向对比与排序" [level=3] [ref=e256]
+            - generic [ref=e257]:
+              - generic [ref=e258]: 排序依据：
+              - generic [ref=e260] [cursor=pointer]:
+                - generic:
+                  - combobox [ref=e262]
+                  - generic [ref=e263]: Macro-F1
+                - img [ref=e266]
+            - generic [ref=e269]:
+              - table [ref=e271]:
+                - rowgroup [ref=e281]:
+                  - row "排名 评估方法 Accuracy Macro-F1 Rare-F1 AUPRC AUROC 操作" [ref=e282]:
+                    - columnheader "排名" [ref=e283]:
+                      - generic [ref=e284]: 排名
+                    - columnheader "评估方法" [ref=e285]:
+                      - generic [ref=e286]: 评估方法
+                    - columnheader "Accuracy" [ref=e287]:
+                      - generic [ref=e288]: Accuracy
+                    - columnheader "Macro-F1" [ref=e289]:
+                      - generic [ref=e290]: Macro-F1
+                    - columnheader "Rare-F1" [ref=e291]:
+                      - generic [ref=e292]: Rare-F1
+                    - columnheader "AUPRC" [ref=e293]:
+                      - generic [ref=e294]: AUPRC
+                    - columnheader "AUROC" [ref=e295]:
+                      - generic [ref=e296]: AUROC
+                    - columnheader "操作" [ref=e297]:
+                      - generic [ref=e298]: 操作
+              - generic [ref=e302]:
+                - table:
+                  - rowgroup
+                - generic [ref=e304]: 暂无数据

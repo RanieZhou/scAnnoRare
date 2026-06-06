@@ -132,18 +132,34 @@
 
         <el-divider />
 
-        <!-- Omics package table -->
-        <h4 class="sub-section-title">🧪 关键单细胞生信包依赖</h4>
-        <el-table :data="packageData" style="width: 100%" size="small" class="dark-table">
-          <el-table-column prop="name" label="依赖库" />
-          <el-table-column prop="version" label="检测版本">
-            <template #default="scope">
-              <el-tag :type="scope.row.version === 'missing' ? 'danger' : 'success'" size="small">
-                {{ scope.row.version === 'missing' ? '未安装' : 'v' + scope.row.version }}
-              </el-tag>
-            </template>
-          </el-table-column>
-        </el-table>
+        <!-- Local Python compute env -->
+        <h4 class="sub-section-title">🔬 本地 Python 计算环境</h4>
+        <template v-if="defaultExtEnv">
+          <p class="env-note">
+            <el-tag type="success" size="small" effect="dark">{{ defaultExtEnv.name }}</el-tag>
+            &nbsp;{{ defaultExtEnv.python_path }}&nbsp;· Python {{ defaultExtEnv.python_version }}
+          </p>
+          <el-table :data="extEnvPackageData" style="width: 100%" size="small" class="dark-table">
+            <el-table-column prop="name" label="依赖库" />
+            <el-table-column prop="version" label="检测版本">
+              <template #default="scope">
+                <el-tag :type="scope.row.installed ? 'success' : 'danger'" size="small">
+                  {{ scope.row.installed ? 'v' + scope.row.version : '未安装' }}
+                </el-tag>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+        <template v-else-if="envsFetched">
+          <p class="env-note" style="color:#f59e0b;">
+            ⚠️ 未配置本地计算环境，所有分析方法将无法运行。请前往
+            <el-link type="primary" @click="$router.push('/settings')">系统设置 → Python 环境</el-link>
+            扫描并选定含所需依赖的本地 Python 环境。
+          </p>
+        </template>
+        <template v-else>
+          <p class="env-note" style="color:#64748b;">加载中…</p>
+        </template>
       </div>
       
       <!-- Placeholder when not paired -->
@@ -155,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted } from 'vue'
+import { ref, reactive, computed, onMounted, watch } from 'vue'
 import { useAgentStore } from '../stores/agent'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
@@ -163,23 +179,53 @@ import axios from 'axios'
 const agentStore = useAgentStore()
 const pairingLoading = ref(false)
 
+// ── 外部环境信息 ──────────────────────────────────────────────────────────────
+const defaultExtEnv = ref<any>(null)
+const envsFetched = ref(false)
+
+async function fetchExtEnv() {
+  if (!agentStore.paired) return
+  try {
+    const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/python-envs`, {
+      headers: { Authorization: `Bearer ${agentStore.sessionToken}` },
+    })
+    const envs: any[] = res.data.envs || []
+    const defPath: string | null = res.data.default_python_path
+    defaultExtEnv.value = defPath ? (envs.find(e => e.python_path === defPath) ?? null) : null
+    envsFetched.value = true
+  } catch (err: any) {
+    if (err?.response?.status === 401) {
+      // Token rejected by agent — clear stale auth and prompt re-pair
+      agentStore.unpair()
+    }
+    envsFetched.value = true
+  }
+}
+
 // On mount: if already paired but envInfo missing, reload it
 onMounted(async () => {
   if (agentStore.isOnline && agentStore.paired && !agentStore.envInfo) {
     await agentStore.fetchAgentEnv()
   }
+  if (agentStore.paired) fetchExtEnv()
+})
+
+// Re-fetch external env info whenever pairing state becomes true (handles re-pair flow)
+watch(() => agentStore.paired, (isPaired) => {
+  if (isPaired) fetchExtEnv()
 })
 
 const form = reactive({
   pairingCode: ''
 })
 
-// Package dictionary parsing
-const packageData = computed(() => {
-  if (!agentStore.envInfo || !agentStore.envInfo.packages) return []
-  return Object.entries(agentStore.envInfo.packages).map(([name, ver]) => ({
+// 本地计算环境包列表
+const extEnvPackageData = computed(() => {
+  if (!defaultExtEnv.value?.capabilities) return []
+  return Object.entries(defaultExtEnv.value.capabilities).map(([name, ver]) => ({
     name,
-    version: ver
+    version: ver as string,
+    installed: !!ver,
   }))
 })
 
@@ -201,6 +247,7 @@ const handlePair = async () => {
       agentStore.setPairing(res.data.session_token)
       ElMessage.success('本地节点成功连接并授权！')
       await agentStore.fetchAgentEnv()
+      fetchExtEnv()
     }
   } catch (err: any) {
     const msg = err.response?.data?.detail || '配对失败，请检查配对码是否正确或过期'
@@ -444,6 +491,14 @@ const handleUnpair = async () => {
   align-items: center;
   justify-content: center;
   min-height: 300px;
+}
+
+.env-note {
+  font-size: 0.8rem;
+  color: #64748b;
+  margin: 0 0 10px;
+  line-height: 1.5;
+  word-break: break-all;
 }
 
 :deep(.el-table) {

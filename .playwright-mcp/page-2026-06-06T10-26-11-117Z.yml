@@ -1,0 +1,99 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "项目管理" [ref=e24] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e26]
+        - generic [ref=e28]: 项目管理
+      - link "数据集注册" [ref=e29] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e31]
+        - generic [ref=e33]: 数据集注册
+      - link "实验配置管理" [ref=e34] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e36]
+        - generic [ref=e38]: 实验配置管理
+      - link "评估与对比" [ref=e39] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e41]
+        - generic [ref=e43]: 评估与对比
+      - link "报告中心" [ref=e44] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e46]
+        - generic [ref=e48]: 报告中心
+      - link "系统设置" [ref=e49] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e51]
+        - generic [ref=e53]: 系统设置
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - generic [ref=e59]: admin
+      - button "退出" [ref=e60] [cursor=pointer]:
+        - generic [ref=e61]: 退出
+  - generic [ref=e62]:
+    - banner [ref=e63]:
+      - navigation "面包屑" [ref=e65]:
+        - generic [ref=e66]:
+          - link "scAnnoRare" [ref=e67]
+          - text: /
+        - link "AgentPair" [ref=e69]
+      - generic [ref=e70]:
+        - generic:
+          - generic:
+            - generic:
+              - img
+            - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e71]:
+      - generic [ref=e72]:
+        - generic [ref=e75]:
+          - heading "Local Agent 连接诊断" [level=3] [ref=e76]
+          - paragraph [ref=e77]: 系统检测到本地运行中的代理服务，端口：17890，当前状态：已授权配对
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - heading "🔑 节点配对授权" [level=3] [ref=e80]
+            - generic [ref=e81]:
+              - generic [ref=e82]:
+                - generic [ref=e83]: 已授权 Session Token
+                - code [ref=e84]: 40653b9cc7f04284...
+              - button "解除节点配对授权" [ref=e85] [cursor=pointer]:
+                - generic [ref=e86]: 解除节点配对授权
+          - generic [ref=e87]:
+            - heading "🖥️ 本地算力与依赖环境诊断" [level=3] [ref=e88]
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - generic [ref=e91]: 操作系统
+                - generic [ref=e92]: Darwin 25.5.0
+              - generic [ref=e93]:
+                - generic [ref=e94]: Python 引擎
+                - generic [ref=e95]: v3.14.0
+            - separator [ref=e96]
+            - heading "📊 硬件算力消耗" [level=4] [ref=e97]
+            - generic [ref=e98]:
+              - generic [ref=e100]:
+                - generic [ref=e101]: CPU 逻辑核心数
+                - generic [ref=e102]: 10 核
+              - generic [ref=e103]:
+                - generic [ref=e104]:
+                  - generic [ref=e105]: 物理内存
+                  - generic [ref=e106]: 11.2GB 可用 / 16GB 总量
+                - progressbar [ref=e107]:
+                  - generic [ref=e111]: 30%
+              - generic [ref=e113]:
+                - generic [ref=e114]: GPU 加速
+                - generic [ref=e115]: 未检测到 NVIDIA GPU 设备，将降级使用 CPU 计算
+            - separator [ref=e116]
+            - heading "🔬 本地 Python 计算环境" [level=4] [ref=e117]
+            - paragraph [ref=e118]: 加载中…

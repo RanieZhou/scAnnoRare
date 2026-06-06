@@ -40,8 +40,8 @@ export const useAgentStore = defineStore('agent', {
           return true
         }
 
-        if (agentPaired && this.sessionToken && !this.envInfo) {
-          // Paired and token present but envInfo missing — load it now
+        if (agentPaired && this.sessionToken) {
+          // Verify token is still valid and refresh env info
           await this.fetchAgentEnv()
         }
 

@@ -1,0 +1,250 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: 🔮
+      - generic [ref=e7]: scAnnoRare
+      - generic [ref=e8]: V1.0
+    - navigation [ref=e9]:
+      - link "首页控制台" [ref=e10] [cursor=pointer]:
+        - /url: /
+        - img [ref=e12]
+        - generic [ref=e16]: 首页控制台
+      - link "计算节点配对" [ref=e17] [cursor=pointer]:
+        - /url: /agent
+        - img [ref=e19]
+        - generic [ref=e22]: 计算节点配对
+      - link "项目管理" [ref=e24] [cursor=pointer]:
+        - /url: /projects
+        - img [ref=e26]
+        - generic [ref=e28]: 项目管理
+      - link "数据集注册" [ref=e29] [cursor=pointer]:
+        - /url: /datasets
+        - img [ref=e31]
+        - generic [ref=e33]: 数据集注册
+      - link "实验配置管理" [ref=e34] [cursor=pointer]:
+        - /url: /experiments
+        - img [ref=e36]
+        - generic [ref=e38]: 实验配置管理
+      - link "评估与对比" [ref=e39] [cursor=pointer]:
+        - /url: /evaluation
+        - img [ref=e41]
+        - generic [ref=e43]: 评估与对比
+      - link "报告中心" [ref=e44] [cursor=pointer]:
+        - /url: /reports
+        - img [ref=e46]
+        - generic [ref=e48]: 报告中心
+      - link "系统设置" [ref=e49] [cursor=pointer]:
+        - /url: /settings
+        - img [ref=e51]
+        - generic [ref=e53]: 系统设置
+    - generic [ref=e54]:
+      - generic [ref=e55]:
+        - img [ref=e57]
+        - generic [ref=e59]: admin
+      - button "退出" [ref=e60] [cursor=pointer]:
+        - generic [ref=e61]: 退出
+  - generic [ref=e62]:
+    - banner [ref=e63]:
+      - navigation "面包屑" [ref=e65]:
+        - generic [ref=e66]:
+          - link "scAnnoRare" [ref=e67]
+          - text: /
+        - link "Settings" [ref=e69]
+      - generic [ref=e72]:
+        - img [ref=e74] [cursor=pointer]
+        - text: "Local Agent: 已连接 (127.0.0.1)"
+    - main [ref=e77]:
+      - generic [ref=e78]:
+        - generic [ref=e79]:
+          - heading "👤 账号信息" [level=3] [ref=e80]
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - generic [ref=e83]: 用户名
+              - generic [ref=e84]: admin
+            - generic [ref=e85]:
+              - generic [ref=e86]: 用户 ID
+              - generic [ref=e87]: admin_001
+            - generic [ref=e88]:
+              - generic [ref=e89]: 登录令牌
+              - generic [ref=e90]: eyJhbGciOiJIUzI1NiIsInR5…
+        - generic [ref=e91]:
+          - heading "🔒 修改密码" [level=3] [ref=e92]
+          - generic [ref=e93]:
+            - generic [ref=e94]:
+              - generic [ref=e95]: 原密码
+              - textbox "原密码" [ref=e99]
+            - generic [ref=e100]:
+              - generic [ref=e101]: 新密码（至少 4 位）
+              - textbox "新密码（至少 4 位）" [ref=e105]
+            - button "确认修改" [ref=e106] [cursor=pointer]:
+              - generic [ref=e107]: 确认修改
+        - generic [ref=e108]:
+          - heading "🖥️ 本地计算节点" [level=3] [ref=e109]
+          - generic [ref=e110]:
+            - generic [ref=e112]: 已连接（127.0.0.1:17890）
+            - generic [ref=e114]: 已配对
+            - button "前往配对页" [ref=e115] [cursor=pointer]:
+              - generic [ref=e116]: 前往配对页
+          - generic [ref=e117]:
+            - generic [ref=e118]:
+              - generic [ref=e119]: 操作系统
+              - generic [ref=e120]: Darwin 25.5.0
+            - generic [ref=e121]:
+              - generic [ref=e122]: Python
+              - generic [ref=e123]: v3.14.0
+            - generic [ref=e124]:
+              - generic [ref=e125]: CPU 核心
+              - generic [ref=e126]: "10"
+            - generic [ref=e127]:
+              - generic [ref=e128]: 内存
+              - generic [ref=e129]: 16 GB
+        - generic [ref=e130]:
+          - heading "🐍 Python 环境管理" [level=3] [ref=e131]
+          - paragraph [ref=e132]: 检测本地 conda / pyenv / system Python 环境，选定后可在评估页直接运行 scANVI 等重型方法（无需打包进 Agent）。
+          - generic [ref=e133]:
+            - button "🔍 重新扫描环境" [ref=e134] [cursor=pointer]:
+              - generic [ref=e135]: 🔍 重新扫描环境
+            - button "➕ 手动添加路径" [ref=e136] [cursor=pointer]:
+              - generic [ref=e137]: ➕ 手动添加路径
+            - generic [ref=e138]: 上次扫描：06/06 17:53
+          - generic [ref=e139]:
+            - generic [ref=e140]:
+              - generic [ref=e141]:
+                - generic [ref=e142]: miniconda3 (conda)
+                - generic [ref=e144]: conda
+              - generic [ref=e145]: /opt/miniconda3/bin/python3
+              - generic [ref=e146]:
+                - generic [ref=e147]: scvi ✗
+                - generic [ref=e148]: celltypist ✗
+                - generic [ref=e149]: scanpy ✓
+                - generic [ref=e150]: anndata ✓
+                - generic [ref=e151]: torch ✗
+                - generic [ref=e152]: sklearn ✓
+              - generic [ref=e153]:
+                - button "设为默认" [ref=e154] [cursor=pointer]:
+                  - generic [ref=e155]: 设为默认
+                - button "移除" [ref=e156] [cursor=pointer]:
+                  - generic [ref=e157]: 移除
+            - generic [ref=e158]:
+              - generic [ref=e159]:
+                - generic [ref=e160]: scANVI (conda)
+                - generic [ref=e162]: conda
+              - generic [ref=e163]: /opt/miniconda3/envs/scANVI/bin/python3
+              - generic [ref=e164]:
+                - generic [ref=e165]: scvi ✓
+                - generic [ref=e166]: celltypist ✗
+                - generic [ref=e167]: scanpy ✓
+                - generic [ref=e168]: anndata ✓
+                - generic [ref=e169]: torch ✓
+                - generic [ref=e170]: sklearn ✓
+              - generic [ref=e171]:
+                - button "设为默认" [ref=e172] [cursor=pointer]:
+                  - generic [ref=e173]: 设为默认
+                - button "移除" [ref=e174] [cursor=pointer]:
+                  - generic [ref=e175]: 移除
+            - generic [ref=e176]:
+              - generic [ref=e177]:
+                - generic [ref=e178]: pyscenic (conda)
+                - generic [ref=e180]: conda
+              - generic [ref=e181]: /opt/miniconda3/envs/pyscenic/bin/python3
+              - generic [ref=e182]:
+                - generic [ref=e183]: scvi ✗
+                - generic [ref=e184]: celltypist ✗
+                - generic [ref=e185]: scanpy ✗
+                - generic [ref=e186]: anndata ✗
+                - generic [ref=e187]: torch ✗
+                - generic [ref=e188]: sklearn ✓
+              - generic [ref=e189]:
+                - button "设为默认" [ref=e190] [cursor=pointer]:
+                  - generic [ref=e191]: 设为默认
+                - button "移除" [ref=e192] [cursor=pointer]:
+                  - generic [ref=e193]: 移除
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: pyenv 3.14.0
+                - generic [ref=e198]: pyenv
+              - generic [ref=e199]: /Users/wangxiansheng/.pyenv/versions/3.14.0/bin/python3
+              - generic [ref=e200]:
+                - generic [ref=e201]: scvi ✗
+                - generic [ref=e202]: celltypist ✓
+                - generic [ref=e203]: scanpy ✓
+                - generic [ref=e204]: anndata ✓
+                - generic [ref=e205]: torch ✗
+                - generic [ref=e206]: sklearn ✓
+              - generic [ref=e207]:
+                - button "设为默认" [ref=e208] [cursor=pointer]:
+                  - generic [ref=e209]: 设为默认
+                - button "移除" [ref=e210] [cursor=pointer]:
+                  - generic [ref=e211]: 移除
+            - generic [ref=e212]:
+              - generic [ref=e213]:
+                - generic [ref=e214]: System (/usr/bin/python3)
+                - generic [ref=e216]: system
+              - generic [ref=e217]: /usr/bin/python3
+              - generic [ref=e218]:
+                - generic [ref=e219]: scvi ✗
+                - generic [ref=e220]: celltypist ✗
+                - generic [ref=e221]: scanpy ✓
+                - generic [ref=e222]: anndata ✓
+                - generic [ref=e223]: torch ✗
+                - generic [ref=e224]: sklearn ✓
+              - generic [ref=e225]:
+                - button "设为默认" [ref=e226] [cursor=pointer]:
+                  - generic [ref=e227]: 设为默认
+                - button "移除" [ref=e228] [cursor=pointer]:
+                  - generic [ref=e229]: 移除
+            - generic [ref=e230]:
+              - generic [ref=e231]:
+                - generic [ref=e232]: System (/usr/local/bin/python3)
+                - generic [ref=e234]: system
+              - generic [ref=e235]: /usr/local/bin/python3
+              - generic [ref=e236]:
+                - generic [ref=e237]: scvi ✓
+                - generic [ref=e238]: celltypist ✓
+                - generic [ref=e239]: scanpy ✓
+                - generic [ref=e240]: anndata ✓
+                - generic [ref=e241]: torch ✓
+                - generic [ref=e242]: sklearn ✓
+              - generic [ref=e243]:
+                - button "设为默认" [ref=e244] [cursor=pointer]:
+                  - generic [ref=e245]: 设为默认
+                - button "移除" [ref=e246] [cursor=pointer]:
+                  - generic [ref=e247]: 移除
+            - generic [ref=e248]:
+              - generic [ref=e249]:
+                - generic [ref=e250]: System (/usr/local/bin/python3.11)
+                - generic [ref=e252]: system
+              - generic [ref=e253]: /usr/local/bin/python3.11
+              - generic [ref=e254]:
+                - generic [ref=e255]: scvi ✓
+                - generic [ref=e256]: celltypist ✓
+                - generic [ref=e257]: scanpy ✓
+                - generic [ref=e258]: anndata ✓
+                - generic [ref=e259]: torch ✓
+                - generic [ref=e260]: sklearn ✓
+              - generic [ref=e261]:
+                - button "设为默认" [ref=e262] [cursor=pointer]:
+                  - generic [ref=e263]: 设为默认
+                - button "移除" [ref=e264] [cursor=pointer]:
+                  - generic [ref=e265]: 移除
+            - generic [ref=e266]:
+              - generic [ref=e267]:
+                - generic [ref=e268]: System (/usr/local/bin/python3.11-intel64)
+                - generic [ref=e270]: system
+              - generic [ref=e271]: /usr/local/bin/python3.11-intel64
+              - generic [ref=e272]:
+                - generic [ref=e273]: scvi ✗
+                - generic [ref=e274]: celltypist ✗
+                - generic [ref=e275]: scanpy ✗
+                - generic [ref=e276]: anndata ✗
+                - generic [ref=e277]: torch ✗
+                - generic [ref=e278]: sklearn ✗
+              - generic [ref=e279]:
+                - button "设为默认" [ref=e280] [cursor=pointer]:
+                  - generic [ref=e281]: 设为默认
+                - button "移除" [ref=e282] [cursor=pointer]:
+                  - generic [ref=e283]: 移除
+        - generic [ref=e284]:
+          - heading "ℹ️ 关于" [level=3] [ref=e285]
+          - paragraph [ref=e286]: 单细胞细胞类型注释与稀有细胞识别多方法评估系统
+          - paragraph [ref=e287]: scAnnoRare · 版本 V1.1

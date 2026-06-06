@@ -1,0 +1,532 @@
+[   72307ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[   72310ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[  590784ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[  590787ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 1099861ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 1099862ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 1380925ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://127.0.0.1:17890/api/v1/local/tasks/run-external:0
+[ 1667524ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://127.0.0.1:17890/api/v1/local/tasks/run-external:0
+[ 1667526ms] [ERROR] [runMethod] error: AxiosError: Request failed with status code 422
+    at settle (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:1740:14)
+    at XMLHttpRequest.onloadend (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2093:4)
+    at Axios$1.request (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2796:37)
+    at async runScANVI (http://localhost:5173/src/pages/Evaluation.vue?t=1780744378237:63:21)
+    at async runMethod (http://localhost:5173/src/pages/Evaluation.vue?t=1780744378237:166:6) {detail: Array(1)} @ http://localhost:5173/@vite/client:524
+[ 1725433ms] [ERROR] Failed to load resource: the server responded with a status of 422 (Unprocessable Content) @ http://127.0.0.1:17890/api/v1/local/tasks/run-external:0
+[ 1725434ms] [ERROR] [runMethod] error: AxiosError: Request failed with status code 422
+    at settle (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:1740:14)
+    at XMLHttpRequest.onloadend (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2093:4)
+    at Axios$1.request (http://localhost:5173/node_modules/.vite/deps/axios.js?v=0f55406d:2796:37)
+    at async runScANVI (http://localhost:5173/src/pages/Evaluation.vue?t=1780744378237:63:21)
+    at async runMethod (http://localhost:5173/src/pages/Evaluation.vue?t=1780744378237:166:6) {detail: Array(1)} @ http://localhost:5173/@vite/client:524
+[ 1817988ms] [ERROR] Failed to load resource: net::ERR_CONNECTION_REFUSED @ http://127.0.0.1:17890/api/v1/local/health:0
+[ 1867526ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_7925b77e/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 1875699ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_7925b77e/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2027885ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_f34815f6/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2048639ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_f34815f6/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2133774ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2168732ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325/sync?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2173013ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 2613389ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 3086038ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/v1/method-runs/run_b89e7646/result:0
+[ 3151181ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325/logs?session_token=0663ce041e6d46f684eba4532a6c7b07&agent_url=http:%2F%2F127.0.0.1:17890:0
+[ 3155831ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8000/api/v1/jobs/ext_job_cfe17325:0
+[ 3520277ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3520285ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746257781:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at leavingHooks.afterLeave (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2715:47)
+[ 3533238ms] [WARNING] [Vue warn]: Unhandled error during execution of scheduler flush 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3533239ms] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2140:23
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 3547266ms] [WARNING] [Vue warn]: Unhandled error during execution of scheduler flush 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3547268ms] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2140:23
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 3557199ms] [ERROR] TypeError: Cannot read properties of null (reading 'flags')
+    at http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2113:22
+    at Array.forEach (<anonymous>)
+    at rerender (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2106:24)
+    at Object.rerender (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2163:11)
+    at http://localhost:5173/src/pages/Evaluation.vue?t=1780746285005:1397:23
+    at http://localhost:5173/@vite/client:70:95
+    at http://localhost:5173/@vite/client:222:52
+    at http://localhost:5173/@vite/client:200:55
+    at Array.forEach (<anonymous>)
+    at HMRClient.queueUpdate (http://localhost:5173/@vite/client:200:33) @ http://localhost:5173/@vite/client:524
+[ 3557199ms] [WARNING] [HMR] Something went wrong during Vue component hot-reload. Full reload required. @ http://localhost:5173/@vite/client:524
+[ 3579843ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:992
+[ 3580162ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3580162ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3580219ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+[ 3600711ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:992
+[ 3600930ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3600931ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 3600967ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+[ 6917267ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:992
+[ 6917467ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 6917467ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 6917556ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+[ 7046643ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7046644ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7046676ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+[ 7048312ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7048417ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7054488ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7054489ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at leavingHooks.afterLeave (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2715:47)
+[ 7055526ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7055625ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7062874ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7062876ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at leavingHooks.afterLeave (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2715:47)
+[ 7063760ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7063858ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7072846ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 7072847ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 7073987ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7073988ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at leavingHooks.afterLeave (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2715:47)
+[ 7075744ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7075851ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7507433ms] [ERROR] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5493:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at patchKeyedChildren (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5687:33) @ http://localhost:5173/@vite/client:524
+[ 7507434ms] [WARNING] [HMR] Something went wrong during Vue component hot-reload. Full reload required. @ http://localhost:5173/@vite/client:524
+[ 7607864ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< null > key="/evaluation" > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7607865ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at leavingHooks.afterLeave (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2715:47)
+[ 7609403ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7609510ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7611037ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7611136ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 7618202ms] [WARNING] [Vue warn]: Unhandled error during execution of setup function 
+  at <Evaluation onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > key="/evaluation" > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7618202ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7618243ms] ReferenceError: watch is not defined
+    at setup (http://localhost:5173/src/pages/Evaluation.vue?t=1780746294936:212:3)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at setupStatefulComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6734:23)
+    at setupComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6710:35)
+    at mountComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5502:3)
+    at processComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5492:8)
+    at patch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5287:28)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5607:5)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at updateComponent (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5525:13)
+[ 7619335ms] [WARNING] [Vue warn]: Unhandled error during execution of component update 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[ 7619420ms] TypeError: Cannot read properties of null (reading 'component')
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6021:40)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at locateNonHydratedAsyncRoot (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:6023:14)
+    at ReactiveEffect.componentUpdateFn [as fn] (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:5576:35)
+    at ReactiveEffect.run (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:426:16)
+    at ReactiveEffect.runIfDirty (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:453:27)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:31)
+    at flushJobs (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2037:5)
+[ 8230763ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 8230764ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 8233791ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 8233791ms] [WARNING] ElementPlusError: [el-radio] [API] label act as value is about to be deprecated in version 3.0.0, please use value instead.
+For more detail, please visit: https://element-plus.org/en-US/component/radio.html
+
+    at debugWarn (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:4760:35)
+    at watch.immediate (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5851:12)
+    at callWithErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1888:17)
+    at callWithAsyncErrorHandling (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1895:15)
+    at baseWatchOptions.call (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2387:46)
+    at job (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1669:13)
+    at watch$1 (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:1690:25)
+    at doWatch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2409:22)
+    at watch (http://localhost:5173/node_modules/.vite/deps/vue.runtime.esm-bundler-BN4TKXIE.js?v=12a5d790:2361:9)
+    at useDeprecated (http://localhost:5173/node_modules/.vite/deps/element-plus.js?v=481a495d:5850:2) @ http://localhost:5173/@vite/client:524
+[ 8652979ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/v1/method-runs/run_a1c3a3df/result:0
+[ 8807922ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/v1/method-runs/run_a1c3a3df/result:0

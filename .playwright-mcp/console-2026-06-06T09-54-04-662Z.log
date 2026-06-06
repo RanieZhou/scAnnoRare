@@ -1,0 +1,21 @@
+[  353006ms] [WARNING] [Vue warn]: Property "defaultExtEnv" was accessed during render but is not defined on instance. 
+  at <AgentPair onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[  353008ms] [WARNING] [Vue warn]: Property "envsFetched" was accessed during render but is not defined on instance. 
+  at <AgentPair onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524
+[  363274ms] [WARNING] [Vue warn]: Property "extEnvPackageData" was accessed during render but is not defined on instance. 
+  at <AgentPair onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< Proxy(Object) > > 
+  at <BaseTransition mode="out-in" appear=false persisted=false  ... > 
+  at <Transition name="fade" mode="out-in" > 
+  at <RouterView> 
+  at <ElConfigProvider locale= {name: zh-cn, el: Object} > 
+  at <App> @ http://localhost:5173/@vite/client:524

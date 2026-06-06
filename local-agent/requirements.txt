@@ -13,6 +13,9 @@ scikit-learn
 matplotlib
 seaborn
 jinja2
+# 内置方法 + 可视化（V1.1）
+celltypist
+umap-learn
 # 可选：GPU 检测
 # torch
 # pynvml

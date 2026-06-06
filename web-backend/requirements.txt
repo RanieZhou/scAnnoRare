@@ -6,3 +6,5 @@ pymysql
 cryptography
 pydantic
 requests
+bcrypt
+pyjwt

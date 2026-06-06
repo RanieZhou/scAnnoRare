@@ -57,131 +57,197 @@
     },
     "Immune_DC_Evaluation": {
         "dataset_name": "Immune_DC_Evaluation",
-        "filepath": "/Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad",
-        "n_cells": 8569,
-        "n_genes": 20125,
-        "label_col": "cell_type",
-        "batch_col": "batch",
-        "total_cells": 8569,
-        "valid_label_cells": 8569,
+        "filepath": "/Users/wangxiansheng/Desktop/scApex/data/human_immune_health/human_immune_health_atlas_dc.h5ad",
+        "n_cells": 23287,
+        "n_genes": 33538,
+        "label_col": "AIFI_L3",
+        "batch_col": "batch_id",
+        "total_cells": 23287,
+        "valid_label_cells": 23287,
         "invalid_label_cells": 0,
         "invalid_label_ratio": 0.0,
         "label_distribution": {
-            "beta": {
-                "count": 2525,
-                "ratio": 0.2947
+            "pDC": {
+                "count": 7587,
+                "ratio": 0.3258
             },
-            "alpha": {
-                "count": 2326,
-                "ratio": 0.2714
+            "HLA-DRhi cDC2": {
+                "count": 7353,
+                "ratio": 0.3158
             },
-            "ductal": {
-                "count": 1077,
-                "ratio": 0.1257
+            "CD14+ cDC2": {
+                "count": 5646,
+                "ratio": 0.2425
             },
-            "acinar": {
-                "count": 958,
-                "ratio": 0.1118
+            "ISG+ cDC2": {
+                "count": 1236,
+                "ratio": 0.0531
             },
-            "delta": {
-                "count": 601,
-                "ratio": 0.0701
+            "cDC1": {
+                "count": 943,
+                "ratio": 0.0405
             },
-            "activated_stellate": {
-                "count": 284,
-                "ratio": 0.0331
-            },
-            "gamma": {
-                "count": 255,
-                "ratio": 0.0298
-            },
-            "endothelial": {
-                "count": 252,
-                "ratio": 0.0294
-            },
-            "quiescent_stellate": {
-                "count": 173,
-                "ratio": 0.0202
-            },
-            "macrophage": {
-                "count": 55,
-                "ratio": 0.0064
-            },
-            "mast": {
-                "count": 25,
-                "ratio": 0.0029
-            },
-            "epsilon": {
-                "count": 18,
-                "ratio": 0.0021
-            },
-            "schwann": {
-                "count": 13,
-                "ratio": 0.0015
-            },
-            "t_cell": {
-                "count": 7,
-                "ratio": 0.0008
+            "ASDC": {
+                "count": 522,
+                "ratio": 0.0224
             }
         },
         "rare_candidates": [
             {
-                "class_name": "gamma",
-                "count": 255,
-                "ratio": 0.0298
+                "class_name": "cDC1",
+                "count": 943,
+                "ratio": 0.0405
             },
             {
-                "class_name": "endothelial",
-                "count": 252,
-                "ratio": 0.0294
-            },
-            {
-                "class_name": "quiescent_stellate",
-                "count": 173,
-                "ratio": 0.0202
-            },
-            {
-                "class_name": "macrophage",
-                "count": 55,
-                "ratio": 0.0064
-            },
-            {
-                "class_name": "mast",
-                "count": 25,
-                "ratio": 0.0029
-            },
-            {
-                "class_name": "epsilon",
-                "count": 18,
-                "ratio": 0.0021
-            },
-            {
-                "class_name": "schwann",
-                "count": 13,
-                "ratio": 0.0015
-            },
-            {
-                "class_name": "t_cell",
-                "count": 7,
-                "ratio": 0.0008
+                "class_name": "ASDC",
+                "count": 522,
+                "ratio": 0.0224
             }
         ],
         "batch_distribution": {
-            "donor3": {
-                "count": 3605,
-                "ratio": 0.4207
+            "B078": {
+                "count": 1950,
+                "ratio": 0.0837
             },
-            "donor1": {
-                "count": 1937,
-                "ratio": 0.226
+            "B040": {
+                "count": 1939,
+                "ratio": 0.0833
             },
-            "donor2": {
-                "count": 1724,
-                "ratio": 0.2012
+            "B002": {
+                "count": 1617,
+                "ratio": 0.0694
             },
-            "donor4": {
-                "count": 1303,
-                "ratio": 0.1521
+            "B072": {
+                "count": 1334,
+                "ratio": 0.0573
+            },
+            "B046": {
+                "count": 1135,
+                "ratio": 0.0487
+            },
+            "B053": {
+                "count": 1105,
+                "ratio": 0.0475
+            },
+            "B056": {
+                "count": 1048,
+                "ratio": 0.045
+            },
+            "B054": {
+                "count": 943,
+                "ratio": 0.0405
+            },
+            "B041": {
+                "count": 925,
+                "ratio": 0.0397
+            },
+            "B094": {
+                "count": 889,
+                "ratio": 0.0382
+            },
+            "B138": {
+                "count": 857,
+                "ratio": 0.0368
+            },
+            "B077": {
+                "count": 850,
+                "ratio": 0.0365
+            },
+            "B001": {
+                "count": 826,
+                "ratio": 0.0355
+            },
+            "B073": {
+                "count": 769,
+                "ratio": 0.033
+            },
+            "B096": {
+                "count": 646,
+                "ratio": 0.0277
+            },
+            "B060": {
+                "count": 637,
+                "ratio": 0.0274
+            },
+            "B045": {
+                "count": 635,
+                "ratio": 0.0273
+            },
+            "B048": {
+                "count": 525,
+                "ratio": 0.0225
+            },
+            "B063": {
+                "count": 513,
+                "ratio": 0.022
+            },
+            "B039": {
+                "count": 505,
+                "ratio": 0.0217
+            },
+            "B084": {
+                "count": 431,
+                "ratio": 0.0185
+            },
+            "B036": {
+                "count": 367,
+                "ratio": 0.0158
+            },
+            "B145": {
+                "count": 350,
+                "ratio": 0.015
+            },
+            "B080": {
+                "count": 321,
+                "ratio": 0.0138
+            },
+            "B047": {
+                "count": 294,
+                "ratio": 0.0126
+            },
+            "B050": {
+                "count": 250,
+                "ratio": 0.0107
+            },
+            "B043": {
+                "count": 247,
+                "ratio": 0.0106
+            },
+            "B010": {
+                "count": 234,
+                "ratio": 0.01
+            },
+            "B007": {
+                "count": 174,
+                "ratio": 0.0075
+            },
+            "B067": {
+                "count": 148,
+                "ratio": 0.0064
+            },
+            "B085": {
+                "count": 145,
+                "ratio": 0.0062
+            },
+            "B064": {
+                "count": 142,
+                "ratio": 0.0061
+            },
+            "B142": {
+                "count": 140,
+                "ratio": 0.006
+            },
+            "B082": {
+                "count": 138,
+                "ratio": 0.0059
+            },
+            "B055": {
+                "count": 132,
+                "ratio": 0.0057
+            },
+            "B132": {
+                "count": 126,
+                "ratio": 0.0054
             }
         }
     },
@@ -468,5 +534,140 @@
             }
         ],
         "batch_distribution": {}
+    },
+    "pancreas_baron1": {
+        "dataset_name": "pancreas_baron1",
+        "filepath": "/Users/wangxiansheng/Desktop/scAnnoRare/data/pancreas_baron.h5ad",
+        "n_cells": 8569,
+        "n_genes": 20125,
+        "label_col": "cell_type",
+        "batch_col": "batch",
+        "total_cells": 8569,
+        "valid_label_cells": 8569,
+        "invalid_label_cells": 0,
+        "invalid_label_ratio": 0.0,
+        "label_distribution": {
+            "beta": {
+                "count": 2525,
+                "ratio": 0.2947
+            },
+            "alpha": {
+                "count": 2326,
+                "ratio": 0.2714
+            },
+            "ductal": {
+                "count": 1077,
+                "ratio": 0.1257
+            },
+            "acinar": {
+                "count": 958,
+                "ratio": 0.1118
+            },
+            "delta": {
+                "count": 601,
+                "ratio": 0.0701
+            },
+            "activated_stellate": {
+                "count": 284,
+                "ratio": 0.0331
+            },
+            "gamma": {
+                "count": 255,
+                "ratio": 0.0298
+            },
+            "endothelial": {
+                "count": 252,
+                "ratio": 0.0294
+            },
+            "quiescent_stellate": {
+                "count": 173,
+                "ratio": 0.0202
+            },
+            "macrophage": {
+                "count": 55,
+                "ratio": 0.0064
+            },
+            "mast": {
+                "count": 25,
+                "ratio": 0.0029
+            },
+            "epsilon": {
+                "count": 18,
+                "ratio": 0.0021
+            },
+            "schwann": {
+                "count": 13,
+                "ratio": 0.0015
+            },
+            "t_cell": {
+                "count": 7,
+                "ratio": 0.0008
+            }
+        },
+        "rare_candidates": [
+            {
+                "class_name": "activated_stellate",
+                "count": 284,
+                "ratio": 0.0331
+            },
+            {
+                "class_name": "gamma",
+                "count": 255,
+                "ratio": 0.0298
+            },
+            {
+                "class_name": "endothelial",
+                "count": 252,
+                "ratio": 0.0294
+            },
+            {
+                "class_name": "quiescent_stellate",
+                "count": 173,
+                "ratio": 0.0202
+            },
+            {
+                "class_name": "macrophage",
+                "count": 55,
+                "ratio": 0.0064
+            },
+            {
+                "class_name": "mast",
+                "count": 25,
+                "ratio": 0.0029
+            },
+            {
+                "class_name": "epsilon",
+                "count": 18,
+                "ratio": 0.0021
+            },
+            {
+                "class_name": "schwann",
+                "count": 13,
+                "ratio": 0.0015
+            },
+            {
+                "class_name": "t_cell",
+                "count": 7,
+                "ratio": 0.0008
+            }
+        ],
+        "batch_distribution": {
+            "donor3": {
+                "count": 3605,
+                "ratio": 0.4207
+            },
+            "donor1": {
+                "count": 1937,
+                "ratio": 0.226
+            },
+            "donor2": {
+                "count": 1724,
+                "ratio": 0.2012
+            },
+            "donor4": {
+                "count": 1303,
+                "ratio": 0.1521
+            }
+        }
     }
 }

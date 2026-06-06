@@ -1,0 +1,1 @@
+[     127ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://127.0.0.1:17890/api/v1/local/env:0

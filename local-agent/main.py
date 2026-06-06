@@ -139,9 +139,11 @@ try:
     from app.api.env import router as env_router
     from app.api.files import router as files_router
     from app.api.tasks import router as tasks_router
+    from app.api.envs import router as envs_router
     app.include_router(env_router, prefix="/api/v1/local", dependencies=[Depends(verify_token)])
     app.include_router(files_router, prefix="/api/v1/local", dependencies=[Depends(verify_token)])
     app.include_router(tasks_router, prefix="/api/v1/local", dependencies=[Depends(verify_token)])
+    app.include_router(envs_router, prefix="/api/v1/local", dependencies=[Depends(verify_token)])
 except Exception as e:
     logger.error(f"Failed to load sub-routers: {e}")
 
