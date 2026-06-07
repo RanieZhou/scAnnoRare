@@ -531,3 +531,7 @@ For more detail, please visit: https://element-plus.org/en-US/component/radio.ht
 [ 8652979ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/v1/method-runs/run_a1c3a3df/result:0
 [ 8807922ms] [ERROR] Failed to load resource: the server responded with a status of 405 (Method Not Allowed) @ http://127.0.0.1:8000/api/v1/method-runs/run_a1c3a3df/result:0
 [12162607ms] [ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://127.0.0.1:17890/api/v1/local/env:0
+[15196605ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:992
+[34003704ms] [LOG] [vite] server connection lost. Polling for restart... @ http://localhost:5173/@vite/client:992
+[34003959ms] [ERROR] Access to XMLHttpRequest at 'http://127.0.0.1:8000/api/v1/experiments' from origin 'http://localhost:5173' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource. @ http://localhost:5173/evaluation:0
+[34003960ms] [ERROR] Failed to load resource: net::ERR_FAILED @ http://127.0.0.1:8000/api/v1/experiments:0

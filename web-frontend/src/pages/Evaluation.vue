@@ -144,7 +144,7 @@
                 <el-button
                   v-if="job.status === 'success'"
                   size="small" type="success" plain
-                  @click="job.isExternal || job.isHistory ? openReportByRunId(job.methodRunId!) : openLocalReport(job.jobId)"
+                  @click="job.isExternal && job.localJobId ? openAgentReport(job.localJobId) : job.isHistory ? openReportByRunId(job.methodRunId!) : openLocalReport(job.jobId)"
                 >查看报告</el-button>
               </div>
             </div>
@@ -331,10 +331,14 @@ function startExternalPolling(localJobId: string, methodRunId: string, methodNam
         clearInterval(t)
         const result = res.data.result
         if (result) {
-          await axios.post(`${WEB}/api/v1/method-runs/${methodRunId}/result`, {
-            ...result,
-            _local_job_id: localJobId,
-          }).catch(() => {})
+          try {
+            await axios.post(`${WEB}/api/v1/method-runs/${methodRunId}/result`, {
+              ...result,
+              _local_job_id: localJobId,
+            })
+          } catch (e: any) {
+            console.warn('[scANVI] result sync failed:', e?.response?.data || e?.message)
+          }
         }
         ElMessage.success(`${methodName} 评估完成！`)
         await fetchComparisonData()
@@ -678,6 +682,15 @@ function _proxyReportUrl(reportId: string) {
   return `${WEB}/api/v1/reports/${reportId}/download`
     + `?session_token=${encodeURIComponent(agentStore.sessionToken)}`
     + `&agent_url=${encodeURIComponent(agentStore.agentUrl)}`
+}
+
+function openAgentReport(localJobId: string) {
+  if (!localJobId) { ElMessage.warning('该任务无法查看报告（无 localJobId）'); return }
+  const url = `${WEB}/api/v1/agent-report`
+    + `?local_job_id=${encodeURIComponent(localJobId)}`
+    + `&session_token=${encodeURIComponent(agentStore.sessionToken)}`
+    + `&agent_url=${encodeURIComponent(agentStore.agentUrl)}`
+  window.open(url, '_blank')
 }
 
 async function openLocalReport(jobId: string) {
