@@ -1,6 +1,14 @@
 import sys
 import os
 
+# When spawned from a GUI parent process (Tauri), stdout/stderr may be None on Windows
+# because the parent has no console. Fix this before any import touches logging/isatty.
+if getattr(sys, "frozen", False):
+    if sys.stdout is None:
+        sys.stdout = open(os.devnull, "w")
+    if sys.stderr is None:
+        sys.stderr = open(os.devnull, "w")
+
 import uuid
 import time
 import logging
@@ -188,6 +196,6 @@ if __name__ == "__main__":
     import uvicorn
     if getattr(sys, "frozen", False):
         # Packaged: pass the app object directly; reload/string-import don't work frozen.
-        uvicorn.run(app, host="127.0.0.1", port=17890)
+        uvicorn.run(app, host="127.0.0.1", port=17890, log_config=None)
     else:
         uvicorn.run("main:app", host="127.0.0.1", port=17890, reload=True)
