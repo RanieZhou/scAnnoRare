@@ -40,7 +40,7 @@ exe = EXE(
     pyz, a.scripts, [],
     exclude_binaries=True,
     name="scannorare-agent",
-    console=False,
+    console=True,
     disable_windowed_traceback=False,
 )
 coll = COLLECT(
