@@ -52,39 +52,61 @@ def _save_store(store: Dict):
         json.dump(store, f, indent=2, ensure_ascii=False)
 
 # ── 探测脚本（在子进程中执行） ──────────────────────────────────────────────────
-_PROBE_SCRIPT = (
-    "import json,sys;"
-    "caps={};"
-    "pkgs=['anndata','celltypist','jinja2','matplotlib','numpy','pandas','scanpy','scipy','scvi','seaborn','sklearn','torch','umap'];"
-    "[caps.update({p: getattr(__import__(p),'__version__','installed')})"
-    " if (lambda: __import__(p) or True)() else None"
-    " for p in pkgs];"
-    "print(json.dumps({'python_version':sys.version.split()[0],'capabilities':caps}))"
-)
-
-# 用更安全的逐个 try 方式
-_PROBE_CODE = """
+# 关键：使用 importlib 元数据探测包是否存在及版本，绝不真正 import 重型库。
+# 真正 import torch / scvi / scanpy 在 Windows 上会派生子进程做硬件检测，
+# 这些子进程持有管道句柄，导致 subprocess 即使超时也无法回收、永久阻塞，
+# 同时 import 本身可能耗时数十秒触发超时，使整个扫描卡死或"找不到任何环境"。
+_PROBE_CODE = r"""
 import json, sys
+from importlib.util import find_spec
+try:
+    from importlib.metadata import version
+except Exception:  # Python < 3.8 fallback
+    from importlib_metadata import version
+
+# import 名 -> 发行包名（用于读取版本号）
+DIST = {'sklearn': 'scikit-learn', 'umap': 'umap-learn', 'scvi': 'scvi-tools'}
+PKGS = ['anndata', 'celltypist', 'jinja2', 'matplotlib', 'numpy', 'pandas',
+        'scanpy', 'scipy', 'scvi', 'seaborn', 'sklearn', 'torch', 'umap']
+
 caps = {}
-for p in ['anndata', 'celltypist', 'jinja2', 'matplotlib', 'numpy', 'pandas', 'scanpy', 'scipy', 'scvi', 'seaborn', 'sklearn', 'torch', 'umap']:
+for p in PKGS:
     try:
-        m = __import__(p)
-        caps[p] = getattr(m, '__version__', 'installed')
+        spec = find_spec(p)   # 仅定位模块，不执行 import，毫秒级返回
     except Exception:
+        spec = None
+    if spec is None:
         caps[p] = None
+        continue
+    try:
+        caps[p] = version(DIST.get(p, p))
+    except Exception:
+        caps[p] = 'installed'
+
 print(json.dumps({'python_version': sys.version.split()[0], 'capabilities': caps}))
 """
 
-def _probe_python(python_path: str, timeout: int = 20) -> Optional[Dict]:
-    """在指定 Python 中运行探测脚本，返回版本+能力信息。超时或失败返回 None。"""
+def _probe_python(python_path: str, timeout: int = 15) -> Optional[Dict]:
+    """在指定 Python 中运行探测脚本，返回版本+能力信息。超时或失败返回 None。
+
+    探测脚本只用 importlib 读取元数据（不 import 重型库），通常 1 秒内返回；
+    timeout 仅用于防御性兜底（损坏的解释器、网络盘卡顿等）。
+    """
+    kw: Dict[str, Any] = {}
+    if sys.platform.startswith("win"):
+        # 抑制黑色控制台窗口（CREATE_NO_WINDOW）
+        kw["creationflags"] = 0x08000000
     try:
         result = subprocess.run(
-            [python_path, "-c", _PROBE_CODE],
+            [python_path, "-I", "-c", _PROBE_CODE],
             capture_output=True, text=True, timeout=timeout,
-            **( {"creationflags": 0x08000000} if sys.platform.startswith("win") else {} )
+            stdin=subprocess.DEVNULL, **kw,
         )
         if result.returncode == 0 and result.stdout.strip():
             return json.loads(result.stdout.strip())
+        logger.debug(f"Probe non-zero/empty for {python_path}: rc={result.returncode} err={result.stderr[:200]}")
+    except subprocess.TimeoutExpired:
+        logger.warning(f"Probe timed out after {timeout}s: {python_path}")
     except Exception as e:
         logger.debug(f"Probe failed {python_path}: {e}")
     return None
@@ -182,30 +204,59 @@ def _scan_system() -> List[tuple]:
     return results
 
 def _full_scan() -> List[Dict]:
-    """扫描所有来源并探测能力，返回环境列表。"""
+    """扫描所有来源并探测能力，返回环境列表。
+
+    探测并行执行，使总耗时受限于最慢的单个环境，而非所有环境之和，
+    避免在拥有大量解释器时长时间卡顿。
+    """
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+
     all_paths: List[tuple] = []
     all_paths += _scan_conda()
     all_paths += _scan_pyenv()
     all_paths += _scan_system()
 
+    # 去重，保留首次出现的来源/名称
     seen = set()
-    envs = []
+    unique_paths: List[tuple] = []
     for python_path, source, name in all_paths:
         if python_path in seen:
             continue
         seen.add(python_path)
-        probe = _probe_python(python_path)
-        if probe is None:
-            continue
-        envs.append({
-            "id": uuid.uuid4().hex[:8],
-            "name": name,
-            "python_path": python_path,
-            "source": source,
-            "python_version": probe.get("python_version", "?"),
-            "capabilities": probe.get("capabilities", {}),
-            "probed_at": time.time(),
-        })
+        unique_paths.append((python_path, source, name))
+
+    logger.info(f"Probing {len(unique_paths)} Python interpreter(s) ...")
+
+    envs: List[Dict] = []
+    if not unique_paths:
+        return envs
+
+    max_workers = min(8, len(unique_paths))
+    with ThreadPoolExecutor(max_workers=max_workers) as pool:
+        future_map = {
+            pool.submit(_probe_python, python_path): (python_path, source, name)
+            for python_path, source, name in unique_paths
+        }
+        for future in as_completed(future_map):
+            python_path, source, name = future_map[future]
+            try:
+                probe = future.result()
+            except Exception as e:
+                logger.debug(f"Probe future error for {python_path}: {e}")
+                probe = None
+            if probe is None:
+                continue
+            envs.append({
+                "id": uuid.uuid4().hex[:8],
+                "name": name,
+                "python_path": python_path,
+                "source": source,
+                "python_version": probe.get("python_version", "?"),
+                "capabilities": probe.get("capabilities", {}),
+                "probed_at": time.time(),
+            })
+
+    logger.info(f"Scan complete: {len(envs)} usable environment(s) found.")
     return envs
 
 # ── 扫描状态（用于进度反馈） ───────────────────────────────────────────────────
