@@ -1,45 +1,75 @@
-# scAnnoRare 桌面应用一键打包脚本（Windows）
-# 产出：自带桥接 Agent 的 .msi / .exe 安装包
-# 注意：计算依赖不打进安装包，用户需在本机选择已有 Python 环境。
+# scAnnoRare Desktop App - Windows Build Script
+# Output: .msi / .exe installer bundling the bridge agent
+# Note: Scientific computing dependencies are NOT bundled.
+#       Users select their own local Python environment at runtime.
 #
-# 前置（需在 Windows 机器上预装）：
-#   - Python 3.10/3.11      https://www.python.org/
-#   - Node.js 18+           https://nodejs.org/
-#   - Rust (stable)         https://rustup.rs/
-#   - Microsoft C++ Build Tools（含 MSVC）
-#   - WebView2 Runtime（Win11 自带；Win10 可能需手动安装）
+# Prerequisites (install on Windows before running):
+#   - Python 3.10 or 3.11    https://www.python.org/
+#   - Node.js 18+            https://nodejs.org/
+#   - Rust (stable)          https://rustup.rs/
+#   - Microsoft C++ Build Tools (MSVC)
+#   - WebView2 Runtime (built-in on Win11; may need manual install on Win10)
 #
-# 用法（在仓库根目录 PowerShell 执行）：
+# Usage (run from repo root in PowerShell):
 #   powershell -ExecutionPolicy Bypass -File packaging\build_desktop_windows.ps1
 
 $ErrorActionPreference = "Stop"
-$Root = (Resolve-Path "$PSScriptRoot\..").Path
-Write-Host "==> 仓库根目录: $Root" -ForegroundColor Cyan
 
-# ── 1. 打包 Local Agent（PyInstaller，产出 scannorare-agent.exe）──────────────
-Write-Host "`n[1/3] 打包 Local Agent ..." -ForegroundColor Green
+# Force UTF-8 console output to prevent encoding errors on non-UTF-8 systems
+[Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+$OutputEncoding = [System.Text.Encoding]::UTF8
+chcp 65001 | Out-Null
+
+$Root = (Resolve-Path "$PSScriptRoot\..").Path
+$StartTime = Get-Date
+Write-Host "==> Repository root: $Root" -ForegroundColor Cyan
+Write-Host "==> Build started : $($StartTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Cyan
+
+# ── Prerequisite checks ─────────────────────────────────────────────────────────
+Write-Host "`n[PRE] Checking prerequisites ..." -ForegroundColor Yellow
+$Missing = @()
+foreach ($cmd in @("python", "node", "npm", "cargo")) {
+    if (-not (Get-Command $cmd -ErrorAction SilentlyContinue)) {
+        $Missing += $cmd
+    }
+}
+if ($Missing.Count -gt 0) {
+    Write-Host "    ERROR: The following tools were not found in PATH: $($Missing -join ', ')" -ForegroundColor Red
+    Write-Host "    Please install them and re-run this script." -ForegroundColor Red
+    exit 1
+}
+Write-Host "    All prerequisites found." -ForegroundColor Green
+
+# ── 1. Package Local Agent (PyInstaller -> onedir exe) ─────────────────────────
+Write-Host "`n[1/3] Packaging Local Agent (PyInstaller) ..." -ForegroundColor Green
 Set-Location "$Root\local-agent"
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pip install pyinstaller
+python -m pip install --upgrade pip --quiet
+python -m pip install -r requirements.txt --quiet
+python -m pip install pyinstaller --quiet
 Set-Location "$Root\local-agent\packaging"
 Remove-Item -Recurse -Force .\dist\scannorare-agent -ErrorAction SilentlyContinue
 Remove-Item -Recurse -Force .\build -ErrorAction SilentlyContinue
 pyinstaller agent.spec --distpath .\dist --workpath .\build --noconfirm
-if (-not (Test-Path ".\dist\scannorare-agent\scannorare-agent.exe")) {
-    throw "Agent 打包失败：未找到 dist\scannorare-agent\scannorare-agent.exe"
-}
-Write-Host "    Agent 打包完成: dist\scannorare-agent\scannorare-agent.exe" -ForegroundColor Green
 
-# ── 2. 安装前端依赖 ───────────────────────────────────────────────────────────
-Write-Host "`n[2/3] 安装桌面壳依赖 ..." -ForegroundColor Green
+$AgentExe = ".\dist\scannorare-agent\scannorare-agent.exe"
+if (-not (Test-Path $AgentExe)) {
+    Write-Host "    ERROR: Agent build failed - expected file not found: $AgentExe" -ForegroundColor Red
+    exit 1
+}
+Write-Host "    Agent built: $AgentExe" -ForegroundColor Green
+
+# ── 2. Install desktop shell (Tauri) dependencies ──────────────────────────────
+Write-Host "`n[2/3] Installing desktop shell dependencies ..." -ForegroundColor Green
 Set-Location "$Root\desktop-agent"
 npm install
 
-# ── 3. 构建 Tauri 安装包（自动把 Agent 作为 resource 打入）─────────────────────
-Write-Host "`n[3/3] 构建 Tauri 安装包 ..." -ForegroundColor Green
+# ── 3. Build Tauri installer (agent bundled as sidecar resource) ────────────────
+Write-Host "`n[3/3] Building Tauri installer ..." -ForegroundColor Green
 npm run tauri build
 
-Write-Host "`n==> 完成！安装包位于：" -ForegroundColor Cyan
-Write-Host "    desktop-agent\src-tauri\target\release\bundle\msi\   (.msi)"
-Write-Host "    desktop-agent\src-tauri\target\release\bundle\nsis\  (.exe)"
+$Elapsed = [math]::Round(((Get-Date) - $StartTime).TotalSeconds)
+Write-Host ""
+Write-Host "==> Build complete in ${Elapsed}s" -ForegroundColor Cyan
+Write-Host "    Installers:"
+Write-Host "      desktop-agent\src-tauri\target\release\bundle\msi\   (.msi)"
+Write-Host "      desktop-agent\src-tauri\target\release\bundle\nsis\  (.exe)"

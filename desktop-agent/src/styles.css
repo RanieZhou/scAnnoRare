@@ -104,6 +104,18 @@ body {
 .btn.primary:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35); }
 .btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
+.hw-grid { display: flex; flex-direction: column; gap: 8px; }
+.hw-item {
+  display: grid;
+  grid-template-columns: 20px 36px 1fr;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.83rem;
+}
+.hw-icon { font-size: 0.9rem; opacity: 0.6; }
+.hw-label { color: var(--muted); font-size: 0.78rem; }
+.hw-val { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
 .countdown { text-align: center; font-size: 0.78rem; color: var(--muted); margin-top: 10px; height: 16px; }
 
 .foot {

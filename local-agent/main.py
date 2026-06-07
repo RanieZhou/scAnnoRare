@@ -154,6 +154,36 @@ async def generate_pairing_code():
         "expires_in": 300
     }
 
+@app.get("/api/v1/local/admin/hardware")
+async def admin_hardware_info():
+    """Returns local hardware info without authentication (desktop shell use only)."""
+    import platform
+    gpu_devices = []
+    try:
+        from app.api.env import detect_gpu_by_nvidia_smi
+        gpu_devices = detect_gpu_by_nvidia_smi()
+    except Exception:
+        pass
+    try:
+        import psutil
+        cpu_count = psutil.cpu_count(logical=True)
+        mem = psutil.virtual_memory()
+        memory_gb = round(mem.total / (1024 ** 3), 1)
+    except Exception:
+        cpu_count = os.cpu_count() or 0
+        memory_gb = 0.0
+    return {
+        "cpu": {
+            "name": platform.processor() or platform.machine(),
+            "logical_cores": cpu_count,
+            "architecture": platform.machine(),
+        },
+        "memory_gb": memory_gb,
+        "gpu_devices": gpu_devices,
+        "platform": platform.system(),
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
     if getattr(sys, "frozen", False):

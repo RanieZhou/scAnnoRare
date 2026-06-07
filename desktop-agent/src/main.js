@@ -1,16 +1,17 @@
-// scAnnoRare Local Agent 桌面外壳 — 状态面板逻辑
-// 直接 fetch 本地 Agent（Agent 放行所有 CORS；webview 非 HTTPS，无 mixed-content 问题）
+// scAnnoRare Local Agent desktop shell — status panel logic
 
 const AGENT = "http://127.0.0.1:17890";
 
 let statusDot, statusText, pairState, genBtn, codeBox, countdownEl;
 let countdownTimer = null;
+let hwFetched = false;
 
 async function checkHealth() {
   try {
     const res = await fetch(`${AGENT}/api/v1/local/health`, { cache: "no-store" });
     const data = await res.json();
     setOnline(true, data.paired);
+    if (!hwFetched) fetchHardware();
   } catch {
     setOnline(false, false);
   }
@@ -29,6 +30,38 @@ function setOnline(online, paired) {
     pairState.textContent = "—";
     pairState.className = "";
     genBtn.disabled = true;
+  }
+}
+
+async function fetchHardware() {
+  try {
+    const res = await fetch(`${AGENT}/api/v1/local/admin/hardware`, { cache: "no-store" });
+    if (!res.ok) return;
+    const d = await res.json();
+    hwFetched = true;
+
+    const cpu = d.cpu || {};
+    const cpuName = cpu.name || cpu.architecture || "Unknown";
+    const cores = cpu.logical_cores ? ` · ${cpu.logical_cores} cores` : "";
+    document.getElementById("hw-cpu").textContent = cpuName + cores;
+
+    const gpus = d.gpu_devices || [];
+    if (gpus.length > 0) {
+      const names = gpus.map((g) => {
+        const vram = g.memory_total_gb ? ` (${g.memory_total_gb} GB)` : "";
+        return g.name + vram;
+      });
+      document.getElementById("hw-gpu").textContent = names.join(", ");
+    } else {
+      document.getElementById("hw-gpu").textContent = "No CUDA GPU detected";
+      document.getElementById("hw-gpu").style.color = "var(--muted)";
+    }
+
+    if (d.memory_gb) {
+      document.getElementById("hw-ram").textContent = `${d.memory_gb} GB`;
+    }
+  } catch {
+    // hardware fetch failed silently — non-critical
   }
 }
 
