@@ -29,7 +29,7 @@ a = Analysis(
         "anndata", "celltypist", "h5py", "jinja2", "matplotlib", "numba", "numpy",
         "pandas", "pynndescent", "scanpy", "scipy", "scvi", "scvi-tools",
         "seaborn", "sklearn", "torch", "umap",
-        "tkinter", "PyQt5", "PyQt6", "PySide2", "PySide6",
+        "PyQt5", "PyQt6", "PySide2", "PySide6",
         "IPython", "notebook", "jupyter", "pytest",
     ],
     noarchive=False,

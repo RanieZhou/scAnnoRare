@@ -1,0 +1,99 @@
+name: Build macOS Installer
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to upload asset to (e.g. v1.0.0)"
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5.6.0
+        with:
+          python-version: "3.11"
+
+      - name: Set up Node.js 22
+        uses: actions/setup-node@v4.4.0
+        with:
+          node-version: "22"
+
+      - name: Set up Rust (stable)
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust build artifacts
+        uses: actions/cache@v4.2.3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            desktop-agent/src-tauri/target
+          key: macos-cargo-${{ hashFiles('desktop-agent/src-tauri/Cargo.lock') }}
+          restore-keys: macos-cargo-
+
+      - name: Install Python dependencies + PyInstaller
+        run: |
+          cd local-agent
+          python -m pip install --upgrade pip --quiet
+          python -m pip install -r requirements.txt --quiet
+          python -m pip install pyinstaller --quiet
+
+      - name: Package Local Agent with PyInstaller
+        run: |
+          cd local-agent/packaging
+          rm -rf ./dist/scannorare-agent ./build
+          pyinstaller agent.spec --distpath ./dist --workpath ./build --noconfirm
+          if [ ! -f "./dist/scannorare-agent/scannorare-agent" ]; then
+            echo "Agent build failed: scannorare-agent not found"
+            exit 1
+          fi
+          echo "Agent built successfully."
+
+      - name: Install desktop shell dependencies
+        run: |
+          cd desktop-agent
+          npm install
+
+      - name: Clean stale bundle artifacts from cache
+        run: |
+          rm -rf desktop-agent/src-tauri/target/release/bundle
+          echo "Cleaned stale bundle directory."
+
+      - name: Build Tauri macOS app
+        run: |
+          cd desktop-agent
+          npm run tauri build
+        env:
+          TAURI_SIGNING_PRIVATE_KEY: ""
+
+      - name: Locate DMG/app bundle
+        id: find_dmg
+        run: |
+          DMG=$(find desktop-agent/src-tauri/target/release/bundle/dmg -name "*.dmg" | head -1)
+          if [ -z "$DMG" ]; then
+            echo "DMG not found after build"
+            exit 1
+          fi
+          echo "dmg_path=$DMG" >> $GITHUB_OUTPUT
+          echo "dmg_name=$(basename $DMG)" >> $GITHUB_OUTPUT
+          echo "DMG: $DMG"
+
+      - name: Upload DMG to GitHub Release
+        uses: softprops/action-gh-release@v2.3.2
+        with:
+          tag_name: ${{ github.event.release.tag_name || inputs.tag }}
+          files: ${{ steps.find_dmg.outputs.dmg_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
