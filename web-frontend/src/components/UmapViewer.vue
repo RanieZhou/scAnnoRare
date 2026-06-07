@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, nextTick, onBeforeUnmount } from 'vue'
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
 import * as echarts from 'echarts'
@@ -62,7 +62,7 @@ async function compute() {
   }
 }
 
-function render(data: any) {
+async function render(data: any) {
   meta.value = { n_points: data.n_points, n_total: data.n_total, subsampled: data.subsampled, classes: data.classes.length }
   hasPlot.value = true
 
@@ -87,7 +87,10 @@ function render(data: any) {
     data: byClass[c],
   }))
 
+  // 等 DOM 更新（v-show 切换）后再初始化 ECharts，避免容器宽度为 0
+  await nextTick()
   if (!chart) chart = echarts.init(chartEl.value!, 'dark')
+  chart.resize()
   chart.setOption({
     backgroundColor: 'transparent',
     tooltip: { trigger: 'item', formatter: (p: any) => `${p.seriesName}<br/>(${(p.value[0] as number).toFixed(2)}, ${(p.value[1] as number).toFixed(2)})` },
@@ -104,8 +107,8 @@ function render(data: any) {
       pageIconInactiveColor: '#4a5568',
     },
     grid: { left: 50, right: 20, top: 20, bottom: 90 },
-    xAxis: { name: 'UMAP-1', scale: true, axisLabel: { color: '#64748b' }, splitLine: { show: false } },
-    yAxis: { name: 'UMAP-2', scale: true, axisLabel: { color: '#64748b' }, splitLine: { show: false } },
+    xAxis: { name: 'UMAP-1', nameLocation: 'end', scale: true, axisLine: { onZero: false }, axisLabel: { color: '#64748b' }, splitLine: { show: false } },
+    yAxis: { name: 'UMAP-2', nameLocation: 'end', scale: true, axisLine: { onZero: false }, axisLabel: { color: '#64748b' }, splitLine: { show: false } },
     series,
   }, true)
 }

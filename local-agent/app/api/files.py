@@ -29,13 +29,66 @@ def _workspace_dir() -> str:
     return os.path.join(base, "workspace")
 
 
+_DRIVES_ROOT = "__drives__"  # Windows 虚拟根，用于列出所有驱动器
+
+
+def _list_windows_drives() -> List[Dict[str, Any]]:
+    drives = []
+    if sys.platform.startswith("win"):
+        import string
+        import ctypes
+        bitmask = ctypes.windll.kernel32.GetLogicalDrives()
+        for letter in string.ascii_uppercase:
+            if bitmask & 1:
+                drives.append({"name": f"{letter}:", "path": f"{letter}:\\"})
+            bitmask >>= 1
+    return drives
+
+
+@router.get("/files/open-dialog")
+async def open_file_dialog(exts: Optional[str] = None):
+    """调用系统原生文件选择对话框，返回用户选中的文件路径。"""
+    import asyncio
+
+    ext_list = [e.strip().lower() for e in exts.split(",")] if exts else list(BROWSE_EXTS)
+    filetypes = [(f"{e.lstrip('.').upper()} 文件", f"*{e}") for e in ext_list]
+    filetypes.append(("所有文件", "*.*"))
+
+    def _open_dialog():
+        import tkinter as tk
+        from tkinter import filedialog
+        root = tk.Tk()
+        root.withdraw()
+        root.attributes("-topmost", True)
+        path = filedialog.askopenfilename(title="选择文件", filetypes=filetypes)
+        root.destroy()
+        return path
+
+    loop = asyncio.get_event_loop()
+    filepath = await loop.run_in_executor(None, _open_dialog)
+
+    if not filepath:
+        return {"path": None, "cancelled": True}
+    return {"path": os.path.normpath(filepath), "cancelled": False}
+
+
 @router.get("/files/browse")
 async def browse_dir(path: Optional[str] = None, exts: Optional[str] = None):
     """列出目录内容（仅返回子目录 + 指定扩展名文件），供前端文件选择弹窗使用。
 
-    path: 目标目录绝对路径，缺省为用户主目录。
+    path: 目标目录绝对路径，缺省为用户主目录。传 "__drives__" 返回 Windows 所有驱动器。
     exts: 逗号分隔的扩展名过滤（如 ".h5ad" 或 ".csv"），缺省为 .h5ad,.csv。
     """
+    # Windows 虚拟根：列出所有驱动器
+    if path == _DRIVES_ROOT:
+        return {
+            "current": _DRIVES_ROOT,
+            "parent": None,
+            "home": os.path.expanduser("~"),
+            "dirs": _list_windows_drives(),
+            "files": [],
+        }
+
     base = path or os.path.expanduser("~")
     base = os.path.abspath(os.path.expanduser(base))
     if not os.path.isdir(base):
@@ -61,10 +114,19 @@ async def browse_dir(path: Optional[str] = None, exts: Optional[str] = None):
     except PermissionError:
         raise HTTPException(status_code=403, detail=f"无权限读取目录：{base}")
 
-    parent = os.path.dirname(base.rstrip(os.sep)) or base
+    # 计算父目录；Windows 驱动器根（如 C:\）的父目录设为虚拟磁盘根
+    raw_parent = os.path.dirname(base.rstrip(os.sep))
+    if sys.platform.startswith("win") and raw_parent == base:
+        # 已在驱动器根，上级指向虚拟磁盘列表
+        parent_path: Optional[str] = _DRIVES_ROOT
+    elif raw_parent and raw_parent != base:
+        parent_path = raw_parent
+    else:
+        parent_path = None
+
     return {
         "current": base,
-        "parent": parent if parent != base else None,
+        "parent": parent_path,
         "home": os.path.expanduser("~"),
         "dirs": dirs,
         "files": files,

@@ -153,11 +153,11 @@ def run_job_thread(job_id: str, task_type: str, args: List[str], job_dir: str):
             
             # Now trigger report generator (runners/generate_report.py)
             result_json = os.path.join(job_dir, "result.json")
-            
+
             report_script = os.path.join(RUNNERS_DIR, "generate_report.py")
 
-            # Run report generator
-            rep_args = runner_cmd(report_script, result_json, job_dir)
+            # Use local-agent's own Python for report generation (only needs matplotlib/jinja2, not ML libs)
+            rep_args = [sys.executable, report_script, result_json, job_dir]
             rep_proc = subprocess.Popen(rep_args, stdout=stdout_file, stderr=stderr_file, **_POPEN_KW)
             rep_proc.wait()
             
@@ -255,8 +255,9 @@ async def create_embedding_task(payload: EmbeddingTaskRequest, background_tasks:
     conn.commit(); conn.close()
 
     runner_script = os.path.join(RUNNERS_DIR, "compute_embedding.py")
-    args = runner_cmd(runner_script, payload.filepath, payload.label_col, job_dir,
-                      str(payload.max_cells), payload.pred_csv or "None")
+    # Use local-agent's own Python — scanpy/anndata available and stable; scanvi311 env crashes on PCA
+    args = [sys.executable, runner_script, payload.filepath, payload.label_col, job_dir,
+            str(payload.max_cells), payload.pred_csv or "None"]
 
     def _run():
         update_job_status(job_id, "running", 20)
@@ -475,8 +476,9 @@ async def create_external_method_task(
             log_event(job_dir, "phase3_report", 75)
             update_job_status(job_id, "running", 75)
             rep_script = os.path.join(RUNNERS_DIR, "generate_report.py")
+            # Use local-agent's own Python for report generation (only needs matplotlib/jinja2, not ML libs)
             proc3 = subprocess.Popen(
-                runner_cmd(rep_script, result_path, job_dir),
+                [sys.executable, rep_script, result_path, job_dir],
                 stdout=stdout_f, stderr=stderr_f, **_POPEN_KW,
             )
             proc3.wait()

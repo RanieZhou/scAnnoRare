@@ -13,7 +13,7 @@
                 placeholder="点击「浏览」选择，或手动输入绝对路径"
                 class="neon-input"
               />
-              <el-button :disabled="!agentStore.paired" @click="pickerVisible = true">
+              <el-button :disabled="!agentStore.paired" :loading="browseLoading" @click="handleBrowse">
                 📂 浏览
               </el-button>
             </div>
@@ -28,13 +28,6 @@
           >
             检测 H5AD 数据结构
           </el-button>
-
-          <FilePicker
-            v-model="pickerVisible"
-            title="选择 H5AD 数据文件"
-            exts=".h5ad"
-            @select="(p: string) => (form.filepath = p)"
-          />
           
           <!-- Column bindings (appears after inspection success) -->
           <div v-if="inspectResult" class="col-bindings">
@@ -148,13 +141,27 @@ import { useAgentStore } from '../stores/agent'
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
 import * as echarts from 'echarts'
-import FilePicker from '../components/FilePicker.vue'
 import UmapViewer from '../components/UmapViewer.vue'
 
-const pickerVisible = ref(false)
-// .path-input-row 样式见 <style>，用于路径输入框 + 浏览按钮并排
-
 const agentStore = useAgentStore()
+const browseLoading = ref(false)
+
+async function handleBrowse() {
+  browseLoading.value = true
+  try {
+    const res = await axios.get(`${agentStore.agentUrl}/api/v1/local/files/open-dialog`, {
+      headers: { Authorization: `Bearer ${agentStore.sessionToken}` },
+      params: { exts: '.h5ad' },
+    })
+    if (!res.data.cancelled && res.data.path) {
+      form.filepath = res.data.path
+    }
+  } catch (err: any) {
+    ElMessage.error(err.response?.data?.detail || '无法打开文件选择框')
+  } finally {
+    browseLoading.value = false
+  }
+}
 const inspectLoading = ref(false)
 const registerLoading = ref(false)
 

@@ -13,7 +13,8 @@
         ⬆ 上级
       </el-button>
       <el-button size="small" @click="go(home)" text>🏠 主目录</el-button>
-      <code class="cur-path">{{ current || '—' }}</code>
+      <el-button size="small" @click="go('__drives__')" text>💾 所有磁盘</el-button>
+      <code class="cur-path">{{ current === '__drives__' ? '所有磁盘' : (current || '—') }}</code>
     </div>
 
     <div v-loading="loading" class="listing">
@@ -22,7 +23,7 @@
 
       <!-- 目录 -->
       <div v-for="d in dirs" :key="d.path" class="row dir" @click="go(d.path)">
-        <span class="icon">📁</span><span class="name">{{ d.name }}</span>
+        <span class="icon">{{ current === '__drives__' ? '💾' : '📁' }}</span><span class="name">{{ d.name }}</span>
       </div>
       <!-- 文件 -->
       <div
